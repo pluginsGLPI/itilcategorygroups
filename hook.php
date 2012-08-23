@@ -43,7 +43,7 @@ function plugin_get_headings_teclibtoolbox($item, $withtemplate) {
    if ($item instanceof CommonDBTM
       && haveRight('config', 'w')
          && $item->mayBeTemplate()
-            && $item->fields['is_template'] == 1) {
+            && $item->fields['is_template'] == 1 & $withtemplate) {
       return array(1 => $LANG['plugin_teclibtoolbox']['template'][1]);
    }
 
