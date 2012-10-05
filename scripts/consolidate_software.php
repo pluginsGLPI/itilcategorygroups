@@ -3,12 +3,13 @@ ini_set("memory_limit", "-1");
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-//define("NOTFOUND",-1);
+$SOFTWARE_ROOT_ENTITY = 0;
+
 function doSearchDat($array_same_soft) {
-   global $ENTITIES_ID_DAT;
+   global $SOFTWARE_ROOT_ENTITY;
 
    for ($i = 0; isset($array_same_soft[$i]); $i++) {
-      if ($array_same_soft[$i]['entities_id'] == $ENTITIES_ID_DAT) {
+      if ($array_same_soft[$i]['entities_id'] == $SOFTWARE_ROOT_ENTITY) {
          return $array_same_soft[$i]['id'];
       }
    }
@@ -16,7 +17,7 @@ function doSearchDat($array_same_soft) {
 }
 
 function doTransferAndGroupement($array_same_soft) {
-   global $ENTITIES_ID_DAT, $DB, $CFG_GLPI;
+   global $SOFTWARE_ROOT_ENTITY, $DB, $CFG_GLPI;
 
    if (count($array_same_soft) > 1) {
       //Si plus d'un soft : on merge le tout
@@ -25,11 +26,11 @@ function doTransferAndGroupement($array_same_soft) {
       
       //Le soft n'existe pas dans l'entité DAT
       if ($id_software == NOTFOUND) {
-         $id_software = $software->addSoftware(addslashes($array_same_soft[0]['name']),
-                                               addslashes($array_same_soft[0]['manufacturer']),
-                                               $ENTITIES_ID_DAT);
+         $id_software = $software->addSoftware(Toolbox::addslashes_deep($array_same_soft[0]['name']),
+                                               Toolbox::addslashes_deep($array_same_soft[0]['manufacturer']),
+                                               $SOFTWARE_ROOT_ENTITY);
          if (isCommandLine()) {
-            echo "Software added ".$array_same_soft[0]['name']." in entity DAT (ID=$ENTITIES_ID_DAT)\n";
+            echo "Software added ".$array_same_soft[0]['name']." in entity DAT (ID=$SOFTWARE_ROOT_ENTITY)\n";
          }
       } else {
          $software->getFromDB($id_software);
@@ -49,10 +50,10 @@ function doTransferAndGroupement($array_same_soft) {
                "FROM `glpi_softwares` AS gs " .
                "LEFT JOIN `glpi_entities` ON (`gs`.`entities_id`=`glpi_entities`.`id`) " .
                "WHERE `gs`.`id` !='$id_software' AND `gs`.name='" .
-                  addslashes($array_same_soft[0]['name']) . "'".
+                  Toolbox::addslashes_deep($array_same_soft[0]['name']) . "'".
                   "AND `gs`.`is_template` = '0' " .
                      getEntitiesRestrictRequest('AND', 'gs', 'entities_id',
-                                                getSonsOf('glpi_entities', $ENTITIES_ID_DAT),
+                                                getSonsOf('glpi_entities', $SOFTWARE_ROOT_ENTITY),
                                                 false).
                "ORDER BY `glpi_entities`.`completename`";
 
@@ -61,7 +62,7 @@ function doTransferAndGroupement($array_same_soft) {
       foreach($DB->request($query) as $data) {
          $array_merge_soft[$data['id']] = 1;
          if (isCommandLine()) {
-            echo "Merge software ".$data['name']." with software ID=$ENTITIES_ID_DAT\n";
+            echo "Merge software ".$data['name']." with software ID=$SOFTWARE_ROOT_ENTITY\n";
          }
       }
       
@@ -71,12 +72,12 @@ function doTransferAndGroupement($array_same_soft) {
    } elseif (count($array_same_soft) == 1) {
       //Le soft n'existe qu'une seule fois dans une sous entité
       $soft = array_pop($array_same_soft);
-      if ($soft['entities_id'] != $ENTITIES_ID_DAT) {
+      if ($soft['entities_id'] != $SOFTWARE_ROOT_ENTITY) {
          //On transfère le soft
          $transfer = new Transfer();
          $transfer->getFromDB($CFG_GLPI['transfers_id_auto']);
          $item_to_transfer    = array("Software" => array($soft['id'] => $soft['id']));
-         $transfer->moveItems($item_to_transfer, $ENTITIES_ID_DAT, $transfer->fields);
+         $transfer->moveItems($item_to_transfer, $SOFTWARE_ROOT_ENTITY, $transfer->fields);
          
          //On met bien le soft comme visible dans les sous-entités
          $tmp['id']           = $soft['id'];
@@ -87,16 +88,16 @@ function doTransferAndGroupement($array_same_soft) {
    }
 }
 
-$ENTITIES_ID_DAT = false;
+$SOFTWARE_ROOT_ENTITY = false;
 
 echo "Start merging softwares\n";
 echo "Finding DAT entity...";
 foreach ($DB->request("glpi_entities", "`name` = 'DAT'") as $data) {
-         $ENTITIES_ID_DAT = $data['id'];
-         echo "... found, ID $ENTITIES_ID_DAT\n";
+         $SOFTWARE_ROOT_ENTITY = $data['id'];
+         echo "... found, ID $SOFTWARE_ROOT_ENTITY\n";
          break;
 }
-if (!$ENTITIES_ID_DAT) {
+if (!$SOFTWARE_ROOT_ENTITY) {
    echo "Exit!!";
    exit();
 }
@@ -123,5 +124,6 @@ foreach ($DB->request($query) as $data) {
 }
 
 #On s'assure que TOUS les softs dans DAT sont récursifs
-$query = "UPDATE `glpi_softwares` SET `is_recursive` = '1' WHERE `entities_id` = '$ENTITIES_ID_DAT'";
+$query = "UPDATE `glpi_softwares` SET `is_recursive` = '1'
+          WHERE `entities_id` = '$SOFTWARE_ROOT_ENTITY'";
 $result = $DB->query($query);

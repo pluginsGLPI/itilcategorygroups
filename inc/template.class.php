@@ -57,8 +57,8 @@ class PluginTeclibtoolboxTemplate extends CommonDBTM {
          }
          echo "</table></div>";
       }
-      echo "<div align='center'>";
       echo "<form action='".GLPI_ROOT."/plugins/teclibtoolbox/front/template.php' method='post'>";
+      echo "<div align='center'>";
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
       echo "<tr class='tab_bg_1'>";
       echo "<td colspan='2' align='center'>";
@@ -69,17 +69,17 @@ class PluginTeclibtoolboxTemplate extends CommonDBTM {
       echo "</td></tr>\n";
 
       echo "</table>";
-      echo "</form>";
       echo "</div>";
+      Html::closeForm();
    }
    
    static function copyTemplate($itemtype, $items_id) {
       global $CFG_GLPI, $DB, $LANG;
       
-      $cpt = 0;
+      $cpt  = 0;
       $item = new $itemtype();
       if ($item->getFromDB($items_id) && $item->fields['is_template']) {
-      $tmp = $item->fields;
+      $tmp      = $item->fields;
       $entities = getSonsOf('glpi_entities', $item->fields['entities_id']);
       unset($entities[$item->fields['entities_id']]);
       foreach ($entities as $entity) {
@@ -88,7 +88,7 @@ class PluginTeclibtoolboxTemplate extends CommonDBTM {
                                       AND `entities_id`='".$entity."' AND `is_template`='1'")) {
             unset($tmp['id']);
             $tmp['entities_id'] = $entity;
-            $new_id = $item->add($tmp);
+            $new_id             = $item->add($tmp);
             $cpt++;
             if ($new_id) {
                if (in_array($itemtype, $CFG_GLPI["infocom_types"])) {
@@ -187,9 +187,10 @@ class PluginTeclibtoolboxTemplate extends CommonDBTM {
             }
          }
          if ($cpt++) {
-            addMessageAfterRedirect($LANG['plugin_teclibtoolbox']['template'][5]." : ".$cpt, true, INFO);
+            Session::addMessageAfterRedirect($LANG['plugin_teclibtoolbox']['template'][5]." : ".$cpt,
+                                             true, INFO);
          } else {
-            addMessageAfterRedirect($LANG['plugin_teclibtoolbox']['template'][6], true, INFO);
+            Session::addMessageAfterRedirect($LANG['plugin_teclibtoolbox']['template'][6], true, INFO);
          }
       }
    }

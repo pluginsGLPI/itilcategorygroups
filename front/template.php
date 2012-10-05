@@ -34,5 +34,5 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (isset($_POST['copy_template'])) {
    PluginTeclibtoolboxTemplate::copyTemplate($_POST['itemtype'], $_POST['id']);
 }
-glpi_header($_SERVER['HTTP_REFERER']);
+Htlm::back();
 ?>

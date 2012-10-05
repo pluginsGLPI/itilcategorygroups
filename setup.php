@@ -36,15 +36,9 @@ function plugin_init_teclibtoolbox() {
    if ($plugin->isInstalled('teclibtoolbox') && $plugin->isActivated('teclibtoolbox')) {
        
       //if glpi is loaded
-      if (getLoginUserID()) {
-          
-         // Display a menu entry ?
-         if (haveRight("config", "w")) {
-            //add teclibtoolbox to items details
-            $PLUGIN_HOOKS['headings']['teclibtoolbox']           = 'plugin_get_headings_teclibtoolbox';
-            $PLUGIN_HOOKS['headings_action']['teclibtoolbox']    = 'plugin_headings_actions_teclibtoolbox';
-         }
-         $PLUGIN_HOOKS['post_init']['teclibtoolbox']                = 'plugin_teclibtoolbox_postinit';
+      if (Session::getLoginUserID()) {
+         $PLUGIN_HOOKS['post_init']['teclibtoolbox'] = 'plugin_teclibtoolbox_postinit';
+         Plugin::registerClass('PluginTeclibtoolboxTemplate');
       }
    }
 }
@@ -55,16 +49,16 @@ function plugin_version_teclibtoolbox() {
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    return array ('name' => $LANG['plugin_teclibtoolbox']['title'][1],
-                   'version' => '0.80',
+                   'version' => '0.83',
                    'author' => $author,
                    'homepage' => 'https://forge.indepnet.net/projects/show/teclibtoolbox',
-                   'minGlpiVersion' => '0.80.0');
+                   'minGlpiVersion' => '0.83.3');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_teclibtoolbox_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.80','lt') || version_compare(GLPI_VERSION,'0.81','ge')) {
-      echo "This plugin requires GLPI >= 0.80 and GLPI < 0.81";
+   if (version_compare(GLPI_VERSION,'0.83.3','lt') || version_compare(GLPI_VERSION,'0.84','ge')) {
+      echo "This plugin requires GLPI 0.83.3+";
       return false;
    }
    return true;
