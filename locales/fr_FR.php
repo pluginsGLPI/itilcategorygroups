@@ -3,7 +3,7 @@
  * @version $Id: fr_FR.php 17 2012-06-19 15:09:22Z walid $
  LICENSE
 
-  This file is part of the teclibtoolbox plugin.
+  This file is part of the meteofrancegmao plugin.
 
  Order plugin is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,22 +16,16 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with GLPI; along with teclibtoolbox. If not, see <http://www.gnu.org/licenses/>.
+ along with GLPI; along with meteofrancegmao. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- @package   teclibtoolbox
- @author    the teclibtoolbox plugin team
- @copyright Copyright (c) 2010-2011 teclibtoolbox plugin team
+ @package   meteofrancegmao
+ @author    the meteofrancegmao plugin team
+ @copyright Copyright (c) 2010-2011 meteofrancegmao plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/teclibtoolbox
+ @link      https://forge.indepnet.net/projects/meteofrancegmao
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
 
-$LANG['plugin_teclibtoolbox']['title'][1] = "Boite à outils TECLIB'";
-$LANG['plugin_teclibtoolbox']['template'][1] = "TECLIB'";
-$LANG['plugin_teclibtoolbox']['template'][2] = "Copier le gabarit";
-$LANG['plugin_teclibtoolbox']['template'][3] = "Gabarit non présent dans les sous entités";
-$LANG['plugin_teclibtoolbox']['template'][4] = "Gabarit présent dans les sous entités";
-$LANG['plugin_teclibtoolbox']['template'][5] = "Nombre de gabarits créés dans les sous entités";
-$LANG['plugin_teclibtoolbox']['template'][6] = "Aucun gabarit créé dans les sous entités";
+$LANG['plugin_meteofrancegmao']['title'][1] = "Transfert GMAO OCS";
