@@ -3,7 +3,7 @@
  * @version $Id: setup.php 19 2012-06-27 09:19:05Z walid $
  LICENSE
 
-  This file is part of the meteofrancegmao plugin.
+  This file is part of the meteofrancehelpdesk plugin.
 
  Order plugin is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,37 +16,53 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with GLPI; along with meteofrancegmao. If not, see <http://www.gnu.org/licenses/>.
+ along with GLPI; along with meteofrancehelpdesk. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- @package   meteofrancegmao
- @author    the meteofrancegmao plugin team
- @copyright Copyright (c) 2010-2011 meteofrancegmao plugin team
+ @package   meteofrancehelpdesk
+ @author    the meteofrancehelpdesk plugin team
+ @copyright Copyright (c) 2010-2011 meteofrancehelpdesk plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/meteofrancegmao
+ @link      https://forge.indepnet.net/projects/meteofrancehelpdesk
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
 
 define ("GMAO_ENTITY_TAG_PATTERN", "/_GMAO$/");
 
-function plugin_init_meteofrancegmao() {
-   global $PLUGIN_HOOKS;
+function plugin_init_meteofrancehelpdesk() {
+   global $PLUGIN_HOOKS, $LANG;
     
-   $PLUGIN_HOOKS['csrf_compliant']['meteofrancegmao'] = true;
+   $PLUGIN_HOOKS['csrf_compliant']['meteofrancehelpdesk'] = true;
    
    $plugin = new Plugin();
-   if ($plugin->isInstalled('meteofrancegmao') && $plugin->isActivated('meteofrancegmao')) {
-      $PLUGIN_HOOKS['item_transfer']['meteofrancegmao'] = 'plugin_meteofrancegmao_transfer';
+   if ($plugin->isInstalled('meteofrancehelpdesk') && $plugin->isActivated('meteofrancehelpdesk')) {
+      Plugin::registerClass('PluginMeteofrancehelpdeskCategory_Group',
+                            array('addtabon'         => 'ITILCategory',
+                                  'forwardentityfrom' => 'ITILCategory'));
+      if (Session::haveRight('config', 'r')) {
+         $PLUGIN_HOOKS['menu_entry']['meteofrancehelpdesk'] = 'front/category_group.php';
+            $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['title']
+            = $LANG['plugin_meteofrancehelpdesk']['title'][2];
+            $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['page']
+            = '/plugins/meteofrancehelpdesk/front/category_group.php';
+            $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['links']['search']
+            = '/plugins/meteofrancehelpdesk/front/category_group.php';
+      }
+      if (Session::haveRight('config', 'w')) {
+         $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['links']['add']
+         = '/plugins/meteofrancehelpdesk/front/category_group.form.php';
+          
+      }
    }
 }
 
 // Get the name and the version of the plugin - Needed
-function plugin_version_meteofrancegmao() {
+function plugin_version_meteofrancehelpdesk() {
    global $LANG;
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
-   return array ('name'           => $LANG['plugin_meteofrancegmao']['title'][1],
+   return array ('name'           => $LANG['plugin_meteofrancehelpdesk']['title'][1],
                    'version'        => '0.83',
                    'author'         => $author,
                    'homepage'       => 'www.teclib.com',
@@ -54,7 +70,7 @@ function plugin_version_meteofrancegmao() {
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
-function plugin_meteofrancegmao_check_prerequisites() {
+function plugin_meteofrancehelpdesk_check_prerequisites() {
    if (version_compare(GLPI_VERSION,'0.83.3','lt') || version_compare(GLPI_VERSION,'0.84','ge')) {
       echo "This plugin requires GLPI 0.83.3+";
       return false;
@@ -63,12 +79,6 @@ function plugin_meteofrancegmao_check_prerequisites() {
 }
 
 // Uninstall process for plugin : need to return true if succeeded : may display messages or add to message after redirect
-function plugin_meteofrancegmao_check_config() {
-   global $CFG_GLPI;
-   if (!$CFG_GLPI['use_ocs_mode']) {
-      Session::addMessageAfterRedirect("Le mode OCS doit être activé", INFO);
-      return false;
-   } else {
+function plugin_meteofrancehelpdesk_check_config() {
       return true;
-   }
 }

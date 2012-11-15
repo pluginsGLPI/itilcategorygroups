@@ -3,7 +3,7 @@
  * @version $Id: fr_FR.php 17 2012-06-19 15:09:22Z walid $
  LICENSE
 
-  This file is part of the meteofrancegmao plugin.
+  This file is part of the meteofrancehelpdesk plugin.
 
  Order plugin is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,23 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with GLPI; along with meteofrancegmao. If not, see <http://www.gnu.org/licenses/>.
+ along with GLPI; along with meteofrancehelpdesk. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- @package   meteofrancegmao
- @author    the meteofrancegmao plugin team
- @copyright Copyright (c) 2010-2011 meteofrancegmao plugin team
+ @package   meteofrancehelpdesk
+ @author    the meteofrancehelpdesk plugin team
+ @copyright Copyright (c) 2010-2011 meteofrancehelpdesk plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/meteofrancegmao
+ @link      https://forge.indepnet.net/projects/meteofrancehelpdesk
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
 
-$LANG['plugin_meteofrancegmao']['title'][1] = "Transfert GMAO OCS";
+$LANG['plugin_meteofrancehelpdesk']['title'][1] = "Météo France Helpdesk";
+$LANG['plugin_meteofrancehelpdesk']['title'][2] = "Liaison catégories - groupes";
+$LANG['plugin_meteofrancehelpdesk']['title'][3] = "Groupes Helpdesk";
+$LANG['plugin_meteofrancehelpdesk']['title'][4] = "Groupe niveau 1";
+$LANG['plugin_meteofrancehelpdesk']['title'][5] = "Groupe niveau 2";
+$LANG['plugin_meteofrancehelpdesk']['title'][6] = "Groupe niveau 3";
+$LANG['plugin_meteofrancehelpdesk']['title'][7] = "Groupe niveau 4";
+$LANG['plugin_meteofrancehelpdesk']['title'][8] = "Type de ticket";
