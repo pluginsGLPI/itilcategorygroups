@@ -66,6 +66,7 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
          $query.= getEntitiesRestrictRequest(" AND ", $table, 'entities_id',
                                              $obj->fields['entities_id'],
                                              $obj->fields['is_recursive']);
+         $query.= "ORDER BY `entities_id` DESC LIMIT 1";
           foreach ($DB->request($query) as $data) {
              $groups[] = $data;
           }
