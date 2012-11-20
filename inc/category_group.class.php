@@ -50,6 +50,7 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
    
    static function getGroupsForCategory($categories_id, $params = array()) {
       global $DB;
+      
       $groups                  = array();
       $category                = new ITILCategory();
       $table                   = getTableForItemType(__CLASS__);
@@ -65,9 +66,9 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
          FROM `$table`
          WHERE `itilcategories_id`='$categories_id' ".$options['condition'];
          $query.= getEntitiesRestrictRequest(" AND ", $table, 'entities_id',
-                                             $category->fields['entities_id'],
-                                             $category->fields['is_recursive']);
-         $query.= " ORDER BY `entities_id` DESC LIMIT 1";
+                                             $options['entities_id'],
+                                             $options['is_recursive']);
+         $query.= " AND `is_active`='1' ORDER BY `entities_id` DESC LIMIT 1";
           foreach ($DB->request($query) as $data) {
              $groups = $data;
              break;
@@ -76,36 +77,6 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       return $groups;
    }
 
-   static function configExistsForEntity($categories_id, $entities_id,
-                                           $condition = "AND `is_incident`='1'") {
-      $query  = "SELECT *
-                 FROM `$table`
-                 WHERE `itilcategories_id`='$categories_id'".$condition;
-      $query .= getEntitiesRestrictRequest(" AND ", $table, 'entities_id', $entities_id, false);
-      $result = $DB->query($query);
-      if ($DB->numrows($result)) {
-         return true;
-      } else {
-         return false;
-      }
-   }
-   
-   static function showForCategory(ItilCategory $item) {
-      global $LANG;
-      $obj = new self();
-      
-      echo "<form name='categories_groups' method='post'>";
-      echo "<div class='center'>";
-      echo "<table class='tab_cadre_fixe'>";
-
-
-      echo "<tr><td class='tab_bg_2 center' colspan='4'>";
-      echo "<input type='submit' class='submit' value='".$LANG['buttons'][2]."' name='update'>";
-      echo "</td></tr>";
-      echo "</table></div>";
-      Html::closeForm();
-      
-   }
    
    function showForm($id, $options = array()) {
       global $LANG;
@@ -120,10 +91,17 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       echo "<td>";
       Html::autocompletionTextField($this, "name");
       echo "</td>";
+      echo "<td>".$LANG['common'][60]."</td>";
+      echo "<td>";
+      Dropdown::showYesNo('is_active', $this->fields['is_active']);
+      echo "</td></tr>";
+
+      echo "<tr>";
       echo "<td>".$LANG['common'][36]."</td>";
       echo "<td>";
       Dropdown::show('ITILCategory', array('value' => $this->fields['itilcategories_id']));
-      echo "</td></tr>";
+      echo "</td><td colspan='2'></td></tr>";
+      
       
       echo "<tr>";
       echo "<td>".$LANG['job'][70]."</td>";
@@ -211,6 +189,14 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       $tab[4]['displaytype']   = 'text';
       $tab[4]['injectable']    = true;
       
+      $tab[5]['table']         = $this->getTable();
+      $tab[5]['field']         = 'is_active';
+      $tab[5]['name']          = $LANG['common'][60];
+      $tab[5]['datatype']      = 'bool';
+      $tab[5]['checktype']     = 'bool';
+      $tab[5]['displaytype']   = 'bool';
+      $tab[5]['injectable']    = true;
+      
       $tab[16]['table']         = $this->getTable();
       $tab[16]['field']         = 'comment';
       $tab[16]['name']          = $LANG['common'][25];
@@ -271,30 +257,6 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       return $tab;
    }
     
-   //----------------------------- Tabs management --------------------------//
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      global $LANG;
-   
-      switch ($item->getType()) {
-         case 'ITILCategory' :
-            if (Session::haveRight('config', 'r')) {
-               return $LANG['plugin_meteofrancehelpdesk']['title'][3];
-            }
-            break;
-      }
-      return '';
-   }
-   
-   
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-   
-      if ($item->getType()=='ITILCategory') {
-         self::showForCategory($item);
-      }
-      return true;
-   }
-   
-
    //----------------------------- Install process --------------------------//
    static function install(Migration $migration) {
       global $DB;
@@ -303,6 +265,7 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       if (!TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
          `id` int(11) NOT NULL AUTO_INCREMENT,
+         `is_active` tinyint(1) NOT NULL DEFAULT '0',
          `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
          `comment` text COLLATE utf8_unicode_ci,
          `date_mod` date default NULL,

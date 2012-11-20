@@ -35,26 +35,28 @@ header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkLoginUser();
+echo "<option value='0'>".Dropdown::EMPTY_VALUE."</option>";
+
 if (!isset($_POST['ticket_id']) || !isset($_POST['cat_id'])) {
    return ;
 }
-$ticket   = new Ticket();
-$ticket->getFromDB($_POST['ticket_id']);
-$category = $_POST['cat_id'];
-$params   = array('entities_id' => $ticket->fields['entities_id'], 'is_recursive' => 1);
-if ($ticket->fields['type'] == Ticket::DEMAND_TYPE) {
-   $params['condition'] = " AND `is_request`='1'";
-} else {
-   $params['condition'] = " AND `is_incident`='1'";
-}
-$groups   = PluginMeteofrancehelpdeskCategory_Group::getGroupsForCategory($category, $params);
-$group    = new Group();
-
-echo "<option value='0'>".Dropdown::EMPTY_VALUE."</option>";
-if (!empty($groups)) {
-   foreach (array('one', 'two', 'three', 'four') as $value) {
-      if ($group->getFromDB($groups['groups_id_level'.$value])) {
-         echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
+$ticket = new Ticket();
+if ($ticket->getFromDB($_POST['ticket_id'])) {
+   $category = $_POST['cat_id'];
+   $params   = array('entities_id' => $ticket->fields['entities_id'], 'is_recursive' => 1);
+   if ($ticket->fields['type'] == Ticket::DEMAND_TYPE) {
+      $params['condition'] = " AND `is_request`='1'";
+   } else {
+      $params['condition'] = " AND `is_incident`='1'";
+   }
+   $groups   = PluginMeteofrancehelpdeskCategory_Group::getGroupsForCategory($category, $params);
+   $group    = new Group();
+   
+   if (!empty($groups)) {
+      foreach (array('one', 'two', 'three', 'four') as $value) {
+         if ($group->getFromDB($groups['groups_id_level'.$value])) {
+            echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
+         }
       }
    }
 }
