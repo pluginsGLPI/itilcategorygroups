@@ -28,8 +28,6 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ("GMAO_ENTITY_TAG_PATTERN", "/_GMAO$/");
-
 function plugin_init_meteofrancehelpdesk() {
    global $PLUGIN_HOOKS, $LANG;
     
@@ -38,8 +36,7 @@ function plugin_init_meteofrancehelpdesk() {
    $plugin = new Plugin();
    if ($plugin->isInstalled('meteofrancehelpdesk') && $plugin->isActivated('meteofrancehelpdesk')) {
       Plugin::registerClass('PluginMeteofrancehelpdeskCategory_Group',
-                            array('addtabon'         => 'ITILCategory',
-                                  'forwardentityfrom' => 'ITILCategory'));
+                            array('forwardentityfrom' => 'ITILCategory'));
       if (Session::haveRight('config', 'r')) {
          $PLUGIN_HOOKS['menu_entry']['meteofrancehelpdesk'] = 'front/category_group.php';
             $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['title']
@@ -54,6 +51,7 @@ function plugin_init_meteofrancehelpdesk() {
          = '/plugins/meteofrancehelpdesk/front/category_group.form.php';
           
       }
+      $PLUGIN_HOOKS['add_javascript']['meteofrancehelpdesk'][] = 'scripts/filtergroups.js.php';
    }
 }
 

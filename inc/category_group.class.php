@@ -51,28 +51,29 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
    static function getGroupsForCategory($categories_id, $params = array()) {
       global $DB;
       $groups                  = array();
-      $obj                     = new self();
+      $category                = new ITILCategory();
       $table                   = getTableForItemType(__CLASS__);
       $options['entities_id']  = 0;
       $options['is_recursive'] = 0;
-      $options['condition']    = "AND `is_incident`='1'";
+      $options['condition']    = " AND `is_incident`='1'";
       foreach ($params as $key => $value) {
          $options[$key] = $value;
       }
-      if ($obj->getFromDB($categories_id)) {
+
+      if ($category->getFromDB($categories_id)) {
          $query = "SELECT *
          FROM `$table`
-         WHERE `itilcategories_id`='$categories_id'".$options['condition'];
+         WHERE `itilcategories_id`='$categories_id' ".$options['condition'];
          $query.= getEntitiesRestrictRequest(" AND ", $table, 'entities_id',
-                                             $obj->fields['entities_id'],
-                                             $obj->fields['is_recursive']);
-         $query.= "ORDER BY `entities_id` DESC LIMIT 1";
+                                             $category->fields['entities_id'],
+                                             $category->fields['is_recursive']);
+         $query.= " ORDER BY `entities_id` DESC LIMIT 1";
           foreach ($DB->request($query) as $data) {
-             $groups[] = $data;
+             $groups = $data;
+             break;
           }
-      } else {
-         return $groups;
       }
+      return $groups;
    }
 
    static function configExistsForEntity($categories_id, $entities_id,

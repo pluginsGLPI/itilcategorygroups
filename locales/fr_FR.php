@@ -1,6 +1,6 @@
 <?php
 /*
- * @version $Id: fr_FR.php 17 2012-06-19 15:09:22Z walid $
+ * @version $Id: setup.php 19 2012-06-27 09:19:05Z walid $
  LICENSE
 
   This file is part of the meteofrancehelpdesk plugin.
