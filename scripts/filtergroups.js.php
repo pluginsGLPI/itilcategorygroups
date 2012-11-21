@@ -40,34 +40,37 @@ Ext.onReady(function() {\n
    if (location.pathname.indexOf('ticket.form.php') > 0) {
 
       //get id of cat select
-      var cat_select_dom_id = Ext.select("select[name=itilcategories_id]")
-         .elements[0].attributes.getNamedItem('id').nodeValue;
+         var cat_select_dom_id = Ext.select("select[name=itilcategories_id]")
+            .elements[0].attributes.getNamedItem('id').nodeValue;
 
-      var ticket_id = document.form_ticket.elements['id'].value;
-      
-      //get id of itilactor select
-      var actor_select_dom_id = Ext.select("select[name*=_itil_assign\[_type]")
-         .elements[0].attributes.getNamedItem('id').nodeValue;
+      // separating the GET parameters from the current URL
+      var getParams = document.URL.split("?");
+      // transforming the GET parameters into a dictionnary
+      var url_params = Ext.urlDecode(getParams[getParams.length - 1]);
+      // get tickets_id
+      var tickets_id = url_params['id'];
 
-      //trigger the filter only on actor(group) selected
-      Ext.get(actor_select_dom_id).on("change", function() {
-         if(this.getValue() != 'group') return;
-          
-         //get ticket_cat value
-         cat_id = Ext.get(cat_select_dom_id).getValue();
+      //only in edit form
+      if(tickets_id == undefined) {
+         // -----------------------
+         // ---- Create Ticket ---- 
+         // -----------------------
+        
+        cat_id = Ext.get(cat_select_dom_id).getValue();
+        if (cat_id == 0) return;
 
-         //perform an ajax request to get the new options for the group list
+        //perform an ajax request to get the new options for the group list
          Ext.Ajax.request({
             url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
             params: {
                'cat_id': cat_id,
-               'ticket_id': ticket_id
+               'ticket_id': 0
             },
             success: function(response, opts) {
                options = response.responseText;
 
-               var assign_select_dom_id = Ext.select("select[name*=_itil_assign\[groups_id]")
-                  .elements[0].attributes.getNamedItem('id').nodeValue;
+               var assign_select_dom_id = Ext.select("select[name=_groups_id_assign]")
+                     .elements[0].attributes.getNamedItem('id').nodeValue;
 
                //replace groups select by ajax response
                Ext.get(assign_select_dom_id).update(options);
@@ -77,8 +80,49 @@ Ext.onReady(function() {\n
                console.log('server-side failure with status code ' + response.status);
             }
          });
-      });
-      
+
+      } else {
+         // -----------------------
+         // ---- Update Ticket ---- 
+         // -----------------------
+         
+         //remove # in ticket_id
+         tickets_id = parseInt(tickets_id);
+         
+         //get id of itilactor select
+         var actor_select_dom_id = Ext.select("select[name*=_itil_assign\[_type]")
+            .elements[0].attributes.getNamedItem('id').nodeValue;
+
+         //trigger the filter only on actor(group) selected
+         Ext.get(actor_select_dom_id).on("change", function() {
+            if(this.getValue() != 'group') return;
+             
+            //get ticket_cat value
+            cat_id = Ext.get(cat_select_dom_id).getValue();
+
+            //perform an ajax request to get the new options for the group list
+            Ext.Ajax.request({
+               url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
+               params: {
+                  'cat_id': cat_id,
+                  'ticket_id': tickets_id
+               },
+               success: function(response, opts) {
+                  options = response.responseText;
+
+                  var assign_select_dom_id = Ext.select("select[name*=_itil_assign\[groups_id]")
+                     .elements[0].attributes.getNamedItem('id').nodeValue;
+
+                  //replace groups select by ajax response
+                  Ext.get(assign_select_dom_id).update(options);
+                  
+               },
+               failure: function(response, opts) {
+                  console.log('server-side failure with status code ' + response.status);
+               }
+            });
+         });
+      }
    }
 });
 JAVASCRIPT;
