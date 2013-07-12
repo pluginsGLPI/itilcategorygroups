@@ -41,6 +41,11 @@ if (!isset($_REQUEST['cat_id'])) {
    return ;
 }
 
+$lnum = array('one'   => 1,
+              'two'   => 2,
+              'three' => 3,
+              'four'  => 4);
+
 $category = $_REQUEST['cat_id'];
       
 
@@ -58,7 +63,13 @@ if (isset($_REQUEST['tickets_id'])) {
       
       if (!empty($groups)) {
          foreach (array('one', 'two', 'three', 'four') as $value) {
-            if ($group->getFromDB($groups['groups_id_level'.$value])) {
+            if ($groups['groups_id_level'.$value] == 0) {
+               foreach (PluginMeteofrancehelpdeskGroup_Level::getAllGroupForALevel($lnum[$value]) as $groups_id) {
+                  if ($group->getFromDB($groups_id)) {
+                     echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
+                  }
+               }
+            } else if ($group->getFromDB($groups['groups_id_level'.$value])) {
                echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
             }
          }
@@ -69,10 +80,15 @@ if (isset($_REQUEST['tickets_id'])) {
 
    $groups   = PluginMeteofrancehelpdeskCategory_Group::getGroupsForCategory($category, $params);
    $group    = new Group();
-      
    if (!empty($groups)) {
       foreach (array('one', 'two', 'three', 'four') as $value) {
-         if ($group->getFromDB($groups['groups_id_level'.$value])) {
+         if ($groups['groups_id_level'.$value] == 0) {
+            foreach (PluginMeteofrancehelpdeskGroup_Level::getAllGroupForALevel($lnum[$value]) as $groups_id) {
+               if ($group->getFromDB($groups_id)) {
+                  echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
+               }
+            }
+         } else if ($group->getFromDB($groups['groups_id_level'.$value])) {
             echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
          }
       }
