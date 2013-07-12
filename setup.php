@@ -65,7 +65,7 @@ function plugin_version_meteofrancehelpdesk() {
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    return array ('name'           => $LANG['plugin_meteofrancehelpdesk']['title'][1],
-                   'version'        => '0.83',
+                   'version'        => '0.83-2',
                    'author'         => $author,
                    'homepage'       => 'www.teclib.com',
                    'minGlpiVersion' => '0.83.3');
