@@ -31,12 +31,14 @@
 function plugin_init_meteofrancehelpdesk() {
    global $PLUGIN_HOOKS, $LANG;
     
-   $PLUGIN_HOOKS['csrf_compliant']['meteofrancehelpdesk'] = true;
+   $PLUGIN_HOOKS['csrf_compliant']['meteofrancehelpdesk'] = false;
    
    $plugin = new Plugin();
    if ($plugin->isInstalled('meteofrancehelpdesk') && $plugin->isActivated('meteofrancehelpdesk')) {
       Plugin::registerClass('PluginMeteofrancehelpdeskCategory_Group',
                             array('forwardentityfrom' => 'ITILCategory'));
+      Plugin::registerClass('PluginMeteofrancehelpdeskGroup_Level',
+                            array('addtabon' => 'Group'));
       if (Session::haveRight('config', 'r')) {
          $PLUGIN_HOOKS['menu_entry']['meteofrancehelpdesk'] = 'front/category_group.php';
             $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['title']
@@ -45,6 +47,8 @@ function plugin_init_meteofrancehelpdesk() {
             = '/plugins/meteofrancehelpdesk/front/category_group.php';
             $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['links']['search']
             = '/plugins/meteofrancehelpdesk/front/category_group.php';
+
+         $PLUGIN_HOOKS['pre_item_update']['meteofrancehelpdesk']     = array('Group' => 'plugin_pre_item_update_meteofrancehelpdesk');
       }
       if (Session::haveRight('config', 'w')) {
          $PLUGIN_HOOKS['submenu_entry']['meteofrancehelpdesk']['options']['PluginMeteofrancehelpdeskCategory_Group']['links']['add']

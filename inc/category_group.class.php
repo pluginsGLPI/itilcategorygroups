@@ -113,30 +113,34 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       Dropdown::showYesNo('is_request', $this->fields['is_request']);
       echo "</td></tr>";
       
-      echo "<tr><td>".$LANG['plugin_meteofrancehelpdesk']['title'][4]."</td>";
+      echo "<tr><td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][4])."</td>";
       echo "<td>";
-      Dropdown::show('Group', array('name'     => 'groups_id_levelone',
+      Dropdown::show('Group', array('name'      => 'groups_id_levelone',
                                     'condition' => "`is_assign`='1'",
-                                     'value'    => $this->fields['groups_id_levelone']));
+                                    'value'     => $this->fields['groups_id_levelone'], 
+                                    'toadd'     => array('all' => $LANG['common'][66])));
       echo "</td>";
-      echo "<td>".$LANG['plugin_meteofrancehelpdesk']['title'][5]."</td>";
+      echo "<td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][5])."</td>";
       echo "<td>";
-      Dropdown::show('Group', array('name'     => 'groups_id_leveltwo',
+      Dropdown::show('Group', array('name'      => 'groups_id_leveltwo',
                                     'condition' => "`is_assign`='1'",
-                                    'value'    => $this->fields['groups_id_leveltwo']));
+                                    'value'     => $this->fields['groups_id_leveltwo'], 
+                                    'toadd'     => array('all' => $LANG['common'][66])));
       echo "</td></tr>";
       
-      echo "<tr><td>".$LANG['plugin_meteofrancehelpdesk']['title'][6]."</td>";
+      echo "<tr><td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][6])."</td>";
       echo "<td>";
-      Dropdown::show('Group', array('name'     => 'groups_id_levelthree',
+      Dropdown::show('Group', array('name'      => 'groups_id_levelthree',
                                     'condition' => "`is_assign`='1'",
-                                     'value'    => $this->fields['groups_id_levelthree']));
+                                    'value'     => $this->fields['groups_id_levelthree'], 
+                                    'toadd'     => array('all' => $LANG['common'][66])));
       echo "</td>";
-      echo "<td>".$LANG['plugin_meteofrancehelpdesk']['title'][7]."</td>";
+      echo "<td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][7])."</td>";
       echo "<td>";
-      Dropdown::show('Group', array('name'     => 'groups_id_levelfour',
+      Dropdown::show('Group', array('name'      => 'groups_id_levelfour',
                                     'condition' => "`is_assign`='1'",
-                                     'value'    => $this->fields['groups_id_levelfour']));
+                                    'value'     => $this->fields['groups_id_levelfour'], 
+                                    'toadd'     => array('all' => $LANG['common'][66])));
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -295,7 +299,7 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
    static function uninstall() {
       global $DB;
       $table = getTableForItemType(__CLASS__);
-      $DB->query("DROP TABLE `$table`");
+      $DB->query("DROP TABLE IF EXISTS`$table`");
       return true;
    }
 }

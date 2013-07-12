@@ -31,8 +31,9 @@
 $LANG['plugin_meteofrancehelpdesk']['title'][1] = "Météo France Helpdesk";
 $LANG['plugin_meteofrancehelpdesk']['title'][2] = "Liaison catégories - groupes";
 $LANG['plugin_meteofrancehelpdesk']['title'][3] = "Groupes Helpdesk";
-$LANG['plugin_meteofrancehelpdesk']['title'][4] = "Groupe niveau 1";
-$LANG['plugin_meteofrancehelpdesk']['title'][5] = "Groupe niveau 2";
-$LANG['plugin_meteofrancehelpdesk']['title'][6] = "Groupe niveau 3";
-$LANG['plugin_meteofrancehelpdesk']['title'][7] = "Groupe niveau 4";
+$LANG['plugin_meteofrancehelpdesk']['title'][4] = "niveau 1";
+$LANG['plugin_meteofrancehelpdesk']['title'][5] = "niveau 2";
+$LANG['plugin_meteofrancehelpdesk']['title'][6] = "niveau 3";
+$LANG['plugin_meteofrancehelpdesk']['title'][7] = "niveau 4";
 $LANG['plugin_meteofrancehelpdesk']['title'][8] = "Type de ticket";
+$LANG['plugin_meteofrancehelpdesk']['title'][9] = "Affectation niveau";
