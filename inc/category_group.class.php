@@ -165,8 +165,8 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       FROM glpi_groups gr
       LEFT JOIN glpi_plugin_meteofrancehelpdesk_groups_levels gl
          ON gl.groups_id = gr.id
-      WHERE gl.level != $level
-      OR gl.level IS NULL");
+      WHERE gl.lvl != $level
+      OR gl.lvl IS NULL");
       while ($row = $DB->fetch_assoc($res)) {
          $groups_id[$row['id']] = $row['id'];
       }

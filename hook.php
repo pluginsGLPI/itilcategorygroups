@@ -64,7 +64,7 @@ function plugin_meteofrancehelpdesk_giveItem($type,$ID,$data,$num) {
    $value = $data["ITEM_$num"];
 
    switch ($table.'.'.$field) {
-      case "glpi_plugin_meteofrancehelpdesk_groups_levels.level" :
+      case "glpi_plugin_meteofrancehelpdesk_groups_levels.lvl" :
          if (!empty($value)) {
             return $LANG['plugin_meteofrancehelpdesk']['title'][3+$value];
          }
@@ -84,8 +84,8 @@ function plugin_meteofrancehelpdesk_MassiveActionsFieldsDisplay($options=array()
 
    // Table fields
    switch ($table.".".$field) {
-      case "glpi_plugin_meteofrancehelpdesk_groups_levels.level" :
-         Dropdown::showFromArray('level', 
+      case "glpi_plugin_meteofrancehelpdesk_groups_levels.lvl" :
+         Dropdown::showFromArray('lvl', 
                                  array(NULL => "---",
                                        1    => $LANG['plugin_meteofrancehelpdesk']['title'][4],
                                        2    => $LANG['plugin_meteofrancehelpdesk']['title'][5],
@@ -101,18 +101,18 @@ function plugin_meteofrancehelpdesk_MassiveActionsFieldsDisplay($options=array()
 
 // Hook done on update item case
 function plugin_pre_item_update_meteofrancehelpdesk($item) {
-   if (isset($_REQUEST['massiveaction']) && isset($_REQUEST['level'])) {
+   if (isset($_REQUEST['massiveaction']) && isset($_REQUEST['lvl'])) {
       $group_level = new PluginMeteofrancehelpdeskGroup_Level;
       foreach($_REQUEST['item'] as $groups_id => $val) {
          if(!$group_level->getFromDB($groups_id)) {
             $group_level->add(array('groups_id'=> $groups_id, 
-                                    'level'    => $_REQUEST['level']));
+                                    'lvl'    => $_REQUEST['lvl']));
          } else {
             $group_level->update(array('groups_id'=> $groups_id, 
-                                       'level'    => $_REQUEST['level']));
+                                       'lvl'    => $_REQUEST['lvl']));
          }
       }
    }   
-   return true;
+   return $item;
 }
 ?>

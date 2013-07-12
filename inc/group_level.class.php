@@ -30,10 +30,10 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
       return $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
          `id`                int(11) NOT NULL auto_increment,
          `groups_id` int(11) NOT NULL,
-         `level`             int(11) DEFAULT NULL,
+         `lvl`             int(11) DEFAULT NULL,
          PRIMARY KEY (`id`),
          KEY         `groups_id` (`groups_id`),
-         KEY         `level` (`level`)
+         KEY         `lvl` (`lvl`)
       ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
    }
 
@@ -93,13 +93,13 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
               "</tr>";
 
          echo "<tr class='tab_bg_2'><td class='center'>";
-         Dropdown::showFromArray('level', 
+         Dropdown::showFromArray('lvl', 
                                  array(NULL => "---",
                                        1    => $LANG['plugin_meteofrancehelpdesk']['title'][4],
                                        2    => $LANG['plugin_meteofrancehelpdesk']['title'][5],
                                        3    => $LANG['plugin_meteofrancehelpdesk']['title'][6],
                                        4    => $LANG['plugin_meteofrancehelpdesk']['title'][7]), 
-                                 array('value' => $item->fields['level']));
+                                 array('value' => $item->fields['lvl']));
          echo "</td></tr>";
 
          echo "</td><td class='center'>";
@@ -125,9 +125,9 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
 
       if ($itemtype = 'Group') {
          $opt[9978]['table']      = getTableForItemType(__CLASS__);
-         $opt[9978]['field']      = 'level';
+         $opt[9978]['field']      = 'lvl';
          $opt[9978]['name']       = $LANG['plugin_meteofrancehelpdesk']['title'][9];
-         $opt[9978]['linkfield']  = 'level';
+         $opt[9978]['linkfield']  = 'lvl';
          $opt[9978]['joinparams'] = array('jointype' => 'child');
       }
 
@@ -142,7 +142,7 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
                 FROM ".getTableForItemType(__CLASS__)." gl 
                 LEFT JOIN glpi_groups gr 
                     ON gl.groups_id = gr.id
-                WHERE gl.level = $level".
+                WHERE gl.lvl = $level".
                 getEntitiesRestrictRequest(" AND ", "gr", 'entities_id',
                                            $_SESSION['glpiactive_entity'],
                                            $_SESSION['glpiactive_entity_recursive']);
