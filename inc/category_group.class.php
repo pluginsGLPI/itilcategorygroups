@@ -118,14 +118,16 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       Dropdown::show('Group', array('name'      => 'groups_id_levelone',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_levelone'], 
-                                    'toadd'     => array('all' => $LANG['common'][66])));
+                                    'toadd'     => array('all' => $LANG['common'][66]), 
+                                    'used' => self::getOthersGroupsID(1)));
       echo "</td>";
       echo "<td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][5])."</td>";
       echo "<td>";
       Dropdown::show('Group', array('name'      => 'groups_id_leveltwo',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_leveltwo'], 
-                                    'toadd'     => array('all' => $LANG['common'][66])));
+                                    'toadd'     => array('all' => $LANG['common'][66]), 
+                                    'used' => self::getOthersGroupsID(2)));
       echo "</td></tr>";
       
       echo "<tr><td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][6])."</td>";
@@ -133,14 +135,16 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       Dropdown::show('Group', array('name'      => 'groups_id_levelthree',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_levelthree'], 
-                                    'toadd'     => array('all' => $LANG['common'][66])));
+                                    'toadd'     => array('all' => $LANG['common'][66]), 
+                                    'used' => self::getOthersGroupsID(3)));
       echo "</td>";
       echo "<td>".ucfirst($LANG['plugin_meteofrancehelpdesk']['title'][7])."</td>";
       echo "<td>";
       Dropdown::show('Group', array('name'      => 'groups_id_levelfour',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_levelfour'], 
-                                    'toadd'     => array('all' => $LANG['common'][66])));
+                                    'toadd'     => array('all' => $LANG['common'][66]), 
+                                    'used' => self::getOthersGroupsID(4)));
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -151,6 +155,23 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
       echo "</td></tr>";
       $this->showFormButtons($options);
       Html::closeForm();
+   }
+
+   static function getOthersGroupsID($level = 0) {
+      global $DB;
+
+      $groups_id = array();
+      $res = $DB->query("SELECT gr.id 
+      FROM glpi_groups gr
+      LEFT JOIN glpi_plugin_meteofrancehelpdesk_groups_levels gl
+         ON gl.groups_id = gr.id
+      WHERE gl.level != $level
+      OR gl.level IS NULL");
+      while ($row = $DB->fetch_assoc($res)) {
+         $groups_id[$row['id']] = $row['id'];
+      }
+
+      return $groups_id;
    }
 
    function getSearchOptions() {
