@@ -69,15 +69,13 @@ Ext.onReady(function() {\n
             success: function(response, opts) {
                options = response.responseText;
 
-               var assign_select_dom_id = Ext.select("select[name=_groups_id_assign]")
-                     .elements[0].attributes.getNamedItem('id').nodeValue;
+               setTimeout(function() {  
+                  var assign_select_dom_id = Ext.select("select[name=_groups_id_assign]")
+                        .elements[0].attributes.getNamedItem('id').nodeValue;
 
-               //replace groups select by ajax response
-               Ext.get(assign_select_dom_id).update(options);
-               
-            },
-            failure: function(response, opts) {
-               console.log('server-side failure with status code ' + response.status);
+                  //replace groups select by ajax response
+                  Ext.get(assign_select_dom_id).update(options);
+               }, 200);
             }
          });
 
@@ -93,36 +91,42 @@ Ext.onReady(function() {\n
          var actor_select_dom_id = Ext.select("select[name*=_itil_assign\[_type]")
             .elements[0].attributes.getNamedItem('id').nodeValue;
 
-         //trigger the filter only on actor(group) selected
-         Ext.get(actor_select_dom_id).on("change", function() {
-            if(this.getValue() != 'group') return;
+         Ext.Ajax.on('requestcomplete', function(conn, response, option) {
+            //trigger the filter only on actor(group) selected
+            if (option.url.indexOf('dropdownItilActors.php') > 0 
+               && (
+                  option.params.indexOf("group") > 0
+                  && option.params.indexOf("assign") > 0
+               )) {
+
+               //delay the execution (ajax requestcomplete event fired before dom loading)
+               setTimeout( function () {
              
-            //get ticket_cat value
-            cat_id = Ext.get(cat_select_dom_id).getValue();
+                  //get ticket_cat value
+                  cat_id = Ext.get(cat_select_dom_id).getValue();
 
-            //perform an ajax request to get the new options for the group list
-            Ext.Ajax.request({
-               url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
-               params: {
-                  'cat_id': cat_id,
-                  'ticket_id': tickets_id
-               },
-               success: function(response, opts) {
-                  options = response.responseText;
+                  //perform an ajax request to get the new options for the group list
+                  Ext.Ajax.request({
+                     url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
+                     params: {
+                        'cat_id': cat_id,
+                        'ticket_id': tickets_id
+                     },
+                     success: function(response, opts) {
+                        options = response.responseText;
 
-                  var assign_select_dom_id = Ext.select("select[name*=_itil_assign\[groups_id]")
-                     .elements[0].attributes.getNamedItem('id').nodeValue;
+                        var assign_select_dom_id = Ext.select("select[name*=_itil_assign\[groups_id]")
+                           .elements[0].attributes.getNamedItem('id').nodeValue;
 
-                  //replace groups select by ajax response
-                  Ext.get(assign_select_dom_id).update(options);
-                  
-               },
-               failure: function(response, opts) {
-                  console.log('server-side failure with status code ' + response.status);
-               }
-            });
-         });
-      }
+                        //replace groups select by ajax response
+                        Ext.get(assign_select_dom_id).update(options);
+                     }
+                  });
+         
+               }, 200);   //end timeout
+            } 
+         }, this); //end on requestcomplet
+      } // end if update ticket
    }
 });
 JAVASCRIPT;
