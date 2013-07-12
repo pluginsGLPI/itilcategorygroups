@@ -26,8 +26,7 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
    static function install(Migration $migration) {
       global $DB;
 
-      $item = new self;
-      $table = $item->getTable();
+      $table = getTableForItemType(__CLASS__);
       return $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
          `id`                int(11) NOT NULL auto_increment,
          `groups_id` int(11) NOT NULL,
@@ -41,8 +40,7 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
    static function uninstall() {
       global $DB;
 
-      $item = new self;
-      $table = $item->getTable();
+      $table = getTableForItemType(__CLASS__);
       return $DB->query("DROP TABLE IF EXISTS `$table`");
    }
 
@@ -126,8 +124,7 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
       $opt = array();
 
       if ($itemtype = 'Group') {
-         $item = new self;
-         $opt[9978]['table']      = $item->getTable();
+         $opt[9978]['table']      = getTableForItemType(__CLASS__);
          $opt[9978]['field']      = 'level';
          $opt[9978]['name']       = $LANG['plugin_meteofrancehelpdesk']['title'][9];
          $opt[9978]['linkfield']  = 'level';
