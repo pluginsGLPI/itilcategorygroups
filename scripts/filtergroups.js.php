@@ -64,7 +64,7 @@ Ext.onReady(function() {\n
             url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
             params: {
                'cat_id': cat_id,
-               'ticket_id': 0
+               'tickets_id': 0
             },
             success: function(response, opts) {
                options = response.responseText;
@@ -84,7 +84,7 @@ Ext.onReady(function() {\n
          // ---- Update Ticket ---- 
          // -----------------------
          
-         //remove # in ticket_id
+         //remove # in tickets_id
          tickets_id = parseInt(tickets_id);
          
          //get id of itilactor select
@@ -107,7 +107,7 @@ Ext.onReady(function() {\n
                      url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
                      params: {
                         'cat_id': cat_id,
-                        'ticket_id': tickets_id
+                        'tickets_id': tickets_id
                      },
                      success: function(response, opts) {
                         options = response.responseText;

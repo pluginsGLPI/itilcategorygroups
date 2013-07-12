@@ -37,16 +37,16 @@ Html::header_nocache();
 Session::checkLoginUser();
 echo "<option value='0'>".Dropdown::EMPTY_VALUE."</option>";
 
-if (!isset($_POST['cat_id'])) {
+if (!isset($_REQUEST['cat_id'])) {
    return ;
 }
 
-$category = $_POST['cat_id'];
+$category = $_REQUEST['cat_id'];
       
 
-if (isset($_POST['tickets_id'])) {
+if (isset($_REQUEST['tickets_id'])) {
    $ticket = new Ticket();
-   if ($ticket->getFromDB($_POST['ticket_id'])) {
+   if ($ticket->getFromDB($_REQUEST['tickets_id'])) {
       $params   = array('entities_id' => $ticket->fields['entities_id'], 'is_recursive' => 1);
       if ($ticket->fields['type'] == Ticket::DEMAND_TYPE) {
          $params['condition'] = " AND `is_request`='1'";
@@ -68,7 +68,7 @@ if (isset($_POST['tickets_id'])) {
    $params   = array('entities_id' => $_SESSION['glpiactive_entity'], 'is_recursive' => 1);
 
    $groups   = PluginMeteofrancehelpdeskCategory_Group::getGroupsForCategory($category, $params);
-      $group    = new Group();
+   $group    = new Group();
       
    if (!empty($groups)) {
       foreach (array('one', 'two', 'three', 'four') as $value) {
