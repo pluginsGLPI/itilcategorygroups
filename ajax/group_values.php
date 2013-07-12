@@ -49,7 +49,7 @@ $lnum = array('one'   => 1,
 $category = $_REQUEST['cat_id'];
       
 
-if (isset($_REQUEST['tickets_id'])) {
+if (isset($_REQUEST['tickets_id']) && !empty($_REQUEST['tickets_id'])) {
    $ticket = new Ticket();
    if ($ticket->getFromDB($_REQUEST['tickets_id'])) {
       $params   = array('entities_id' => $ticket->fields['entities_id'], 'is_recursive' => 1);
