@@ -94,10 +94,7 @@ Ext.onReady(function() {\n
          Ext.Ajax.on('requestcomplete', function(conn, response, option) {
             //trigger the filter only on actor(group) selected
             if (option.url.indexOf('dropdownItilActors.php') > 0 
-               && (
-                  option.params.indexOf("group") > 0
-                  && option.params.indexOf("assign") > 0
-               )) {
+               && option.params.indexOf("group") > 0 && option.params.indexOf("assign") > 0) {
 
                //delay the execution (ajax requestcomplete event fired before dom loading)
                setTimeout( function () {
@@ -134,7 +131,6 @@ Ext.onReady(function() {\n
                         }
                      }
                   });
-         
                }, 200);   //end timeout
             } 
          }, this); //end on requestcomplet
