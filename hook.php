@@ -101,17 +101,18 @@ function plugin_meteofrancehelpdesk_MassiveActionsFieldsDisplay($options=array()
 
 // Hook done on update item case
 function plugin_pre_item_update_meteofrancehelpdesk($item) {
-   Html::printCleanArray($_REQUEST, $item);exit;
    if (isset($_REQUEST['massiveaction']) && isset($_REQUEST['level'])) {
       $group_level = new PluginMeteofrancehelpdeskGroup_Level;
-      foreach($_REQUEST['item'] as $groups_id) {
-         $group_level->getFromDB($groups_id);
-         $group_level->update(array('id'=> $group_level->fields['id'], 
-                                    'level' => $_REQUEST['level']));
+      foreach($_REQUEST['item'] as $groups_id => $val) {
+         if(!$group_level->getFromDB($groups_id)) {
+            $group_level->add(array('groups_id'=> $groups_id, 
+                                    'level'    => $_REQUEST['level']));
+         } else {
+            $group_level->update(array('groups_id'=> $groups_id, 
+                                       'level'    => $_REQUEST['level']));
+         }
       }
-      Html::printCleanArray($_REQUEST['item']);exit;
-      
-   }
+   }   
    return true;
 }
 ?>
