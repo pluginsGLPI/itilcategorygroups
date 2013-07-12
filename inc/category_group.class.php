@@ -69,10 +69,13 @@ class PluginMeteofrancehelpdeskCategory_Group extends CommonDropdown {
                                              $options['entities_id'],
                                              $options['is_recursive']);
          $query.= " AND `is_active`='1' ORDER BY `entities_id` DESC LIMIT 1";
-          foreach ($DB->request($query) as $data) {
-             $groups = $data;
-             break;
-          }
+         foreach ($DB->request($query) as $data) {
+            $groups = $data;
+            break;
+         }
+         if (empty($groups) && !empty($category->fields['itilcategories_id'])) {
+            return self::getGroupsForCategory($category->fields['itilcategories_id'], $params);
+         }
       }
       return $groups;
    }
