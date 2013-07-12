@@ -118,8 +118,20 @@ Ext.onReady(function() {\n
                         var assign_select_dom_id = Ext.select("select[name*=_itil_assign\[groups_id]")
                            .elements[0].attributes.getNamedItem('id').nodeValue;
 
+                        var id_num = assign_select_dom_id.
+                                       replace("dropdown__itil_assign[groups_id]", "");
+
+                        //remove input associated to search dropdown
+                        var input_search = Ext.get('search_'+id_num);
+                        if (input_search) {
+                           input_search.remove();
+                        }
+
                         //replace groups select by ajax response
-                        Ext.get(assign_select_dom_id).update(options);
+                        var dropdown_search = Ext.get(assign_select_dom_id);
+                        if (dropdown_search) {
+                           dropdown_search.update(options);
+                        }
                      }
                   });
          
