@@ -236,21 +236,25 @@ class PluginItilcategorygroupsCategory_Group extends CommonDropdown {
    
       $tab[26]['table']         = 'glpi_groups';
       $tab[26]['field']         = 'name';
+      $tab[26]['datatype']      = 'dropdown';
       $tab[26]['linkfield']     = 'groups_id_levelone';
       $tab[26]['name']          = __('Level 1','itilcategorygroups');
 
       $tab[27]['table']         = 'glpi_groups';
       $tab[27]['field']         = 'name';
+      $tab[27]['datatype']      = 'dropdown';
       $tab[27]['linkfield']     = 'groups_id_leveltwo';
       $tab[27]['name']          = __('Level 2','itilcategorygroups');
       
       $tab[28]['table']         = 'glpi_groups';
       $tab[28]['field']         = 'name';
+      $tab[28]['datatype']      = 'dropdown';
       $tab[28]['linkfield']     = 'groups_id_levelthree';
       $tab[28]['name']          = __('Level 3','itilcategorygroups');
   
       $tab[29]['table']         = 'glpi_groups';
       $tab[29]['field']         = 'name';
+      $tab[29]['datatype']      = 'dropdown';
       $tab[29]['linkfield']     = 'groups_id_levelfour';
       $tab[29]['name']          = __('Level 4','itilcategorygroups');
       
