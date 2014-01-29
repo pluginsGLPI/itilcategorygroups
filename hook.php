@@ -3,7 +3,7 @@
  * @version $Id: setup.php 19 2012-06-27 09:19:05Z walid $
  LICENSE
 
-  This file is part of the meteofrancehelpdesk plugin.
+  This file is part of the itilcategorygroups plugin.
 
  Order plugin is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,47 +16,46 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with GLPI; along with meteofrancehelpdesk. If not, see <http://www.gnu.org/licenses/>.
+ along with GLPI; along with itilcategorygroups. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- @package   meteofrancehelpdesk
- @author    the meteofrancehelpdesk plugin team
- @copyright Copyright (c) 2010-2011 meteofrancehelpdesk plugin team
+ @package   itilcategorygroups
+ @author    the itilcategorygroups plugin team
+ @copyright Copyright (c) 2010-2011 itilcategorygroups plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/meteofrancehelpdesk
+ @link      https://forge.indepnet.net/projects/itilcategorygroups
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
 
-function plugin_meteofrancehelpdesk_install() {
-   $migration = new Migration("0.83");
+function plugin_itilcategorygroups_install() {
+   $migration = new Migration("0.84");
    
-   include_once(GLPI_ROOT."/plugins/meteofrancehelpdesk/inc/category_group.class.php");
-   include_once(GLPI_ROOT."/plugins/meteofrancehelpdesk/inc/group_level.class.php");
-   PluginMeteofrancehelpdeskCategory_Group::install($migration);
-   PluginMeteofrancehelpdeskGroup_Level::install($migration);
+   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
+   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/group_level.class.php");
+   PluginItilcategorygroupsCategory_Group::install($migration);
+   PluginItilcategorygroupsGroup_Level::install($migration);
    return true;
 }
 
-function plugin_meteofrancehelpdesk_uninstall() {
-   include_once(GLPI_ROOT."/plugins/meteofrancehelpdesk/inc/category_group.class.php");
-   include_once(GLPI_ROOT."/plugins/meteofrancehelpdesk/inc/group_level.class.php");
-   PluginMeteofrancehelpdeskCategory_Group::uninstall();
-   PluginMeteofrancehelpdeskGroup_Level::uninstall();
+function plugin_itilcategorygroups_uninstall() {
+   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
+   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/group_level.class.php");
+   PluginItilcategorygroupsCategory_Group::uninstall();
+   PluginItilcategorygroupsGroup_Level::uninstall();
    return true;
 }
 
-function plugin_meteofrancehelpdesk_getAddSearchOptions($itemtype) {
+function plugin_itilcategorygroups_getAddSearchOptions($itemtype) {
    if (isset($_SESSION['glpiactiveentities'])) {
-      $options = PluginMeteofrancehelpdeskGroup_Level::getAddSearchOptions($itemtype);
+      $options = PluginItilcategorygroupsGroup_Level::getAddSearchOptions($itemtype);
       return $options;
    } else {
       return NULL;
    }
 }
 
-function plugin_meteofrancehelpdesk_giveItem($type,$ID,$data,$num) {
-   global $LANG;
+function plugin_itilcategorygroups_giveItem($type,$ID,$data,$num) {
 
    $searchopt = &Search::getOptions($type);
    $table = $searchopt[$ID]["table"];
@@ -64,9 +63,14 @@ function plugin_meteofrancehelpdesk_giveItem($type,$ID,$data,$num) {
    $value = $data["ITEM_$num"];
 
    switch ($table.'.'.$field) {
-      case "glpi_plugin_meteofrancehelpdesk_groups_levels.lvl" :
+      case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
          if (!empty($value)) {
-            return $LANG['plugin_meteofrancehelpdesk']['title'][3+$value];
+            switch($value) {
+               case 1: return __('Level 1','itilcategorygroups'); break;
+               case 2: return __('Level 2','itilcategorygroups'); break;
+               case 3: return __('Level 3','itilcategorygroups'); break;
+               case 4: return __('Level 4','itilcategorygroups'); break;
+            }
          }
    }
    return "";
@@ -74,8 +78,7 @@ function plugin_meteofrancehelpdesk_giveItem($type,$ID,$data,$num) {
 
 
 // Display specific massive actions for plugin fields
-function plugin_meteofrancehelpdesk_MassiveActionsFieldsDisplay($options=array()) {
-   global $LANG;
+function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options=array()) {
 
    $table     = $options['options']['table'];
    $field     = $options['options']['field'];
@@ -84,13 +87,13 @@ function plugin_meteofrancehelpdesk_MassiveActionsFieldsDisplay($options=array()
 
    // Table fields
    switch ($table.".".$field) {
-      case "glpi_plugin_meteofrancehelpdesk_groups_levels.lvl" :
+      case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
          Dropdown::showFromArray('lvl', 
                                  array(NULL => "---",
-                                       1    => $LANG['plugin_meteofrancehelpdesk']['title'][4],
-                                       2    => $LANG['plugin_meteofrancehelpdesk']['title'][5],
-                                       3    => $LANG['plugin_meteofrancehelpdesk']['title'][6],
-                                       4    => $LANG['plugin_meteofrancehelpdesk']['title'][7]));
+                                       1    => __('Level 1','itilcategorygroups'),
+                                       2    => __('Level 2','itilcategorygroups'),
+                                       3    => __('Level 3','itilcategorygroups'),
+                                       4    => __('Level 4','itilcategorygroups')));
          return true;
    }
 
@@ -100,9 +103,9 @@ function plugin_meteofrancehelpdesk_MassiveActionsFieldsDisplay($options=array()
 
 
 // Hook done on update item case
-function plugin_pre_item_update_meteofrancehelpdesk($item) {
+function plugin_pre_item_update_itilcategorygroups($item) {
    if (isset($_REQUEST['massiveaction']) && isset($_REQUEST['lvl'])) {
-      $group_level = new PluginMeteofrancehelpdeskGroup_Level;
+      $group_level = new PluginItilcategorygroupsGroup_Level;
       foreach($_REQUEST['item'] as $groups_id => $val) {
          if(!$group_level->getFromDB($groups_id)) {
             $group_level->add(array('groups_id'=> $groups_id, 

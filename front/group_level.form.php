@@ -5,7 +5,7 @@ include (GLPI_ROOT . "/inc/includes.php");
 
 Session::checkCentralAccess();
 
-$level = new PluginMeteofrancehelpdeskGroup_Level();
+$level = new PluginItilcategorygroupsGroup_Level();
 
 if (isset($_POST["add"])) {
    $level->add($_POST);
@@ -17,4 +17,3 @@ if (isset($_POST["add"])) {
 
 }
 Html::displayErrorAndDie("lost");
-?>

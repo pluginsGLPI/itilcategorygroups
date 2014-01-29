@@ -1,25 +1,24 @@
 <?php
 
-class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
+class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
    // From CommonDBChild
-   public $itemtype = 'Group';
-   public $items_id = 'groups_id';
+   public static $itemtype = 'Group';
+   public static $items_id = 'groups_id';
 
-   function getIndexName() {
-      return $this->items_id;
+   static function getIndexName() {
+      return self::$items_id;
    }
 
    static function getTypeName($nb=0) {
-      global $LANG;
-      return $LANG['plugin_meteofrancehelpdesk']['title'][9];
+      return __('Level attribution','itilcategorygroups');
    }
 
-   function canView() {
+   static function canView() {
       return Session::haveRight('config', 'r');
    }
    
-   function canCreate() {
+   static function canCreate() {
       return Session::haveRight('config', 'w');
    }
 
@@ -45,12 +44,11 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
    }
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      global $LANG;
 
       if (!$withtemplate) {
          switch ($item->getType()) {
             case 'Group' :
-               return $LANG['plugin_meteofrancehelpdesk']['title'][1];
+               return __('ItilCategory Groups','itilcategorygroups');
          }
       }
       return '';
@@ -66,7 +64,7 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
    }
 
    static function showForGroup(Group $group) {
-      global $DB, $LANG;
+      global $DB;
 
       $ID = $group->getField('id');
       if (!$group->can($ID,'r')) {
@@ -85,30 +83,30 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
          echo "<form name='group_level_form$rand' id='group_level_form$rand' method='post'
                 action='";
          echo Toolbox::getItemTypeFormURL(__CLASS__)."'>";
-         echo "<input type='hidden' name='".$item->items_id."' value='$ID' />";
+         echo "<input type='hidden' name='".self::$items_id."' value='$ID' />";
 
          echo "<div class='spaced'>";
          echo "<table class='tab_cadre_fixe'>";
-         echo "<tr class='tab_bg_1'><th>".$LANG['plugin_meteofrancehelpdesk']['title'][9].
+         echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups').
               "</tr>";
 
          echo "<tr class='tab_bg_2'><td class='center'>";
          Dropdown::showFromArray('lvl', 
                                  array(NULL => "---",
-                                       1    => $LANG['plugin_meteofrancehelpdesk']['title'][4],
-                                       2    => $LANG['plugin_meteofrancehelpdesk']['title'][5],
-                                       3    => $LANG['plugin_meteofrancehelpdesk']['title'][6],
-                                       4    => $LANG['plugin_meteofrancehelpdesk']['title'][7]), 
+                                       1    => __('Level 1','itilcategorygroups'),
+                                       2    => __('Level 2','itilcategorygroups'),
+                                       3    => __('Level 3','itilcategorygroups'),
+                                       4    => __('Level 4','itilcategorygroups')), 
                                  array('value' => $item->fields['lvl']));
          echo "</td></tr>";
 
          echo "</td><td class='center'>";
          if ($item->fields["id"]) {
             echo "<input type='hidden' name='id' value='".$item->fields["id"]."'>";
-            echo "<input type='submit' name='update' value=\"".$LANG['buttons'][7]."\"
+            echo "<input type='submit' name='update' value=\"".__('Save')."\"
                    class='submit'>";
          } else {
-            echo "<input type='submit' name='add' value=\"".$LANG['buttons'][7]."\" class='submit'>";
+            echo "<input type='submit' name='add' value=\"".__('Save')."\" class='submit'>";
          }
          echo "</td></tr>";
 
@@ -119,14 +117,13 @@ class PluginMeteofrancehelpdeskGroup_Level extends CommonDBChild {
    }
 
    static function getAddSearchOptions($itemtype) {
-      global $LANG;
-
+      
       $opt = array();
 
       if ($itemtype = 'Group') {
          $opt[9978]['table']      = getTableForItemType(__CLASS__);
          $opt[9978]['field']      = 'lvl';
-         $opt[9978]['name']       = $LANG['plugin_meteofrancehelpdesk']['title'][9];
+         $opt[9978]['name']       = __('Level attribution','itilcategorygroups');
          $opt[9978]['linkfield']  = 'lvl';
          $opt[9978]['joinparams'] = array('jointype' => 'child');
       }

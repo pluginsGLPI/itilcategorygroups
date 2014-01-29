@@ -3,7 +3,7 @@
  * @version $Id: setup.php 19 2012-06-27 09:19:05Z walid $
 LICENSE
 
-This file is part of the meteofrancehelpdesk plugin.
+This file is part of the itilcategorygroups plugin.
 
 Order plugin is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with GLPI; along with meteofrancehelpdesk. If not, see <http://www.gnu.org/licenses/>.
+along with GLPI; along with itilcategorygroups. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------
-@package   meteofrancehelpdesk
-@author    the meteofrancehelpdesk plugin team
-@copyright Copyright (c) 2010-2011 meteofrancehelpdesk plugin team
+@package   itilcategorygroups
+@author    the itilcategorygroups plugin team
+@copyright Copyright (c) 2010-2011 itilcategorygroups plugin team
 @license   GPLv2+
 http://www.gnu.org/licenses/gpl.txt
-@link      https://forge.indepnet.net/projects/meteofrancehelpdesk
+@link      https://forge.indepnet.net/projects/itilcategorygroups
 @link      http://www.glpi-project.org/
 @since     2009
 ---------------------------------------------------------------------- */
@@ -61,7 +61,7 @@ Ext.onReady(function() {\n
 
         //perform an ajax request to get the new options for the group list
          Ext.Ajax.request({
-            url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
+            url: '../plugins/itilcategorygroups/ajax/group_values.php',
             params: {
                'cat_id': cat_id,
                'tickets_id': 0
@@ -104,7 +104,7 @@ Ext.onReady(function() {\n
 
                   //perform an ajax request to get the new options for the group list
                   Ext.Ajax.request({
-                     url: '../plugins/meteofrancehelpdesk/ajax/group_values.php',
+                     url: '../plugins/itilcategorygroups/ajax/group_values.php',
                      params: {
                         'cat_id': cat_id,
                         'tickets_id': tickets_id
