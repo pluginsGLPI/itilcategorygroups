@@ -28,10 +28,8 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT."/inc/includes.php");
+include ("../../../inc/includes.php");
 
 $dropdown = new PluginItilcategorygroupsCategory_Group();
-include (GLPI_ROOT . "/front/dropdown.common.php");
 
-?>
+include (GLPI_ROOT."/front/dropdown.common.php");
