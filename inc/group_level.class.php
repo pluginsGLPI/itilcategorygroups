@@ -131,8 +131,12 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       return $opt;
    }
 
-   static function getAllGroupForALevel($level) {
+   static function getAllGroupForALevel($level, $entities_id = -1) {
       global $DB;
+
+      if ($entities_id === -1) {
+         $entities_id = $_SESSION['glpiactive_entity'];
+      }
 
       $groups_id = array();
       $query = "SELECT gl.groups_id 
@@ -141,8 +145,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
                     ON gl.groups_id = gr.id
                 WHERE gl.lvl = $level".
                 getEntitiesRestrictRequest(" AND ", "gr", 'entities_id',
-                                           $_SESSION['glpiactive_entity'],
-                                           $_SESSION['glpiactive_entity_recursive']);
+                                           $entities_id, 0);
       foreach   ($DB->request($query) as $data) {
          $groups_id[] = $data['groups_id'];
       }
