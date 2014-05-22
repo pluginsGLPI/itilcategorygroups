@@ -120,7 +120,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       
       $opt = array();
 
-      if ($itemtype = 'Group') {
+      if ($itemtype == 'Group') {
          $opt[9978]['table']      = getTableForItemType(__CLASS__);
          $opt[9978]['field']      = 'lvl';
          $opt[9978]['name']       = __('Level attribution','itilcategorygroups');
