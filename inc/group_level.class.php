@@ -145,7 +145,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
                     ON gl.groups_id = gr.id
                 WHERE gl.lvl = $level".
                 getEntitiesRestrictRequest(" AND ", "gr", 'entities_id',
-                                           $entities_id, 0);
+                                           $entities_id, true);
       foreach   ($DB->request($query) as $data) {
          $groups_id[] = $data['groups_id'];
       }
