@@ -64,8 +64,8 @@ if (isset($_REQUEST['tickets_id']) && !empty($_REQUEST['tickets_id'])) {
       
       if (!empty($groups)) {
          foreach (array('one', 'two', 'three', 'four') as $value) {
-            if ($groups['groups_id_level'.$value] == 0) {
-               foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lnum[$value], $params['entities_id']) as $groups_id) {
+            if ($groups['groups_id_level'.$value] == -1) {
+               foreach (PluginMeteofrancehelpdeskGroup_Level::getAllGroupForALevel($lnum[$value], $params['entities_id']) as $groups_id) {
                   if ($group->getFromDB($groups_id)) {
                      echo "<option value='".$group->getID()."'>".$lnum[$value]."-".$group->getName()."</option>";
                   }
@@ -83,8 +83,8 @@ if (isset($_REQUEST['tickets_id']) && !empty($_REQUEST['tickets_id'])) {
    $group    = new Group();
    if (!empty($groups)) {
       foreach (array('one', 'two', 'three', 'four') as $value) {
-         if ($groups['groups_id_level'.$value] == 0) {
-            foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lnum[$value]) as $groups_id) {
+         if ($groups['groups_id_level'.$value] == -1) {
+            foreach (PluginMeteofrancehelpdeskGroup_Level::getAllGroupForALevel($lnum[$value]) as $groups_id) {
                if ($group->getFromDB($groups_id)) {
                   echo "<option value='".$group->getID()."'>".$lnum[$value]."-".$group->getName()."</option>";
                }

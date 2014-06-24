@@ -122,16 +122,20 @@ class PluginItilcategorygroupsCategory_Group extends CommonDropdown {
       Dropdown::show('Group', array('name'      => 'groups_id_levelone',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_levelone'], 
-                                    'toadd'     => array('all' => __('All')), 
-                                    'used' => self::getOthersGroupsID(1)));
+                                    'toadd'     => array(-1 => $LANG['common'][66], 
+                                                          0 => "----"),
+                                    'used' => self::getOthersGroupsID(1), 
+                                    'display_emptychoice' => false));
       echo "</td>";
       echo "<td>".ucfirst(__('Level 2','itilcategorygroups'))."</td>";
       echo "<td>";
       Dropdown::show('Group', array('name'      => 'groups_id_leveltwo',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_leveltwo'], 
-                                    'toadd'     => array('all' => __('All')), 
-                                    'used' => self::getOthersGroupsID(2)));
+                                    'toadd'     => array(-1 => $LANG['common'][66], 
+                                                          0 => "----"),
+                                    'used' => self::getOthersGroupsID(2), 
+                                    'display_emptychoice' => false));
       echo "</td></tr>";
       
       echo "<tr><td>".ucfirst(__('Level 3','itilcategorygroups'))."</td>";
@@ -139,16 +143,20 @@ class PluginItilcategorygroupsCategory_Group extends CommonDropdown {
       Dropdown::show('Group', array('name'      => 'groups_id_levelthree',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_levelthree'], 
-                                    'toadd'     => array('all' => __('All')), 
-                                    'used' => self::getOthersGroupsID(3)));
+                                    'toadd'     => array(-1 => $LANG['common'][66], 
+                                                          0 => "----"),
+                                    'used' => self::getOthersGroupsID(3), 
+                                    'display_emptychoice' => false));
       echo "</td>";
       echo "<td>".ucfirst(__('Level 4','itilcategorygroups'))."</td>";
       echo "<td>";
       Dropdown::show('Group', array('name'      => 'groups_id_levelfour',
                                     'condition' => "`is_assign`='1'",
                                     'value'     => $this->fields['groups_id_levelfour'], 
-                                    'toadd'     => array('all' => __('All')), 
-                                    'used' => self::getOthersGroupsID(4)));
+                                    'toadd'     => array(-1 => $LANG['common'][66], 
+                                                          0 => "----"),
+                                    'used' => self::getOthersGroupsID(4), 
+                                    'display_emptychoice' => false));
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
