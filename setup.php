@@ -37,35 +37,36 @@ function plugin_init_itilcategorygroups() {
 
    if ($plugin->isInstalled('itilcategorygroups') && $plugin->isActivated('itilcategorygroups')) {
 
-      Plugin::registerClass('PluginItilcategorygroupsCategory_Group',
+      Plugin::registerClass('PluginItilcategorygroupsCategory',
                             array('forwardentityfrom' => 'ITILCategory'));
-
       Plugin::registerClass('PluginItilcategorygroupsGroup_Level',
                             array('addtabon' => 'Group'));
 
       if (Session::haveRight('config', 'r')) {
 
-         $PLUGIN_HOOKS['menu_entry']['itilcategorygroups'] = 'front/category_group.php';
+         $PLUGIN_HOOKS['menu_entry']['itilcategorygroups'] = 'front/category.php';
 
-            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory_Group']['title']
+            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['title']
             = __('Link ItilCategory - Groups','itilcategorygroups');
 
-            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory_Group']['page']
-            = '/plugins/itilcategorygroups/front/category_group.php';
+            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['page']
+            = '/plugins/itilcategorygroups/front/category.php';
 
-            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory_Group']['links']['search']
-            = '/plugins/itilcategorygroups/front/category_group.php';
+            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['search']
+            = '/plugins/itilcategorygroups/front/category.php';
 
          $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups']     = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
       }
       if (Session::haveRight('config', 'w')) {
-
-         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory_Group']['links']['add']
-         = '/plugins/itilcategorygroups/front/category_group.form.php';
+         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
+         = '/plugins/itilcategorygroups/front/category.form.php';
           
       }
 
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/filtergroups.js.php';
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/multiple_group.js';
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = "lib/chosen/chosen.native.js";
+      $PLUGIN_HOOKS['add_css']['itilcategorygroups'][] = "lib/chosen/chosen.css";
       
    }
 }
@@ -75,7 +76,7 @@ function plugin_version_itilcategorygroups() {
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    return array ('name'             => __('ItilCategory Groups','itilcategorygroups'),
-                   'version'        => '0.84+1.0',
+                   'version'        => '0.84+1.1',
                    'author'         => $author,
                    'homepage'       => 'www.teclib.com',
                    'minGlpiVersion' => '0.84');

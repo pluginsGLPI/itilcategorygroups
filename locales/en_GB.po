@@ -51,3 +51,6 @@ msgstr ""
 #: inc/group_level.class.php:126
 msgid "Level attribution"
 msgstr ""
+
+msgid "A link with this category already exists"
+msgstr "A link with this category already exists"

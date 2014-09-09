@@ -51,3 +51,6 @@ msgstr "Helpdesk catégories groupes"
 #: inc/group_level.class.php:126
 msgid "Level attribution"
 msgstr "Attribution de niveau"
+
+msgid "A link with this category already exists"
+msgstr "Une liaison avec cette catégorie existe déjà"

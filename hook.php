@@ -31,8 +31,11 @@
 function plugin_itilcategorygroups_install() {
    $migration = new Migration("0.84");
    
+   //order is important for install
+   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category.class.php");
    include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
    include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/group_level.class.php");
+   PluginItilcategorygroupsCategory::install($migration);
    PluginItilcategorygroupsCategory_Group::install($migration);
    PluginItilcategorygroupsGroup_Level::install($migration);
    return true;
@@ -40,8 +43,10 @@ function plugin_itilcategorygroups_install() {
 
 function plugin_itilcategorygroups_uninstall() {
    include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
+   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category.class.php");
    include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/group_level.class.php");
    PluginItilcategorygroupsCategory_Group::uninstall();
+   PluginItilcategorygroupsCategory::uninstall();
    PluginItilcategorygroupsGroup_Level::uninstall();
    return true;
 }

@@ -32,67 +32,17 @@ $AJAX_INCLUDE = 1;
 include ("../../../inc/includes.php");
 
 header("Content-Type: text/html; charset=UTF-8");
-
 Html::header_nocache();
-
 Session::checkLoginUser();
-echo "<option value='0'>".Dropdown::EMPTY_VALUE."</option>";
 
-if (!isset($_REQUEST['cat_id'])) {
-   return ;
+if (!isset($_REQUEST['itilcategories_id'])) {
+   exit;
+}
+if (!isset($_REQUEST['tickets_id'])) {
+   $_REQUEST['tickets_id'] = 0;
 }
 
-$lnum = array('one'   => 1,
-              'two'   => 2,
-              'three' => 3,
-              'four'  => 4);
+PluginItilcategorygroupsCategory::filteredDropdownAssignGroups(intval($_REQUEST['tickets_id']), 
+                                                               intval($_REQUEST['itilcategories_id']));
 
-$category = $_REQUEST['cat_id'];
-      
-
-if (isset($_REQUEST['tickets_id']) && !empty($_REQUEST['tickets_id'])) {
-   $ticket = new Ticket();
-   if ($ticket->getFromDB($_REQUEST['tickets_id'])) {
-      $params   = array('entities_id' => $ticket->fields['entities_id'], 'is_recursive' => 1);
-      if ($ticket->fields['type'] == Ticket::DEMAND_TYPE) {
-         $params['condition'] = " AND `is_request`='1'";
-      } else {
-         $params['condition'] = " AND `is_incident`='1'";
-      }
-      $groups   = PluginItilcategorygroupsCategory_Group::getGroupsForCategory($category, $params);
-      $group    = new Group();
-      
-      if (!empty($groups)) {
-         foreach (array('one', 'two', 'three', 'four') as $value) {
-            if ($groups['groups_id_level'.$value] == -1) {
-               foreach (PluginMeteofrancehelpdeskGroup_Level::getAllGroupForALevel($lnum[$value], $params['entities_id']) as $groups_id) {
-                  if ($group->getFromDB($groups_id)) {
-                     echo "<option value='".$group->getID()."'>".$lnum[$value]."-".$group->getName()."</option>";
-                  }
-               }
-            } else if ($group->getFromDB($groups['groups_id_level'.$value])) {
-               echo "<option value='".$group->getID()."'>".$lnum[$value]."-".$group->getName()."</option>";
-            }
-         }
-      }
-   }
-} else {
-   $params   = array('entities_id' => $_SESSION['glpiactive_entity'], 'is_recursive' => 1);
-
-   $groups   = PluginItilcategorygroupsCategory_Group::getGroupsForCategory($category, $params);
-   $group    = new Group();
-   if (!empty($groups)) {
-      foreach (array('one', 'two', 'three', 'four') as $value) {
-         if ($groups['groups_id_level'.$value] == -1) {
-            foreach (PluginMeteofrancehelpdeskGroup_Level::getAllGroupForALevel($lnum[$value]) as $groups_id) {
-               if ($group->getFromDB($groups_id)) {
-                  echo "<option value='".$group->getID()."'>".$lnum[$value]."-".$group->getName()."</option>";
-               }
-            }
-         } else if ($group->getFromDB($groups['groups_id_level'.$value])) {
-            echo "<option value='".$group->getID()."'>".$lnum[$value]."-".$group->getName()."</option>";
-         }
-      }
-   }
-}
 ?>

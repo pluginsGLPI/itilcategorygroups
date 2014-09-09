@@ -56,14 +56,14 @@ Ext.onReady(function() {\n
          // ---- Create Ticket ---- 
          // -----------------------
         
-        cat_id = Ext.get(cat_select_dom_id).getValue();
-        if (cat_id == 0) return;
+        itilcategories_id = Ext.get(cat_select_dom_id).getValue();
+        if (itilcategories_id == 0) return;
 
         //perform an ajax request to get the new options for the group list
          Ext.Ajax.request({
             url: '../plugins/itilcategorygroups/ajax/group_values.php',
             params: {
-               'cat_id': cat_id,
+               'itilcategories_id': itilcategories_id,
                'tickets_id': 0
             },
             success: function(response, opts) {
@@ -100,13 +100,13 @@ Ext.onReady(function() {\n
                setTimeout( function () {
              
                   //get ticket_cat value
-                  cat_id = Ext.get(cat_select_dom_id).getValue();
+                  itilcategories_id = Ext.get(cat_select_dom_id).getValue();
 
                   //perform an ajax request to get the new options for the group list
                   Ext.Ajax.request({
                      url: '../plugins/itilcategorygroups/ajax/group_values.php',
                      params: {
-                        'cat_id': cat_id,
+                        'itilcategories_id': itilcategories_id,
                         'tickets_id': tickets_id
                      },
                      success: function(response, opts) {

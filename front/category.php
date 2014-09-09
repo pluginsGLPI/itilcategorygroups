@@ -1,6 +1,6 @@
 <?php
 /*
- * @version $Id: billstate.form.php 651 2012-09-14 08:22:06Z walid $
+ * @version $Id: billstate.php 651 2012-09-14 08:22:06Z walid $
  LICENSE
 
  This file is part of the order plugin.
@@ -30,6 +30,6 @@
 
 include ("../../../inc/includes.php");
 
-$dropdown = new PluginItilcategorygroupsCategory_Group();
+$dropdown = new PluginItilcategorygroupsCategory();
 
-include (GLPI_ROOT."/front/dropdown.common.form.php");
+include (GLPI_ROOT."/front/dropdown.common.php");
