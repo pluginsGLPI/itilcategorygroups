@@ -282,9 +282,9 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                                        $options['is_recursive']);
          $query = "SELECT 
                      cat.*, 
-                     GROUP_CONCAT(\"{'groups_id':\", 
+                     GROUP_CONCAT(\"{\\\"groups_id\\\":\", 
                                   cat_gr.groups_id, 
-                                  \", 'level': \",  
+                                  \", \\\"level\\\": \",  
                                   cat_gr.level, 
                                   \"}\") as groups_level
                    FROM `$table` cat
