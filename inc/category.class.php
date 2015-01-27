@@ -388,27 +388,83 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    
       $tab[26]['table']         = 'glpi_groups';
       $tab[26]['field']         = 'name';
-      $tab[26]['datatype']      = 'dropdown';
-      $tab[26]['linkfield']     = 'groups_id_levelone';
-      $tab[26]['name']          = __('Level 1','itilcategorygroups');
+      $tab[26]['forcegroupby']  = true;
+      $tab[26]['name']          = $LANG['plugin_itilcategorygroups']['title'][4];
+      $tab[26]['joinparams']    = array(
+                                    'beforejoin' => array( 
+                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+                                       'joinparams' => array(
+                                          'condition'  => 'AND level = 1',
+                                          'jointype'   => 'child', 
+                                          'beforejoin' => array(
+                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                                             'joinparams' => array(
+                                                'jointype'  => 'child' 
+                                             )
+                                          )
+                                       )
+                                    )
+                                 );
 
       $tab[27]['table']         = 'glpi_groups';
       $tab[27]['field']         = 'name';
-      $tab[27]['datatype']      = 'dropdown';
-      $tab[27]['linkfield']     = 'groups_id_leveltwo';
-      $tab[27]['name']          = __('Level 2','itilcategorygroups');
+      $tab[27]['forcegroupby']  = true;
+      $tab[27]['name']          = $LANG['plugin_itilcategorygroups']['title'][5];
+      $tab[27]['joinparams']    = array(
+                                    'beforejoin' => array( 
+                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+                                       'joinparams' => array(
+                                          'condition'  => 'AND level = 2',
+                                          'jointype'   => 'child', 
+                                          'beforejoin' => array(
+                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                                             'joinparams' => array(
+                                                'jointype'  => 'child' 
+                                             )
+                                          )
+                                       )
+                                    )
+                                 );
       
       $tab[28]['table']         = 'glpi_groups';
       $tab[28]['field']         = 'name';
-      $tab[28]['datatype']      = 'dropdown';
-      $tab[28]['linkfield']     = 'groups_id_levelthree';
-      $tab[28]['name']          = __('Level 3','itilcategorygroups');
+      $tab[28]['forcegroupby']  = true;
+      $tab[28]['name']          = $LANG['plugin_itilcategorygroups']['title'][6];
+      $tab[28]['joinparams']    = array(
+                                    'beforejoin' => array( 
+                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+                                       'joinparams' => array(
+                                          'condition'  => 'AND level = 3',
+                                          'jointype'   => 'child', 
+                                          'beforejoin' => array(
+                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                                             'joinparams' => array(
+                                                'jointype'  => 'child' 
+                                             )
+                                          )
+                                       )
+                                    )
+                                 );
   
       $tab[29]['table']         = 'glpi_groups';
       $tab[29]['field']         = 'name';
-      $tab[29]['datatype']      = 'dropdown';
-      $tab[29]['linkfield']     = 'groups_id_levelfour';
-      $tab[29]['name']          = __('Level 4','itilcategorygroups');
+      $tab[29]['forcegroupby']  = true;
+      $tab[29]['name']          = $LANG['plugin_itilcategorygroups']['title'][7];
+      $tab[29]['joinparams']    = array(
+                                    'beforejoin' => array( 
+                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+                                       'joinparams' => array(
+                                          'condition'  => 'AND level = 4',
+                                          'jointype'   => 'child', 
+                                          'beforejoin' => array(
+                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                                             'joinparams' => array(
+                                                'jointype'  => 'child' 
+                                             )
+                                          )
+                                       )
+                                    )
+                                 );
       
       /* id */
       $tab[30]['table']         = $this->getTable();
