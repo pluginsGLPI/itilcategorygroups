@@ -394,7 +394,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                                        'joinparams' => array(
-                                          'condition'  => 'AND level = 1',
+                                          'condition'  => 'AND NEWTABLE.level = 1',
                                           'jointype'   => 'child', 
                                           'beforejoin' => array(
                                              'table'      => 'glpi_plugin_itilcategorygroups_categories',
@@ -414,7 +414,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                                        'joinparams' => array(
-                                          'condition'  => 'AND level = 2',
+                                          'condition'  => 'AND NEWTABLE.level = 2',
                                           'jointype'   => 'child', 
                                           'beforejoin' => array(
                                              'table'      => 'glpi_plugin_itilcategorygroups_categories',
@@ -434,7 +434,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                                        'joinparams' => array(
-                                          'condition'  => 'AND level = 3',
+                                          'condition'  => 'AND NEWTABLE.level = 3',
                                           'jointype'   => 'child', 
                                           'beforejoin' => array(
                                              'table'      => 'glpi_plugin_itilcategorygroups_categories',
@@ -454,7 +454,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                                        'joinparams' => array(
-                                          'condition'  => 'AND level = 4',
+                                          'condition'  => 'AND NEWTABLE.level = 4',
                                           'jointype'   => 'child', 
                                           'beforejoin' => array(
                                              'table'      => 'glpi_plugin_itilcategorygroups_categories',
