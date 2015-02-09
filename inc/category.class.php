@@ -56,36 +56,44 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $this->showFormHeader($options);
       
       echo "<tr>";
-      echo "<td>".__('Name')." :</td>";
+      echo "<td><label>".__('Name')." :</label></td>";
       echo "<td style='width:30%'>";
-      Html::autocompletionTextField($this, "name");
+      echo Html::autocompletionTextField($this, "name");
       echo "</td>";
-      echo "<td>".__('Active')." :</td>";
+      
+      $rand = mt_rand();
+      echo "<td><label for='dropdown_is_active$rand'>".__('Active')." :</label></td>";
       echo "<td style='width:30%'>";
-      Dropdown::showYesNo('is_active', $this->fields['is_active']);
+      Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, array('rand' => $rand));
       echo "</td></tr>";
 
+      $rand = mt_rand();
       echo "<tr>";
-      echo "<td>".__('Category')." :</td>";
+      echo "<td><label for='dropdown_itilcategories_id$rand'>".__('Category')." :</label></td>";
       echo "<td>";
-      Dropdown::show('ITILCategory', array('value' => $this->fields['itilcategories_id']));
+      Dropdown::show('ITILCategory', array(
+         'value' => $this->fields['itilcategories_id'],
+         'rand' => $rand));
       echo "</td><td colspan='2'></td></tr>";
-        
+      
+      $rand = mt_rand();
       echo "<tr>";
-      echo "<td>".__('Visible for an incident')." :</td>";
+      echo "<td><label for='dropdown_is_incident$rand'>".__('Visible for an incident')." :</label></td>";
       echo "<td>";
-      Dropdown::showYesNo('is_incident', $this->fields['is_incident']);
+      Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, array('rand' => $rand));
       echo "</td>";
-      echo "<td>".__('Visible for a request')." :</td>";
+      
+      $rand = mt_rand();
+      echo "<td><label for='dropdown_is_request$rand'>".__('Visible for a request')." :</label></td>";
       echo "<td>";
-      Dropdown::showYesNo('is_request', $this->fields['is_request']);
+      Dropdown::showYesNo('is_request', $this->fields['is_request'], -1, array('rand' => $rand));
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__('Comments') . ":  </td>";
+      echo "<td><label for='comment'>".__('Comments') . " : </label></td>";
       echo "<td align='left'>";
-      echo "<textarea style='width:100%; height:70px;' name='comment'>" . $this->fields["comment"] .
-        "</textarea>";
+      echo "<textarea name='comment' id='comment' style='width:100%; height:70px;'>";
+      echo $this->fields["comment"] . "</textarea>";
       echo "</td></tr>";
 
       echo "<tr><td colspan='4'><hr></td></tr>";
@@ -112,7 +120,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       Html::closeForm();
 
       //enable chosen for multiple selector
-      if(! preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT'])) {
+      if(! preg_match('/(?i)msie [1-8]/', $_SERVER['HTTP_USER_AGENT'])) {
          echo "<script type='text/javascript'>
             initChosen();
          </script>";
