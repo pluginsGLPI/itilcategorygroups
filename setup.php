@@ -65,8 +65,6 @@ function plugin_init_itilcategorygroups() {
 
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/filtergroups.js.php';
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/multiple_group.js';
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = "lib/chosen/chosen.native.js";
-      $PLUGIN_HOOKS['add_css']['itilcategorygroups'][] = "lib/chosen/chosen.css";
    }
 }
 

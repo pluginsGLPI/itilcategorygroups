@@ -119,12 +119,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $this->showFormButtons($options);
       Html::closeForm();
 
-      //enable chosen for multiple selector
-      if(! preg_match('/(?i)msie [1-8]/', $_SERVER['HTTP_USER_AGENT'])) {
-         echo "<script type='text/javascript'>
-            initChosen();
-         </script>";
-      }
    }
 
    static function multipleDropdownGroup($level, $itilcategories_id, $all) {
@@ -160,7 +154,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
       
       echo "<span id='select_level_$level'>";
-      echo "<select name='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----'>";
+      echo "<select name='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
       while ($data_gr = $DB->fetch_assoc($res_gr)) {
          if (in_array($data_gr['id'], $values)) {
             $selected = "selected";
@@ -171,6 +165,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
       echo "</select>";
       echo "</span>";
+      echo '<script>$("#select_level_'.$level.' select").select2();</script>';
       echo "<input type='hidden' name='view_all_lvl$level' value='0'>";
       echo "&nbsp;".__('All')." ?&nbsp;".
            "<input type='checkbox' name='view_all_lvl$level' $checked onclick='toggleSelect($level)'/>";
