@@ -53,7 +53,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
 
       $this->showTabs($options);
-
       $this->showFormHeader($options);
       
       echo "<tr>";
@@ -144,18 +143,21 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                   AND gr_lvl.lvl = ".intval($level);
       $res_gr = $DB->query($query_gr);
 
-      $checked = $disabled = "";
       if ($all == 1) {
          $checked = "checked='checked'";
          $disabled = "disabled='disabled'";
+      } else {
+         $checked = "";
+         $disabled = "";
       }
       
       echo "<span id='select_level_$level'>";
       echo "<select name='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----'>";
       while ($data_gr = $DB->fetch_assoc($res_gr)) {
-         $selected = "";
          if (in_array($data_gr['id'], $values)) {
             $selected = "selected";
+         } else {
+            $selected = "";
          }
          echo "<option value='".$data_gr['id']."' $selected>".$data_gr['name']."</option>";
       }
@@ -319,11 +321,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       $groups_id = array();
       $res = $DB->query("SELECT gr.id 
-      FROM glpi_groups gr
-      LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
-         ON gl.groups_id = gr.id
-      WHERE gl.lvl != $level
-      OR gl.lvl IS NULL");
+                        FROM glpi_groups gr
+                        LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
+                           ON gl.groups_id = gr.id
+                        WHERE gl.lvl != $level
+                        OR gl.lvl IS NULL");
       while ($row = $DB->fetch_assoc($res)) {
          $groups_id[$row['id']] = $row['id'];
       }
@@ -334,7 +336,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    function getSearchOptions() {
       $tab = array();
    
-      $tab['common'] = __('Link ItilCategory - Groups','itilcategorygroups');
+      $tab['common'] = __('Link ItilCategory - Groups', 'itilcategorygroups');
    
       $tab[1]['table']         = $this->getTable();
       $tab[1]['field']         = 'name';
