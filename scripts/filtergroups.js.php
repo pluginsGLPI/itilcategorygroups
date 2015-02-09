@@ -1,139 +1,148 @@
 <?php
-/*
- * @version $Id: setup.php 19 2012-06-27 09:19:05Z walid $
-LICENSE
-
-This file is part of the itilcategorygroups plugin.
-
-Order plugin is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-Order plugin is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with GLPI; along with itilcategorygroups. If not, see <http://www.gnu.org/licenses/>.
---------------------------------------------------------------------------
-@package   itilcategorygroups
-@author    the itilcategorygroups plugin team
-@copyright Copyright (c) 2010-2011 itilcategorygroups plugin team
-@license   GPLv2+
-http://www.gnu.org/licenses/gpl.txt
-@link      https://forge.indepnet.net/projects/itilcategorygroups
-@link      http://www.glpi-project.org/
-@since     2009
----------------------------------------------------------------------- */
-
 include ("../../../inc/includes.php");
 
 //change mimetype
 header("Content-type: application/javascript");
 
 $JS = <<<JAVASCRIPT
-Ext.onReady(function() {\n
-   // only in ticket form
-   if (location.pathname.indexOf('ticket.form.php') > 0) {
+if (location.pathname.indexOf('ticket.form.php') == 0) {
+   exit;
+}
 
-      //get id of cat select
-         var cat_select_dom_id = Ext.select("select[name=itilcategories_id]")
-            .elements[0].attributes.getNamedItem('id').nodeValue;
+function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i=0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        }
+    }
+}
 
-      // separating the GET parameters from the current URL
-      var getParams = document.URL.split("?");
-      // transforming the GET parameters into a dictionnary
-      var url_params = Ext.urlDecode(getParams[getParams.length - 1]);
-      // get tickets_id
-      var tickets_id = url_params['id'];
+// only in ticket form
 
-      //only in edit form
-      if(tickets_id == undefined) {
-         // -----------------------
-         // ---- Create Ticket ---- 
-         // -----------------------
-        
-        itilcategories_id = Ext.get(cat_select_dom_id).getValue();
-        if (itilcategories_id == 0) return;
+var url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
+var tickets_id = getUrlParameter('id');
 
-        //perform an ajax request to get the new options for the group list
-         Ext.Ajax.request({
-            url: '../plugins/itilcategorygroups/ajax/group_values.php',
-            params: {
-               'itilcategories_id': itilcategories_id,
-               'tickets_id': 0
+function redefineDropdown(id, url, tickets_id) {
+
+$('#' + id).select2({
+   width: '80%',
+   minimumInputLength: 0,
+   quietMillis: 100,
+   minimumResultsForSearch: 50,
+   closeOnSelect: false,
+   ajax: {
+      url: url,
+      dataType: 'json',
+      data: function (term, page) {
+         return {
+            ticket_id: tickets_id,
+            itemtype: "Group",
+            display_emptychoice: 1,
+            displaywith: [],
+            emptylabel: "-----",
+            condition: "",
+            used: [],
+            toadd: [],
+            entity_restrict: 0,
+            limit: "50",
+            permit_select_parent: 0,
+            specific_tags: [],
+            searchText: term,
+            page_limit: 100, // page size
+            page: page, // page number
+               };
             },
-            success: function(response, opts) {
-               options = response.responseText;
-
-               setTimeout(function() {  
-                  var assign_select_dom_id = Ext.select("select[name=_groups_id_assign]")
-                        .elements[0].attributes.getNamedItem('id').nodeValue;
-
-                  //replace groups select by ajax response
-                  Ext.get(assign_select_dom_id).update(options);
-               }, 200);
+            results: function (data, page) {
+               var more = (data.count >= 100);
+               return {results: data.results, more: more};
             }
-         });
+         },
+         initSelection: function (element, callback) {
+            var id=$(element).val();
+            var defaultid = '0';
+            if (id !== '') {
+               // No ajax call for first item
+               if (id === defaultid) {
+                 var data = {id: 0,
+                           text: "-----"};
+                  callback(data);
+               } else {
+                  $.ajax(url, {
+                  data: {
+                     ticket_id: tickets_id,
+                     itemtype: "Group",
+                     display_emptychoice: true,
+                     displaywith: [],
+                     emptylabel: "-----",
+                     condition: "8791f22d6279ae77180198b33b4cc0f0e3b49513",
+                     used: [],
+                     toadd: [],
+                     entity_restrict: 0,
+                     limit: "50",
+                     permit_select_parent: false,
+                     specific_tags: [],
+                     _one_id: id},
+               dataType: 'json',
+               }).done(function(data) { callback(data); });
+            }
+         }
 
-      } else {
-         // -----------------------
-         // ---- Update Ticket ---- 
-         // -----------------------
-         
-         //remove # in tickets_id
-         tickets_id = parseInt(tickets_id);
-         
-         //get id of itilactor select
-         var actor_select_dom_id = Ext.select("select[name*=_itil_assign\[_type]")
-            .elements[0].attributes.getNamedItem('id').nodeValue;
+      },
+      formatResult: function(result, container, query, escapeMarkup) {
+         var markup=[];
+         window.Select2.util.markMatch(result.text, query.term, markup, escapeMarkup);
+         if (result.level) {
+            var a='';
+            var i=result.level;
+            while (i>1) {
+               a = a+'&nbsp;&nbsp;&nbsp;';
+               i=i-1;
+            }
+            return a+'&raquo;'+markup.join('');
+         }
+         return markup.join('');
+      }
+   });
+}
 
-         Ext.Ajax.on('requestcomplete', function(conn, response, option) {
-            //trigger the filter only on actor(group) selected
-            if (option.url.indexOf('dropdownItilActors.php') > 0 
-               && option.params.indexOf("group") > 0 && option.params.indexOf("assign") > 0) {
+$(document).ready(function() {
 
-               //delay the execution (ajax requestcomplete event fired before dom loading)
-               setTimeout( function () {
-             
-                  //get ticket_cat value
-                  itilcategories_id = Ext.get(cat_select_dom_id).getValue();
+   if (tickets_id == undefined) {
+      // -----------------------
+      // ---- Create Ticket ----
+      // -----------------------
 
-                  //perform an ajax request to get the new options for the group list
-                  Ext.Ajax.request({
-                     url: '../plugins/itilcategorygroups/ajax/group_values.php',
-                     params: {
-                        'itilcategories_id': itilcategories_id,
-                        'tickets_id': tickets_id
-                     },
-                     success: function(response, opts) {
-                        options = response.responseText;
+      $('#tabspanel + div.ui-tabs').on("tabsload", function( event, ui ) {
+         setTimeout(function() {
+            var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
+            redefineDropdown(assign_select_dom_id, url, 0);
+         }, 300);
+      });
 
-                        var assign_select_dom_id = Ext.select("select[name*=_itil_assign\[groups_id]")
-                           .elements[0].attributes.getNamedItem('id').nodeValue;
+   } else {
+      // -----------------------
+      // ---- Update Ticket ----
+      // -----------------------
+      
+      $(document).ajaxSend(function( event, jqxhr, settings ) {
+         if (settings.url.indexOf("dropdownItilActors.php") > 0 
+            && settings.data.indexOf("group") > 0
+               && settings.data.indexOf("assign") > 0
+            ) {
+            //delay the execution (ajax requestcomplete event fired before dom loading)
+            setTimeout(function() {
+               if ($("*[name='_itil_assign[groups_id]']").length) {
+                  var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
+                  redefineDropdown(assign_select_dom_id, url, tickets_id);
+               }
+            }, 300);
+            
+         }
+      });
 
-                        var id_num = assign_select_dom_id.
-                                       replace("dropdown__itil_assign[groups_id]", "");
-
-                        //remove input associated to search dropdown
-                        var input_search = Ext.get('search_'+id_num);
-                        if (input_search) {
-                           input_search.remove();
-                        }
-
-                        //replace groups select by ajax response
-                        var dropdown_search = Ext.get(assign_select_dom_id);
-                        if (dropdown_search) {
-                           dropdown_search.update(options);
-                        }
-                     }
-                  });
-               }, 200); //end timeout
-            } 
-         }, this); //end on requestcomplet
-      } // end if update ticket
    }
 });
 JAVASCRIPT;
