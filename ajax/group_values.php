@@ -35,14 +35,12 @@ header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 Session::checkLoginUser();
 
-if (!isset($_REQUEST['itilcategories_id'])) {
+if (! isset($_REQUEST['itilcategories_id'])) {
    exit;
 }
-if (!isset($_REQUEST['tickets_id'])) {
+if (! isset($_REQUEST['tickets_id'])) {
    $_REQUEST['tickets_id'] = 0;
 }
 
 PluginItilcategorygroupsCategory::filteredDropdownAssignGroups(intval($_REQUEST['tickets_id']), 
                                                                intval($_REQUEST['itilcategories_id']));
-
-?>

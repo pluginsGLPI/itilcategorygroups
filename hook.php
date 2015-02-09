@@ -69,18 +69,17 @@ function plugin_itilcategorygroups_giveItem($type,$ID,$data,$num) {
 
    switch ($table.'.'.$field) {
       case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
-         if (!empty($value)) {
+         if (! empty($value)) {
             switch($value) {
-               case 1: return __('Level 1','itilcategorygroups'); break;
-               case 2: return __('Level 2','itilcategorygroups'); break;
-               case 3: return __('Level 3','itilcategorygroups'); break;
-               case 4: return __('Level 4','itilcategorygroups'); break;
+               case 1: return __('Level 1', 'itilcategorygroups'); break;
+               case 2: return __('Level 2', 'itilcategorygroups'); break;
+               case 3: return __('Level 3', 'itilcategorygroups'); break;
+               case 4: return __('Level 4', 'itilcategorygroups'); break;
             }
          }
    }
    return "";
 }
-
 
 // Display specific massive actions for plugin fields
 function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options=array()) {
@@ -89,16 +88,15 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options=array())
    $field     = $options['options']['field'];
    $linkfield = $options['options']['linkfield'];
 
-
    // Table fields
    switch ($table.".".$field) {
       case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
          Dropdown::showFromArray('lvl', 
                                  array(NULL => "---",
-                                       1    => __('Level 1','itilcategorygroups'),
-                                       2    => __('Level 2','itilcategorygroups'),
-                                       3    => __('Level 3','itilcategorygroups'),
-                                       4    => __('Level 4','itilcategorygroups')));
+                                       1    => __('Level 1', 'itilcategorygroups'),
+                                       2    => __('Level 2', 'itilcategorygroups'),
+                                       3    => __('Level 3', 'itilcategorygroups'),
+                                       4    => __('Level 4', 'itilcategorygroups')));
          return true;
    }
 
@@ -110,9 +108,9 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options=array())
 // Hook done on update item case
 function plugin_pre_item_update_itilcategorygroups($item) {
    if (isset($_REQUEST['massiveaction']) && isset($_REQUEST['lvl'])) {
-      $group_level = new PluginItilcategorygroupsGroup_Level;
+      $group_level = new PluginItilcategorygroupsGroup_Level();
       foreach($_REQUEST['item'] as $groups_id => $val) {
-         if(!$group_level->getFromDB($groups_id)) {
+         if(! $group_level->getFromDB($groups_id)) {
             $group_level->add(array('groups_id'=> $groups_id, 
                                     'lvl'    => $_REQUEST['lvl']));
          } else {

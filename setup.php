@@ -30,7 +30,7 @@
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
-    
+   
    $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
    
    $plugin = new Plugin();
@@ -46,40 +46,38 @@ function plugin_init_itilcategorygroups() {
 
          $PLUGIN_HOOKS['menu_entry']['itilcategorygroups'] = 'front/category.php';
 
-            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['title']
+         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['title']
             = __('Link ItilCategory - Groups','itilcategorygroups');
 
-            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['page']
+         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['page']
             = '/plugins/itilcategorygroups/front/category.php';
 
-            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['search']
+         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['search']
             = '/plugins/itilcategorygroups/front/category.php';
 
-         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups']     = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
+         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
       }
       if (Session::haveRight('config', 'w')) {
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
-         = '/plugins/itilcategorygroups/front/category.form.php';
-          
+            = '/plugins/itilcategorygroups/front/category.form.php';
+         
       }
 
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/filtergroups.js.php';
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/multiple_group.js';
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = "lib/chosen/chosen.native.js";
       $PLUGIN_HOOKS['add_css']['itilcategorygroups'][] = "lib/chosen/chosen.css";
-      
    }
 }
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_itilcategorygroups() {
 
-   $author = "<a href='www.teclib.com'>TECLIB'</a>";
-   return array ('name'             => __('ItilCategory Groups','itilcategorygroups'),
-                   'version'        => '0.84+1.1',
-                   'author'         => $author,
-                   'homepage'       => 'www.teclib.com',
-                   'minGlpiVersion' => '0.84');
+   return array('name'           => __('ItilCategory Groups','itilcategorygroups'),
+                'version'        => '0.84+1.1',
+                'author'         => "<a href='www.teclib.com'>TECLIB'</a>",
+                'homepage'       => 'www.teclib.com',
+                'minGlpiVersion' => '0.84');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect

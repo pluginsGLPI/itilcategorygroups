@@ -8,7 +8,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
       global $DB;
       
       $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
+      if (! TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
          `id`                                      INT(11)    NOT NULL AUTO_INCREMENT,
          `plugin_itilcategorygroups_categories_id` INT(11)    NOT NULL DEFAULT '0',

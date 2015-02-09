@@ -45,7 +45,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
-      if (!$withtemplate) {
+      if (! $withtemplate) {
          switch ($item->getType()) {
             case 'Group' :
                return __('ItilCategory Groups','itilcategorygroups');
@@ -57,7 +57,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
 
-      if ($item->getType()=='Group') {
+      if ($item->getType() == 'Group') {
          self::showForGroup($item);
       }
       return true;
@@ -67,11 +67,11 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       global $DB;
 
       $ID = $group->getField('id');
-      if (!$group->can($ID,'r')) {
+      if (! $group->can($ID, 'r')) {
          return false;
       }
 
-      $canedit = $group->can($ID,'w');
+      $canedit = $group->can($ID, 'w');
       if ($canedit) {
          // Get data
          $item = new self();
@@ -81,14 +81,12 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
          $rand = mt_rand();
          echo "<form name='group_level_form$rand' id='group_level_form$rand' method='post'
-                action='";
-         echo Toolbox::getItemTypeFormURL(__CLASS__)."'>";
+                action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
          echo "<input type='hidden' name='".self::$items_id."' value='$ID' />";
 
          echo "<div class='spaced'>";
          echo "<table class='tab_cadre_fixe'>";
-         echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups').
-              "</tr>";
+         echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups')."</th></tr>";
 
          echo "<tr class='tab_bg_2'><td class='center'>";
          Dropdown::showFromArray('lvl', 
@@ -109,7 +107,6 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
             echo "<input type='submit' name='add' value=\"".__('Save')."\" class='submit'>";
          }
          echo "</td></tr>";
-
 
          echo "</table></div>";
          Html::closeForm();
@@ -146,7 +143,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
                 WHERE gl.lvl = $level".
                 getEntitiesRestrictRequest(" AND ", "gr", 'entities_id',
                                            $entities_id, true);
-      foreach   ($DB->request($query) as $data) {
+      foreach ($DB->request($query) as $data) {
          $groups_id[] = $data['groups_id'];
       }
       return $groups_id;

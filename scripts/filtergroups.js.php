@@ -131,7 +131,7 @@ Ext.onReady(function() {\n
                         }
                      }
                   });
-               }, 200);   //end timeout
+               }, 200); //end timeout
             } 
          }, this); //end on requestcomplet
       } // end if update ticket

@@ -1,5 +1,4 @@
 <?php
-
 include ("../../../inc/includes.php");
 
 Session::checkCentralAccess();

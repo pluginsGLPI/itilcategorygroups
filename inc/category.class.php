@@ -113,7 +113,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       Html::closeForm();
 
       //enable chosen for multiple selector
-      if(!preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT'])) {
+      if(! preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT'])) {
          echo "<script type='text/javascript'>
             initChosen();
          </script>";
@@ -125,7 +125,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       // find current values for this select
       $values = array();
-      if (!empty($itilcategories_id)) {
+      if (! empty($itilcategories_id)) {
          $query_val = "SELECT groups_id
                        FROM glpi_plugin_itilcategorygroups_categories_groups
                        WHERE itilcategories_id = $itilcategories_id
@@ -167,7 +167,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    function prepareInputForAdd($input) {
-      $cat = new self;
+      $cat = new self();
       $found_cat = $cat->find("itilcategories_id = ".$this->input["itilcategories_id"]);
       if (count($found_cat) > 0) {
          Session::addMessageAfterRedirect(__("A link with this category already exists", "itilcategorygroups"));
@@ -192,7 +192,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    function post_updateItem($history=1) {    
-      $cat_group = new PluginItilcategorygroupsCategory_Group;
+      $cat_group = new PluginItilcategorygroupsCategory_Group();
      
       for ($lvl = 1; $lvl <= 4; $lvl++) {
 
@@ -280,8 +280,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $entity_restrict = getEntitiesRestrictRequest(" AND ", "cat", "entities_id",
                                                        $options['entities_id'],
                                                        $options['is_recursive']);
-         $query = "SELECT 
-                     cat.*, 
+         $query = "SELECT cat.*, 
                      GROUP_CONCAT(\"{\\\"groups_id\\\":\", 
                                   cat_gr.groups_id, 
                                   \", \\\"level\\\": \",  
@@ -548,8 +547,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $migration->migrationOneTable($table);
       }
 
-      
-      
       return true;
    }
    

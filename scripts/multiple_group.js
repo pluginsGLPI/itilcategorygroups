@@ -6,7 +6,6 @@ initChosen = function() {
    }
 }
 
-
 toggleSelect = function(level) {
    index = level - 1;
 
