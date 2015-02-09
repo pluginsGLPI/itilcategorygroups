@@ -40,15 +40,15 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    static function canView() {
-      return Session::haveRight('config', 'r');
+      return Session::haveRight('config', READ);
    }
    
    static function canCreate() {
-      return Session::haveRight('config', 'w');
+      return Session::haveRight('config', CREATE);
    }
    function showForm($id, $options = array()) {
 
-      if (!$this->can($id, 'r')) {
+      if (! $this->can($id, READ)) {
          return false;
       }
 
