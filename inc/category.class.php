@@ -98,20 +98,20 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       echo "<tr><td colspan='4'><hr></td></tr>";
       
-      echo "<tr><td>".ucfirst(__('Level 1','itilcategorygroups'))." :</td>";
+      echo "<tr><td><label for='groups_id_level1[]'>".ucfirst(__('Level 1','itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(1, $this->fields['itilcategories_id'], $this->fields['view_all_lvl1']);
       echo "</td>";
-      echo "<td>".ucfirst(__('Level 2','itilcategorygroups'))." :</td>";
+      echo "<td><label for='groups_id_level2[]'>".ucfirst(__('Level 2','itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(2, $this->fields['itilcategories_id'], $this->fields['view_all_lvl2']);
       echo "</td></tr>";
       
-      echo "<tr><td>".ucfirst(__('Level 3','itilcategorygroups'))." :</td>";
+      echo "<tr><td><label for='groups_id_level3[]'>".ucfirst(__('Level 3','itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(3, $this->fields['itilcategories_id'], $this->fields['view_all_lvl3']);
       echo "</td>";
-      echo "<td>".ucfirst(__('Level 4','itilcategorygroups'))." :</td>";
+      echo "<td><label for='groups_id_level4[]'>".ucfirst(__('Level 4','itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(4, $this->fields['itilcategories_id'], $this->fields['view_all_lvl4']);
       echo "</td></tr>";
@@ -154,7 +154,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
       
       echo "<span id='select_level_$level'>";
-      echo "<select name='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
+      echo "<select name='groups_id_level".$level."[]' id='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
       while ($data_gr = $DB->fetch_assoc($res_gr)) {
          if (in_array($data_gr['id'], $values)) {
             $selected = "selected";
@@ -167,8 +167,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       echo "</span>";
       echo '<script>$("#select_level_'.$level.' select").select2();</script>';
       echo "<input type='hidden' name='view_all_lvl$level' value='0'>";
-      echo "&nbsp;".__('All')." ?&nbsp;".
-           "<input type='checkbox' name='view_all_lvl$level' $checked onclick='toggleSelect($level)'/>";
+      echo "&nbsp;<label for='view_all_lvl$level'>".__('All')." ?&nbsp;</label>".
+           "<input type='checkbox' name='view_all_lvl$level' id='view_all_lvl$level' $checked onclick='toggleSelect($level)'/>";
    }
 
    function prepareInputForAdd($input) {
