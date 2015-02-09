@@ -74,8 +74,8 @@ function plugin_init_itilcategorygroups() {
 function plugin_version_itilcategorygroups() {
    return array('name'           => __('ItilCategory Groups', 'itilcategorygroups'),
                 'version'        => '0.85+1.2',
-                'author'         => "<a href='www.teclib.com'>TECLIB'</a>",
-                'homepage'       => 'www.teclib.com');
+                'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
+                'homepage'       => 'http://www.teclib.com');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
