@@ -193,7 +193,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $this->post_updateItem();
    }
 
-   function post_updateItem($history=1) {    
+   function post_updateItem($history=1) {
       $cat_group = new PluginItilcategorygroupsCategory_Group();
      
       for ($lvl = 1; $lvl <= 4; $lvl++) {
@@ -220,6 +220,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    }
 
+   /**
+    * show options html tags
+    * @param unknown $tickets_id
+    * @param unknown $itilcategories_id
+    */
    static function filteredDropdownAssignGroups($tickets_id, $itilcategories_id) {
       $group  = new Group();
       $ticket = new Ticket();
@@ -240,7 +245,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       } 
 
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params);
-      if (!empty($found_groups)) {
+      if (! empty($found_groups)) {
          for ($lvl = 1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
                if ($found_groups['groups_id_level'.$lvl] === "all") {
@@ -261,12 +266,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
    }
 
+   /**
+    * get groups for category
+    * @param int $itilcategories_id
+    * @param array $params
+    * @return array 
+    */
    static function getGroupsForCategory($itilcategories_id, $params = array()) {
       global $DB;
-      
-      $groups   = array();
-      $category = new ITILCategory();
-      $table    = getTableForItemType(__CLASS__);
 
       //define default options
       $options['entities_id']  = 0;
@@ -277,6 +284,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       foreach ($params as $key => $value) {
          $options[$key] = $value;
       }
+      
+      $groups   = array();
+      $category = new ITILCategory();
+      $table    = getTableForItemType(__CLASS__);
 
       if ($category->getFromDB($itilcategories_id)) {
          $entity_restrict = getEntitiesRestrictRequest(" AND ", "cat", "entities_id",
@@ -319,13 +330,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    static function getOthersGroupsID($level = 0) {
       global $DB;
 
-      $groups_id = array();
       $res = $DB->query("SELECT gr.id 
                         FROM glpi_groups gr
                         LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
                            ON gl.groups_id = gr.id
                         WHERE gl.lvl != $level
                         OR gl.lvl IS NULL");
+      $groups_id = array();
       while ($row = $DB->fetch_assoc($res)) {
          $groups_id[$row['id']] = $row['id'];
       }
