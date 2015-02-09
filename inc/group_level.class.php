@@ -11,15 +11,15 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    }
 
    static function getTypeName($nb=0) {
-      return __('Level attribution','itilcategorygroups');
+      return __('Level attribution', 'itilcategorygroups');
    }
 
    static function canView() {
-      return Session::haveRight('config', 'r');
+      return Session::haveRight('config', READ);
    }
    
    static function canCreate() {
-      return Session::haveRight('config', 'w');
+      return Session::haveRight('config', CREATE);
    }
 
    static function install(Migration $migration) {
@@ -38,7 +38,6 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
    static function uninstall() {
       global $DB;
-
       $table = getTableForItemType(__CLASS__);
       return $DB->query("DROP TABLE IF EXISTS `$table`");
    }
@@ -67,11 +66,11 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       global $DB;
 
       $ID = $group->getField('id');
-      if (! $group->can($ID, 'r')) {
+      if (! $group->can($ID, READ)) {
          return false;
       }
 
-      $canedit = $group->can($ID, 'w');
+      $canedit = $group->can($ID, UPDATE);
       if ($canedit) {
          // Get data
          $item = new self();
@@ -120,7 +119,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       if ($itemtype == 'Group') {
          $opt[9978]['table']      = getTableForItemType(__CLASS__);
          $opt[9978]['field']      = 'lvl';
-         $opt[9978]['name']       = __('Level attribution','itilcategorygroups');
+         $opt[9978]['name']       = __('Level attribution', 'itilcategorygroups');
          $opt[9978]['linkfield']  = 'lvl';
          $opt[9978]['joinparams'] = array('jointype' => 'child');
       }
