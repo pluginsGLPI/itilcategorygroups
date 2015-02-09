@@ -25,7 +25,13 @@ function getUrlParameter(sParam) {
 var url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
 var tickets_id = getUrlParameter('id');
 
+function getItilcategories_id() {
+   var cat_select_dom_id = $("[name=itilcategories_id]")[0].id;
+   return itilcategories_id = $("#"+cat_select_dom_id).val();
+}
+
 function redefineDropdown(id, url, tickets_id) {
+//console.log("category id : "+itilcategories_id);
 
 $('#' + id).select2({
    width: '80%',
@@ -39,6 +45,7 @@ $('#' + id).select2({
       data: function (term, page) {
          return {
             ticket_id: tickets_id,
+            itilcategories_id: getItilcategories_id(),
             itemtype: "Group",
             display_emptychoice: 1,
             displaywith: [],
@@ -73,6 +80,7 @@ $('#' + id).select2({
                   $.ajax(url, {
                   data: {
                      ticket_id: tickets_id,
+                     itilcategories_id: getItilcategories_id(),
                      itemtype: "Group",
                      display_emptychoice: true,
                      displaywith: [],
@@ -117,6 +125,8 @@ $(document).ready(function() {
 
       $('#tabspanel + div.ui-tabs').on("tabsload", function( event, ui ) {
          setTimeout(function() {
+            if (getItilcategories_id() == 0) return;
+            
             var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
             redefineDropdown(assign_select_dom_id, url, 0);
          }, 300);
