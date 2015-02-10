@@ -224,49 +224,52 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    /**
-    * show options html tags
-    * @param unknown $tickets_id
-    * @param unknown $itilcategories_id
+    * get SQL condition for filtered dropdown assign groups
+    * @param int $tickets_id
+    * @param int $itilcategories_id
+    * @return string
     */
-   static function filteredDropdownAssignGroups($tickets_id, $itilcategories_id) {
-      $group  = new Group();
+   static function getSQLCondition($tickets_id, $itilcategories_id) {
+      
       $ticket = new Ticket();
-      $params = array('entities_id' => $_SESSION['glpiactive_entity'],
-                      'is_recursive' => 1);
-
-      echo "<option value='0'>".Dropdown::EMPTY_VALUE."</option>";
-
-      if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
+      $params = array(
+            'entities_id' => $_SESSION['glpiactive_entity'],
+            'is_recursive' => 1
+      );
+      if (! empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
          $params['entities_id'] = $ticket->fields['entities_id'];
-
-         if ($ticket->fields['type'] == Ticket::DEMAND_TYPE) {
-            $params['condition'] = " AND `is_request`='1'";
-         } else {
-            $params['condition'] = " AND `is_incident`='1'";
-         }
-      } 
-
+         $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE) ? 
+            "`is_request`='1'" : "`is_incident`='1'";
+      }
+   
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params);
+      
+      $groups_id_toshow = array(); //init
       if (! empty($found_groups)) {
-         for ($lvl = 1; $lvl <= 4; $lvl++) {
+         for ($lvl=1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
                if ($found_groups['groups_id_level'.$lvl] === "all") {
-                  foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']) as $groups_id) {
-                     if ($group->getFromDB($groups_id)) {
-                        echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
-                     }
-                  }
-
+                  $groups_id_toshow[] = PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']);
                } else {
-                  foreach ($found_groups['groups_id_level'.$lvl] as $groups_id) {
-                     $group->getFromDB($groups_id);
-                     echo "<option value='".$group->getID()."'>".$group->getName()."</option>";
-                  }
+                  $groups_id_toshow[] = $found_groups['groups_id_level'.$lvl];
                }
             }
          }
       }
+      
+      if (count($groups_id_toshow) > 0) {
+         $myarray = array();
+         foreach ($groups_id_toshow as $groups_id => $groups_name) {
+            $myarray[] = $groups_id;
+         }
+         $newarray = implode(", ", $myarray);
+         $condition = " id IN ($newarray)";
+          
+      } else {
+         $condition = "";
+      }
+      return $condition;
    }
 
    /**

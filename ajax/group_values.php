@@ -13,5 +13,14 @@ if (! isset($_REQUEST['itilcategories_id'])) {
 
 $ticket_id = (isset($_REQUEST['ticket_id'])) ? $_REQUEST['ticket_id'] : 0;
 
-PluginItilcategorygroupsCategory::filteredDropdownAssignGroups(intval($ticket_id), 
+$condition = PluginItilcategorygroupsCategory::getSQLCondition(intval($ticket_id), 
                                                                intval($_REQUEST['itilcategories_id']));
+if (! empty($condition)) {
+   $rand = mt_rand();
+   $_SESSION['glpicondition'][$rand] = $condition;
+   
+   $_GET["condition"] = $rand;
+   require ("../../../ajax/getDropdownValue.php");
+} else {
+   echo '{"results":[{"id":0,"text":"-----"}],"count":0}';
+}

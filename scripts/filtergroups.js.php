@@ -68,7 +68,7 @@ $('#' + id).select2({
             }
          },
          initSelection: function (element, callback) {
-            var id=$(element).val();
+            var id = $(element).val();
             var defaultid = '0';
             if (id !== '') {
                // No ajax call for first item
@@ -94,7 +94,12 @@ $('#' + id).select2({
                      specific_tags: [],
                      _one_id: id},
                dataType: 'json',
-               }).done(function(data) { callback(data); });
+               }).done(function(data) {
+                  if (data.results[0].id == defaultid) {
+                     var data = {id: 0, text: "-----"};
+                  }
+                  callback(data);
+               });
             }
          }
 
