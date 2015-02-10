@@ -69,14 +69,12 @@ function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num) {
 
    switch ($table.'.'.$field) {
       case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
-         if (! empty($value)) {
-            switch ($value) {
-               case 1:
-               case 2:
-               case 3:
-               case 4:
-                  return __('Level '.$value, 'itilcategorygroups');
-            }
+         switch ($value) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+               return __('Level '.$value, 'itilcategorygroups');
          }
    }
    return "";
