@@ -407,7 +407,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $tab[26]['table']         = 'glpi_groups';
       $tab[26]['field']         = 'name';
       $tab[26]['forcegroupby']  = true;
-      $tab[26]['name']          = $LANG['plugin_itilcategorygroups']['title'][4];
+      $tab[26]['name']          = __("Level 1", "itilcategorygroups");
       $tab[26]['joinparams']    = array(
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
@@ -427,7 +427,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $tab[27]['table']         = 'glpi_groups';
       $tab[27]['field']         = 'name';
       $tab[27]['forcegroupby']  = true;
-      $tab[27]['name']          = $LANG['plugin_itilcategorygroups']['title'][5];
+      $tab[27]['name']          = __("Level 2", "itilcategorygroups");
       $tab[27]['joinparams']    = array(
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
@@ -447,7 +447,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $tab[28]['table']         = 'glpi_groups';
       $tab[28]['field']         = 'name';
       $tab[28]['forcegroupby']  = true;
-      $tab[28]['name']          = $LANG['plugin_itilcategorygroups']['title'][6];
+      $tab[28]['name']          = __("Level 3", "itilcategorygroups");
       $tab[28]['joinparams']    = array(
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
@@ -467,7 +467,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $tab[29]['table']         = 'glpi_groups';
       $tab[29]['field']         = 'name';
       $tab[29]['forcegroupby']  = true;
-      $tab[29]['name']          = $LANG['plugin_itilcategorygroups']['title'][7];
+      $tab[29]['name']          = __("Level 4", "itilcategorygroups");
       $tab[29]['joinparams']    = array(
                                     'beforejoin' => array( 
                                        'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
