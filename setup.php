@@ -61,8 +61,8 @@ function plugin_init_itilcategorygroups() {
             = '/plugins/itilcategorygroups/front/category.form.php';
       }
 
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/filtergroups.js.php';
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/multiple_group.js';
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = array('scripts/filtergroups.js.php', 
+                                                                     'scripts/multiple_group.js');
    }
 }
 

@@ -60,21 +60,22 @@ function plugin_itilcategorygroups_getAddSearchOptions($itemtype) {
    }
 }
 
-function plugin_itilcategorygroups_giveItem($type,$ID,$data,$num) {
+function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num) {
 
    $searchopt = &Search::getOptions($type);
    $table = $searchopt[$ID]["table"];
    $field = $searchopt[$ID]["field"];
-   $value = $data["ITEM_$num"];
+   $value = $data['raw']["ITEM_$num"];
 
    switch ($table.'.'.$field) {
       case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
          if (! empty($value)) {
-            switch($value) {
-               case 1: return __('Level 1', 'itilcategorygroups'); break;
-               case 2: return __('Level 2', 'itilcategorygroups'); break;
-               case 3: return __('Level 3', 'itilcategorygroups'); break;
-               case 4: return __('Level 4', 'itilcategorygroups'); break;
+            switch ($value) {
+               case 1:
+               case 2:
+               case 3:
+               case 4:
+                  return __('Level '.$value, 'itilcategorygroups');
             }
          }
    }
