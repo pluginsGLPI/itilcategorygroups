@@ -34,7 +34,6 @@ function plugin_init_itilcategorygroups() {
    $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
    
    $plugin = new Plugin();
-
    if ($plugin->isInstalled('itilcategorygroups') && $plugin->isActivated('itilcategorygroups')) {
 
       Plugin::registerClass('PluginItilcategorygroupsCategory',
@@ -42,7 +41,7 @@ function plugin_init_itilcategorygroups() {
       Plugin::registerClass('PluginItilcategorygroupsGroup_Level',
                             array('addtabon' => 'Group'));
 
-      if (Session::haveRight('config', 'r')) {
+      if (Session::haveRight('config', READ)) {
 
          $PLUGIN_HOOKS['menu_entry']['itilcategorygroups'] = 'front/category.php';
 
@@ -57,10 +56,9 @@ function plugin_init_itilcategorygroups() {
 
          $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
       }
-      if (Session::haveRight('config', 'w')) {
+      if (Session::haveRight('config', UPDATE)) {
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
             = '/plugins/itilcategorygroups/front/category.form.php';
-         
       }
 
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'][] = 'scripts/filtergroups.js.php';
