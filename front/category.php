@@ -30,6 +30,9 @@
 
 include ("../../../inc/includes.php");
 
+Html::header(PluginItilcategorygroupsCategory::getTypeName(), '',
+   "tools", "pluginitilcategorygroupsmenu", "model");
+
 $dropdown = new PluginItilcategorygroupsCategory();
 
 include (GLPI_ROOT."/front/dropdown.common.php");

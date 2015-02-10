@@ -43,10 +43,11 @@ function plugin_init_itilcategorygroups() {
 
       if (Session::haveRight('config', READ)) {
 
-         $PLUGIN_HOOKS['menu_entry']['itilcategorygroups'] = 'front/category.php';
+         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('tools' => 'PluginItilcategorygroupsMenu');
 
-         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['title']
-            = __('Link ItilCategory - Groups','itilcategorygroups');
+         /* old */ 
+         //$PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['title']
+         //   = __('Link ItilCategory - Groups', 'itilcategorygroups');
 
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['page']
             = '/plugins/itilcategorygroups/front/category.php';
@@ -54,6 +55,7 @@ function plugin_init_itilcategorygroups() {
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['search']
             = '/plugins/itilcategorygroups/front/category.php';
 
+         // other hook :
          $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
       }
       if (Session::haveRight('config', UPDATE)) {
