@@ -199,7 +199,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    function post_updateItem($history=1) {
       
       // quick fix :
-      if ($_REQUEST['massiveaction']) {
+      if (isset($_REQUEST['massiveaction'])) {
          return ;
       }
       
