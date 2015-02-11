@@ -197,11 +197,18 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    function post_updateItem($history=1) {
+      
+      // quick fix :
+      if ($_REQUEST['massiveaction']) {
+         return ;
+      }
+      
       $cat_group = new PluginItilcategorygroupsCategory_Group();
      
-      for ($lvl = 1; $lvl <= 4; $lvl++) {
+      for ($lvl=1; $lvl <= 4; $lvl++) {
 
          if ($this->input["view_all_lvl$lvl"] != 1) {
+            
             //delete old groups values
             $found_cat_groups = $cat_group->find("itilcategories_id = ".$this->input["itilcategories_id"].
                                                  " AND level = $lvl");
@@ -209,7 +216,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                $cat_group->delete(array('id' => $current_cat_group['id']));
             }
 
-             //insert new saved
+            //insert new saved
             if (isset($this->input["groups_id_level$lvl"])) {
                foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
                   $cat_group->add(array('plugin_itilcategorygroups_categories_id' => $this->input["id"],
