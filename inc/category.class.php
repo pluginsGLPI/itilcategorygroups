@@ -237,46 +237,50 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @return string
     */
    static function getSQLCondition($tickets_id, $itilcategories_id) {
-      
+      $group  = new Group();
       $ticket = new Ticket();
-      $params = array(
-            'entities_id' => $_SESSION['glpiactive_entity'],
-            'is_recursive' => 1
-      );
+      $params = array('entities_id' => $_SESSION['glpiactive_entity'],
+            'is_recursive' => 1);
+   
+      $groups_id_toshow = array(); //init
+   
       if (! empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
          $params['entities_id'] = $ticket->fields['entities_id'];
-         $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE) ? 
-            "`is_request`='1'" : "`is_incident`='1'";
+   
+         if ($ticket->fields['type'] == Ticket::DEMAND_TYPE) {
+            $params['condition'] = " AND `is_request`='1'";
+         } else {
+            $params['condition'] = " AND `is_incident`='1'";
+         }
       }
    
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params);
-      
-      $groups_id_toshow = array(); //init
       if (! empty($found_groups)) {
-         for ($lvl=1; $lvl <= 4; $lvl++) {
+         for ($lvl = 1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
                if ($found_groups['groups_id_level'.$lvl] === "all") {
-                  $groups_id_toshow[] = PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']);
+                  foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']) as $groups_id) {
+                     if ($group->getFromDB($groups_id)) {
+                        $groups_id_toshow[] = $group->getID();
+                     }
+                  }
+   
                } else {
-                  $groups_id_toshow[] = $found_groups['groups_id_level'.$lvl];
+                  foreach ($found_groups['groups_id_level'.$lvl] as $groups_id) {
+                     $group->getFromDB($groups_id);
+                     $groups_id_toshow[] = $group->getID();
+                  }
                }
             }
          }
       }
       
       if (count($groups_id_toshow) > 0) {
-         $myarray = array();
-         foreach ($groups_id_toshow as $groups_id => $groups_name) {
-            $myarray[] = $groups_id;
-         }
-         $newarray = implode(", ", $myarray);
-         $condition = " id IN ($newarray)";
-          
-      } else {
-         $condition = "";
+         $imploded = implode(", ", $groups_id_toshow);
+         return "id IN ($imploded)";
       }
-      return $condition;
+      return "";
    }
 
    /**
