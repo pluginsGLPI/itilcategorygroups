@@ -430,6 +430,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[26]['massiveaction'] = false;
 
       $tab[27]['table']         = 'glpi_groups';
       $tab[27]['field']         = 'name';
@@ -450,6 +451,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[27]['massiveaction'] = false;
       
       $tab[28]['table']         = 'glpi_groups';
       $tab[28]['field']         = 'name';
@@ -470,6 +472,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[28]['massiveaction'] = false;
   
       $tab[29]['table']         = 'glpi_groups';
       $tab[29]['field']         = 'name';
@@ -490,6 +493,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[29]['massiveaction'] = false;
       
       /* id */
       $tab[30]['table']         = $this->getTable();
