@@ -118,7 +118,7 @@ $('#' + id).select2({
 }
 
 $(document).ready(function() {
-   if (location.pathname.indexOf('ticket.form.php') == 0) {
+   if (location.pathname.indexOf('ticket.form.php') != 0) {
    
       if (tickets_id == undefined) {
          // -----------------------
