@@ -42,8 +42,8 @@ function plugin_init_itilcategorygroups() {
                             array('addtabon' => 'Group'));
 
       if (Session::haveRight('config', READ)) {
-         // add to 'Tools' menu :
-         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('tools' => 'PluginItilcategorygroupsMenu');
+         // add to 'Admin' menu :
+         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('admin' => 'PluginItilcategorygroupsMenu');
 
          // other hook :
          $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
