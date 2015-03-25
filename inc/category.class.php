@@ -52,7 +52,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          return false;
       }
 
-      $this->showTabs($options);
       $this->showFormHeader($options);
       
       echo "<tr>";
