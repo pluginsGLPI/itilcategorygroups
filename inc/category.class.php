@@ -312,10 +312,16 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $entity_restrict = getEntitiesRestrictRequest(" AND ", "cat", "entities_id",
                                                        $options['entities_id'],
                                                        $options['is_recursive']);
-         $query = "SELECT cat.*, 
-                     GROUP_CONCAT(\"{\\\"groups_id\\\":\", 
+
+         // increase size of group concat to avoid errors
+         $DB->query("SET SESSION group_concat_max_len = 1000000");
+
+         // retrieve all groups associated to this cat
+         $query = "SELECT 
+                     cat.*, 
+                     GROUP_CONCAT(\"{\\\"gr_id\\\":\", 
                                   cat_gr.groups_id, 
-                                  \", \\\"level\\\": \",  
+                                  \", \\\"lvl\\\": \",  
                                   cat_gr.level, 
                                   \"}\") as groups_level
                    FROM `$table` cat
@@ -333,8 +339,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                   $groups["groups_id_level$level"] = "all";
                } else {
                   foreach ($groups_level as $current_group_level) {
-                     if ($current_group_level['level'] == $level) {
-                        $groups["groups_id_level$level"][] = $current_group_level['groups_id'];
+                     if ($current_group_level['lvl'] == $level) {
+                        $groups["groups_id_level$level"][] = $current_group_level['gr_id'];
                      }
                   }
                }
