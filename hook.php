@@ -106,17 +106,18 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options=array())
 
 // Hook done on update item case
 function plugin_pre_item_update_itilcategorygroups($item) {
-   if (isset($_REQUEST['massiveaction']) && isset($_REQUEST['lvl'])) {
+   if (isset($_REQUEST['massiveaction'])
+       && isset($_REQUEST['lvl'])
+       && $item instanceof Group) {
       $group_level = new PluginItilcategorygroupsGroup_Level();
-      foreach($_REQUEST['item'] as $groups_id => $val) {
-         if(! $group_level->getFromDB($groups_id)) {
-            $group_level->add(array('groups_id'=> $groups_id, 
+      if(! $group_level->getFromDB($item->fields['id'])) {
+         $group_level->add(array('groups_id'=> $item->fields['id'], 
+                                 'lvl'    => $_REQUEST['lvl']));
+      } else {
+         $group_level->update(array('groups_id'=> $item->fields['id'], 
                                     'lvl'    => $_REQUEST['lvl']));
-         } else {
-            $group_level->update(array('groups_id'=> $groups_id, 
-                                       'lvl'    => $_REQUEST['lvl']));
-         }
       }
+      
    }   
    return $item;
 }
