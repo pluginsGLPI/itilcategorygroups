@@ -31,7 +31,7 @@
 include ("../../../inc/includes.php");
 
 Html::header(PluginItilcategorygroupsCategory::getTypeName(), '',
-   "tools", "pluginitilcategorygroupsmenu", "model");
+   "config", "pluginitilcategorygroupsmenu", "model");
 
 $dropdown = new PluginItilcategorygroupsCategory();
 

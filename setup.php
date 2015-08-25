@@ -43,7 +43,7 @@ function plugin_init_itilcategorygroups() {
 
       if (Session::haveRight('config', READ)) {
          // add to 'Tools' menu :
-         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('tools' => 'PluginItilcategorygroupsMenu');
+         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('config' => 'PluginItilcategorygroupsMenu');
 
          // other hook :
          $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
