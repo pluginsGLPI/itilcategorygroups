@@ -52,7 +52,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          return false;
       }
 
-      $this->showTabs($options);
       $this->showFormHeader($options);
       
       echo "<tr>";
@@ -197,11 +196,18 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    function post_updateItem($history=1) {
+      
+      // quick fix :
+      if (isset($_REQUEST['massiveaction'])) {
+         return ;
+      }
+      
       $cat_group = new PluginItilcategorygroupsCategory_Group();
      
-      for ($lvl = 1; $lvl <= 4; $lvl++) {
+      for ($lvl=1; $lvl <= 4; $lvl++) {
 
          if ($this->input["view_all_lvl$lvl"] != 1) {
+            
             //delete old groups values
             $found_cat_groups = $cat_group->find("itilcategories_id = ".$this->input["itilcategories_id"].
                                                  " AND level = $lvl");
@@ -209,7 +215,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                $cat_group->delete(array('id' => $current_cat_group['id']));
             }
 
-             //insert new saved
+            //insert new saved
             if (isset($this->input["groups_id_level$lvl"])) {
                foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
                   $cat_group->add(array('plugin_itilcategorygroups_categories_id' => $this->input["id"],
@@ -231,6 +237,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     */
    static function getSQLCondition($tickets_id, $itilcategories_id) {
       $ticket = new Ticket();
+      $group  = new Group();
       $params = array('entities_id'  => $_SESSION['glpiactive_entity'],
                       'is_recursive' => 1);
 
@@ -248,9 +255,20 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          for ($lvl=1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
                if ($found_groups['groups_id_level'.$lvl] === "all") {
-                  $groups_id_toshow[] = PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']);
+                  foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']) as $groups_id) {
+                     if ($group->getFromDB($groups_id)) {
+                        $groups_id_toshow[] = $group->getID();
+                     }
+                  }
+   
                } else {
-                  $groups_id_toshow[] = $found_groups['groups_id_level'.$lvl];
+                  foreach ($found_groups['groups_id_level'.$lvl] as $groups_id) {
+                     if (countElementsInTableForEntity("glpi_groups", $ticket->getEntityID(), 
+                                                       "`id`='$groups_id'") > 0) {
+                        $group->getFromDB($groups_id);
+                        $groups_id_toshow[] = $group->getID();
+                     }
+                  }
                }
             }
          }
@@ -297,10 +315,16 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $entity_restrict = getEntitiesRestrictRequest(" AND ", "cat", "entities_id",
                                                        $options['entities_id'],
                                                        $options['is_recursive']);
-         $query = "SELECT cat.*, 
-                     GROUP_CONCAT(\"{\\\"groups_id\\\":\", 
+
+         // increase size of group concat to avoid errors
+         $DB->query("SET SESSION group_concat_max_len = 1000000");
+
+         // retrieve all groups associated to this cat
+         $query = "SELECT 
+                     cat.*, 
+                     GROUP_CONCAT(\"{\\\"gr_id\\\":\", 
                                   cat_gr.groups_id, 
-                                  \", \\\"level\\\": \",  
+                                  \", \\\"lvl\\\": \",  
                                   cat_gr.level, 
                                   \"}\") as groups_level
                    FROM `$table` cat
@@ -318,8 +342,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                   $groups["groups_id_level$level"] = "all";
                } else {
                   foreach ($groups_level as $current_group_level) {
-                     if ($current_group_level['level'] == $level) {
-                        $groups["groups_id_level$level"][] = $current_group_level['groups_id'];
+                     if ($current_group_level['lvl'] == $level) {
+                        $groups["groups_id_level$level"][] = $current_group_level['gr_id'];
                      }
                   }
                }
@@ -421,6 +445,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[26]['massiveaction'] = false;
 
       $tab[27]['table']         = 'glpi_groups';
       $tab[27]['field']         = 'name';
@@ -441,6 +466,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[27]['massiveaction'] = false;
       
       $tab[28]['table']         = 'glpi_groups';
       $tab[28]['field']         = 'name';
@@ -461,6 +487,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[28]['massiveaction'] = false;
   
       $tab[29]['table']         = 'glpi_groups';
       $tab[29]['field']         = 'name';
@@ -481,6 +508,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                        )
                                     )
                                  );
+      $tab[29]['massiveaction'] = false;
       
       /* id */
       $tab[30]['table']         = $this->getTable();
