@@ -237,8 +237,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
          $params['entities_id'] = $ticket->fields['entities_id'];
-         $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE) ? 
-            "`is_request`='1'" : "`is_incident`='1'";
+         $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE? 
+            "`is_request`='1'" : "`is_incident`='1'");
       }
    
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params);
