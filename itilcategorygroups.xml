@@ -1,0 +1,73 @@
+<root>
+   <name>ItilCategory Groups</name>
+   <key>itilcategorygroups</key>
+   <state>stable</state>
+   <logo>https://raw.githubusercontent.com/PluginsGLPI/itilcategorygroups/master/itilcategorygroups.png</logo>
+   <description>
+      <short>
+         <en>This plugins aims to filter assignable groups in ticket by selected category</en>
+         <fr>Ce plugin apporte le filtrage des groupes "attribués à" en fonction de la catégorie du ticket</fr>
+      </short>
+      <long>
+         <en>This plugins aims to filter assignable groups in ticket by selected category.
+
+You can define a level to your glpi groups.
+Then, for each of your ticket's categories, you can define which group will be viewed or not.</en>
+         <fr>Ce plugin apporte le filtrage des groupes "attribués à" en fonction de la catégorie du ticket.
+
+Vous pouvez définir un niveau (parmis 4) pour vos groupes glpi.
+Ensuite, pour chacune des vos catégories, vous pouvez définir quel group sera visible ou non.
+         </fr>
+      </long>
+   </description>
+   <homepage>https://github.com/pluginsGLPI/itilcategorygroups</homepage>
+   <download>https://github.com/pluginsGLPI/itilcategorygroups/releases</download>
+   <issues>https://github.com/pluginsGLPI/itilcategorygroups/issues</issues>
+   <readme>https://raw.githubusercontent.com/pluginsGLPI/itilcategorygroups/master/README.md</readme>
+   <authors>
+      <author>Teclib'</author>
+      <author>Walid Nouh</author>
+      <author>Alexandre Delaunay</author>
+      <author>Emmanuel Haguet</author>
+      <author>François Legastelois</author>
+   </authors>
+   <versions>
+      <version>
+         <num>0.90+1.0</num>
+         <compatibility>0.90</compatibility>
+         <compatibility>0.85</compatibility>
+      </version>
+      <version>
+         <num>0.85+1.0</num>
+         <compatibility>0.85</compatibility>
+      </version>
+      <version>
+         <num>0.84+1.1</num>
+         <compatibility>0.84</compatibility>
+      </version>
+      <version>
+         <num>0.84+1.0</num>
+         <compatibility>0.84</compatibility>
+      </version>
+   </versions>
+   <langs>
+      <lang>en_GB</lang>
+      <lang>fr_FR</lang>
+   </langs>
+   <license>GPL v2+</license>
+   <tags>
+      <en>
+         <tag>Helpdesk</tag>
+         <tag>Category</tag>
+         <tag>Filter</tag>
+      </en>
+      <lang>
+         <tag>Assistance</tag>
+         <tag>Categorie</tag>
+         <tag>Filtre</tag>
+      </lang>
+   </tags>
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/PluginsGLPI/itilcategorygroups/master/screenshots/category_config.png</screenshot>
+   </screenshots>
+</root>
