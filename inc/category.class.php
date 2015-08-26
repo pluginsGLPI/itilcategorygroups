@@ -230,13 +230,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @return string
     */
    static function getSQLCondition($tickets_id, $itilcategories_id) {
-      
       $ticket = new Ticket();
-      $params = array(
-            'entities_id' => $_SESSION['glpiactive_entity'],
-            'is_recursive' => 1
-      );
-      if (! empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
+      $params = array('entities_id'  => $_SESSION['glpiactive_entity'],
+                      'is_recursive' => 1);
+
+      if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
          $params['entities_id'] = $ticket->fields['entities_id'];
          $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE) ? 
@@ -246,7 +244,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params);
       
       $groups_id_toshow = array(); //init
-      if (! empty($found_groups)) {
+      if (!empty($found_groups)) {
          for ($lvl=1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
                if ($found_groups['groups_id_level'.$lvl] === "all") {
@@ -258,17 +256,17 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          }
       }
       
+      $condition = "";
       if (count($groups_id_toshow) > 0) {
-         $myarray = array();
-         foreach ($groups_id_toshow as $groups_id => $groups_name) {
-            $myarray[] = $groups_id;
-         }
-         $newarray = implode(", ", $myarray);
+         // transform found groups (2 dimensions) in a flat array
+         $groups_id_toshow_flat = array();
+         array_walk_recursive($groups_id_toshow, function($v, $k) use(&$groups_id_toshow_flat) {
+            array_push($groups_id_toshow_flat, $v);
+         });
+
+         $newarray = implode(", ", $groups_id_toshow_flat);
          $condition = " id IN ($newarray)";
-          
-      } else {
-         $condition = "";
-      }
+      } 
       return $condition;
    }
 

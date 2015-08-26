@@ -117,41 +117,48 @@ $('#' + id).select2({
    });
 }
 
+var triggerNewTicket = function() {
+   setTimeout(function() {
+      if (getItilcategories_id() == 0) {
+         return;
+      }
+      var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
+      redefineDropdown(assign_select_dom_id, url, 0);
+   }, 300);
+}
+
+var triggerupdateTicket = function() {
+   setTimeout(function() {
+      if (getItilcategories_id() == 0) {
+         return;
+      }
+      var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
+      redefineDropdown(assign_select_dom_id, url, tickets_id);
+   }, 300);
+}
+
 $(document).ready(function() {
-   if (location.pathname.indexOf('ticket.form.php') == 0) {
+   if (location.pathname.indexOf('ticket.form.php') >= 0) {
    
       if (tickets_id == undefined) {
-         // -----------------------
          // ---- Create Ticket ----
-         // -----------------------
-   
+         triggerNewTicket();
          $('#tabspanel + div.ui-tabs').on("tabsload", function( event, ui ) {
-            setTimeout(function() {
-               if (getItilcategories_id() == 0) return;
-               
-               var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
-               redefineDropdown(assign_select_dom_id, url, 0);
-            }, 300);
+            triggerNewTicket();
          });
    
       } else {
-         // -----------------------
          // ---- Update Ticket ----
-         // -----------------------
-         
+         $(".ui-tabs-panel:visible").find(".headerRow:visible").ready(function() {
+            triggerupdateTicket();
+         });
+               
          $(document).ajaxSend(function( event, jqxhr, settings ) {
             if (settings.url.indexOf("dropdownItilActors.php") > 0 
                && settings.data.indexOf("group") > 0
                   && settings.data.indexOf("assign") > 0
                ) {
-               //delay the execution (ajax requestcomplete event fired before dom loading)
-               setTimeout(function() {
-                  if ($("*[name='_itil_assign[groups_id]']").length) {
-                     var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
-                     redefineDropdown(assign_select_dom_id, url, tickets_id);
-                  }
-               }, 300);
-               
+               triggerupdateTicket();
             }
          });
    
