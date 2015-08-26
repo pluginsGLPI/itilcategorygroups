@@ -148,11 +148,7 @@ $(document).ready(function() {
          });
    
       } else {
-         // ---- Update Ticket ----
-         $(".ui-tabs-panel:visible").find(".headerRow:visible").ready(function() {
-            triggerupdateTicket();
-         });
-               
+         // ---- Update Ticket ----             
          $(document).ajaxSend(function( event, jqxhr, settings ) {
             if (settings.url.indexOf("dropdownItilActors.php") > 0 
                && settings.data.indexOf("group") > 0
