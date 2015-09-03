@@ -17,9 +17,12 @@ $condition = PluginItilcategorygroupsCategory::getSQLCondition(intval($ticket_id
                                                                intval($_REQUEST['itilcategories_id']));
 if (! empty($condition)) {
    $rand = mt_rand();
+   $default_options = array('display_emptychoice' => true, 
+                            'itemtype'            => 'Group', 
+                            'condition'           => $rand);
+   $_GET = array_merge($_GET, $default_options);
    $_SESSION['glpicondition'][$rand] = $condition;
    
-   $_GET["condition"] = $rand;
    require ("../../../ajax/getDropdownValue.php");
 } else {
    echo '{"results":[{"id":0,"text":"-----"}],"count":0}';

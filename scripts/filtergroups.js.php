@@ -21,75 +21,50 @@ function getUrlParameter(sParam) {
 var url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
 var tickets_id = getUrlParameter('id');
 
-function getItilcategories_id() {
+var getItilcategories_id = function () {
    var cat_select_dom_id = $("[name=itilcategories_id]")[0].id;
    return itilcategories_id = $("#"+cat_select_dom_id).val();
-}
+};
 
-function redefineDropdown(id, url, tickets_id) {
-//console.log("category id : "+itilcategories_id);
+var redefineDropdown = function (id, url, tickets_id) {
+   //console.log("category id : "+itilcategories_id);
 
-$('#' + id).select2({
-   width: '80%',
-   minimumInputLength: 0,
-   quietMillis: 100,
-   minimumResultsForSearch: 50,
-   closeOnSelect: false,
-   ajax: {
-      url: url,
-      dataType: 'json',
-      data: function (term, page) {
-         return {
-            ticket_id: tickets_id,
-            itilcategories_id: getItilcategories_id(),
-            itemtype: "Group",
-            display_emptychoice: 1,
-            displaywith: [],
-            emptylabel: "-----",
-            condition: "",
-            used: [],
-            toadd: [],
-            entity_restrict: 0,
-            limit: "50",
-            permit_select_parent: 0,
-            specific_tags: [],
-            searchText: term,
-            page_limit: 100, // page size
-            page: page, // page number
-               };
-            },
-            results: function (data, page) {
-               var more = (data.count >= 100);
-               return {results: data.results, more: more};
-            }
+   $('#' + id).select2({
+      width:                   '80%',
+      minimumInputLength:      0,
+      quietMillis:             100,
+      minimumResultsForSearch: 50,
+      closeOnSelect:           false,
+      ajax: {
+         url: url,
+         dataType: 'json',
+         data: function (term, page) {
+            return {
+               ticket_id:         tickets_id,
+               itilcategories_id: getItilcategories_id()
+            };
          },
-         initSelection: function (element, callback) {
-            var id = $(element).val();
-            var defaultid = '0';
-            if (id !== '') {
-               // No ajax call for first item
-               if (id === defaultid) {
-                 var data = {id: 0,
-                           text: "-----"};
-                  callback(data);
-               } else {
-                  $.ajax(url, {
+         results: function (data, page) {
+            var more = (data.count >= 100);
+            return { results: data.results, more: more };
+         }
+      },
+      initSelection: function (element, callback) {
+         var id = $(element).val();
+         var defaultid = '0';
+         if (id !== '') {
+            // No ajax call for first item
+            if (id === defaultid) {
+              var data = {id: 0,
+                        text: "-----"};
+               callback(data);
+            } else {
+               $.ajax(url, {
                   data: {
                      ticket_id: tickets_id,
-                     itilcategories_id: getItilcategories_id(),
-                     itemtype: "Group",
-                     display_emptychoice: true,
-                     displaywith: [],
-                     emptylabel: "-----",
-                     condition: "8791f22d6279ae77180198b33b4cc0f0e3b49513",
-                     used: [],
-                     toadd: [],
-                     entity_restrict: 0,
-                     limit: "50",
-                     permit_select_parent: false,
-                     specific_tags: [],
-                     _one_id: id},
-               dataType: 'json',
+                     itilcategories_id: getItilcategories_id()
+                  },
+                  dataType: 'json',
                }).done(function(data) {
                   if (data.results[0].id == defaultid) {
                      var data = {id: 0, text: "-----"};
@@ -98,7 +73,6 @@ $('#' + id).select2({
                });
             }
          }
-
       },
       formatResult: function(result, container, query, escapeMarkup) {
          var markup=[];
@@ -115,7 +89,7 @@ $('#' + id).select2({
          return markup.join('');
       }
    });
-}
+};
 
 var triggerNewTicket = function() {
    setTimeout(function() {
@@ -125,7 +99,7 @@ var triggerNewTicket = function() {
       var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
       redefineDropdown(assign_select_dom_id, url, 0);
    }, 300);
-}
+};
 
 var triggerupdateTicket = function() {
    setTimeout(function() {
@@ -135,7 +109,7 @@ var triggerupdateTicket = function() {
       var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
       redefineDropdown(assign_select_dom_id, url, tickets_id);
    }, 300);
-}
+};
 
 $(document).ready(function() {
    if (location.pathname.indexOf('ticket.form.php') >= 0) {
@@ -143,8 +117,10 @@ $(document).ready(function() {
       if (tickets_id == undefined) {
          // ---- Create Ticket ----
          triggerNewTicket();
-         $('#tabspanel + div.ui-tabs').on("tabsload", function( event, ui ) {
-            triggerNewTicket();
+         jQuery('div.ui-tabs').tabs({
+            load: function( event, ui ) {
+               triggerNewTicket();
+            }
          });
    
       } else {
