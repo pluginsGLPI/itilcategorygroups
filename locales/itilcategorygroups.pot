@@ -1,0 +1,56 @@
+# ITILCATEGORY GROUPS
+# Copyright (C) 2014 TECLIB'
+# This file is distributed under the same license as the ITILCATEGORY GROUPS package.
+# Alexandre Delaunay (adelaunay@teclib.com), 2013
+# François Legastelois (flegastelois@teclib.com), 2014
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.84+1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-29 10:27+0100\n"
+"PO-Revision-Date: 2014-01-29 10:27+0100\n"
+"Last-Translator: François Legastelois <flegastelois@teclib.com>\n"
+"Language-Team: TECLIB <contact@teclib.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: hook.php:69 hook.php:93 inc/category_group.class.php:120
+#: inc/category_group.class.php:240 inc/group_level.class.php:96
+msgid "Level 1"
+msgstr ""
+
+#: hook.php:70 hook.php:94 inc/category_group.class.php:128
+#: inc/category_group.class.php:245 inc/group_level.class.php:97
+msgid "Level 2"
+msgstr ""
+
+#: hook.php:71 hook.php:95 inc/category_group.class.php:137
+#: inc/category_group.class.php:250 inc/group_level.class.php:98
+msgid "Level 3"
+msgstr ""
+
+#: hook.php:72 hook.php:96 inc/category_group.class.php:145
+#: inc/category_group.class.php:255 inc/group_level.class.php:99
+msgid "Level 4"
+msgstr ""
+
+#: setup.php:51 inc/category_group.class.php:39
+#: inc/category_group.class.php:186
+msgid "Link ItilCategory - Groups"
+msgstr ""
+
+#: setup.php:77
+msgid "ItilCategory Groups"
+msgstr ""
+
+#: inc/group_level.class.php:14 inc/group_level.class.php:90
+#: inc/group_level.class.php:126
+msgid "Level attribution"
+msgstr ""
+
+msgid "A link with this category already exists"
+msgstr ""
