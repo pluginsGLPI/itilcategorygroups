@@ -98,7 +98,7 @@ var triggerNewTicket = function() {
       }
       var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
       redefineDropdown(assign_select_dom_id, url, 0);
-   }, 300);
+   }, 500);
 };
 
 var triggerupdateTicket = function() {
@@ -108,7 +108,7 @@ var triggerupdateTicket = function() {
       }
       var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
       redefineDropdown(assign_select_dom_id, url, tickets_id);
-   }, 300);
+   }, 1000);
 };
 
 $(document).ready(function() {
