@@ -36,6 +36,10 @@ function plugin_init_itilcategorygroups() {
    $plugin = new Plugin();
    if ($plugin->isInstalled('itilcategorygroups') && $plugin->isActivated('itilcategorygroups')) {
 
+      if (Session::haveRight('config', UPDATE)) {
+         $PLUGIN_HOOKS['config_page']['itilcategorygroups'] = 'front/category.php';
+      }
+
       Plugin::registerClass('PluginItilcategorygroupsCategory',
                             array('forwardentityfrom' => 'ITILCategory'));
       Plugin::registerClass('PluginItilcategorygroupsGroup_Level',
