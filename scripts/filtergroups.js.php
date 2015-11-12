@@ -18,7 +18,7 @@ function getUrlParameter(sParam) {
 
 // only in ticket form
 
-var url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
+var groups_url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
 var tickets_id = getUrlParameter('id');
 
 var getItilcategories_id = function () {
@@ -97,8 +97,8 @@ var triggerNewTicket = function() {
          return;
       }
       var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
-      redefineDropdown(assign_select_dom_id, url, 0);
-   }, 500);
+      redefineDropdown(assign_select_dom_id, groups_url, 0);
+   }, 300);
 };
 
 var triggerupdateTicket = function() {
@@ -107,34 +107,36 @@ var triggerupdateTicket = function() {
          return;
       }
       var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
-      redefineDropdown(assign_select_dom_id, url, tickets_id);
-   }, 1000);
+      redefineDropdown(assign_select_dom_id, groups_url, tickets_id);
+   }, 300);
 };
 
-$(document).ready(function() {
-   if (location.pathname.indexOf('ticket.form.php') >= 0) {
-   
+var triggerAll = function() {
+   setTimeout(function() {
       if (tickets_id == undefined) {
-         // ---- Create Ticket ----
          triggerNewTicket();
-         jQuery('div.ui-tabs').tabs({
-            load: function( event, ui ) {
-               triggerNewTicket();
-            }
-         });
-   
       } else {
-         // ---- Update Ticket ----             
          $(document).ajaxSend(function( event, jqxhr, settings ) {
             if (settings.url.indexOf("dropdownItilActors.php") > 0 
                && settings.data.indexOf("group") > 0
                   && settings.data.indexOf("assign") > 0
                ) {
-               triggerupdateTicket();
+             triggerupdateTicket();
             }
          });
-   
       }
+   }, 300);
+};
+
+$(document).ready(function() {
+   if (location.pathname.indexOf('ticket.form.php') >= 0) {
+      $(".ui-tabs-panel:visible").ready(function() {
+         triggerAll();
+      }); 
+
+      $("#tabspanel + div.ui-tabs").on("tabsload", function() {
+         triggerAll();
+      });
    }
 });
 JAVASCRIPT;
