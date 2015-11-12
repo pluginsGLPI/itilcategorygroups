@@ -27,8 +27,6 @@ var getItilcategories_id = function () {
 };
 
 var redefineDropdown = function (id, url, tickets_id) {
-   //console.log("category id : "+itilcategories_id);
-
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,
