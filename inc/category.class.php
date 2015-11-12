@@ -32,6 +32,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    
    public $first_level_menu  = "plugins";
    public $second_level_menu = "itilcategorygroups";
+
+   static $rightname         = 'config';
     
    var $dohistory = true;
    
@@ -39,13 +41,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       return __('Link ItilCategory - Groups','itilcategorygroups');
    }
 
-   static function canView() {
-      return Session::haveRight('config', READ);
-   }
-   
-   static function canCreate() {
-      return Session::haveRight('config', CREATE);
-   }
    function showForm($id, $options = array()) {
 
       if (! $this->can($id, READ)) {

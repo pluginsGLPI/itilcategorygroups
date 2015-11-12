@@ -34,7 +34,8 @@ function plugin_init_itilcategorygroups() {
    $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
    
    $plugin = new Plugin();
-   if ($plugin->isInstalled('itilcategorygroups') && $plugin->isActivated('itilcategorygroups')) {
+   if ($plugin->isInstalled('itilcategorygroups') 
+       && $plugin->isActivated('itilcategorygroups')) {
 
       if (Session::haveRight('config', UPDATE)) {
          $PLUGIN_HOOKS['config_page']['itilcategorygroups'] = 'front/category.php';
