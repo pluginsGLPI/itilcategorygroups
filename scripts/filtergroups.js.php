@@ -90,13 +90,11 @@ var redefineDropdown = function (id, url, tickets_id) {
 };
 
 var triggerNewTicket = function() {
-   setTimeout(function() {
-      if (getItilcategories_id() == 0) {
-         return;
-      }
-      var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
-      redefineDropdown(assign_select_dom_id, groups_url, 0);
-   }, 300);
+   if (getItilcategories_id() == 0) {
+      return;
+   }
+   var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
+   redefineDropdown(assign_select_dom_id, groups_url, 0);
 };
 
 var triggerupdateTicket = function() {
