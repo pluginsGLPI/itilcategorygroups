@@ -5,26 +5,8 @@ include ("../../../inc/includes.php");
 header("Content-type: application/javascript");
 
 $JS = <<<JAVASCRIPT
-function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i=0; i < sURLVariables.length; i++) {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) {
-            return sParameterName[1];
-        }
-    }
-}
-
-// only in ticket form
-
 var groups_url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
 var tickets_id = getUrlParameter('id');
-
-var getItilcategories_id = function () {
-   var cat_select_dom_id = $("[name=itilcategories_id]")[0].id;
-   return itilcategories_id = $("#"+cat_select_dom_id).val();
-};
 
 var redefineDropdown = function (id, url, tickets_id) {
    $('#' + id).select2({
@@ -98,41 +80,41 @@ var triggerNewTicket = function() {
 };
 
 var triggerupdateTicket = function() {
-   setTimeout(function() {
-      if (getItilcategories_id() == 0) {
-         return;
-      }
-      var assign_select_dom_id = $("*[name='_itil_assign[groups_id]']")[0].id;
+   if (getItilcategories_id() == 0) {
+      return;
+   }
+   checkDOMChange("input[name='_itil_assign[groups_id]'", function() {
+      var assign_select_dom_id = $("input[name='_itil_assign[groups_id]']")[0].id;
       redefineDropdown(assign_select_dom_id, groups_url, tickets_id);
-   }, 300);
+   });
 };
 
 var triggerAll = function() {
-   setTimeout(function() {
-      if (tickets_id == undefined) {
-         triggerNewTicket();
-      } else {
-         $(document).ajaxSend(function( event, jqxhr, settings ) {
-            if (settings.url.indexOf("dropdownItilActors.php") > 0 
-               && settings.data.indexOf("group") > 0
-                  && settings.data.indexOf("assign") > 0
-               ) {
-             triggerupdateTicket();
-            }
-         });
-      }
-   }, 300);
+   if (tickets_id == undefined) {
+      triggerNewTicket();
+   } else {
+      $(document).ajaxSend(function( event, jqxhr, settings ) {
+         if (settings.url.indexOf("dropdownItilActors.php") > 0 
+            && settings.data.indexOf("group") > 0
+               && settings.data.indexOf("assign") > 0
+            ) {
+          triggerupdateTicket();
+         }
+      });
+   }
 };
 
 $(document).ready(function() {
    if (location.pathname.indexOf('ticket.form.php') >= 0) {
-      $(".ui-tabs-panel:visible").ready(function() {
-         triggerAll();
-      }); 
+      setTimeout(function() {
+         $(".ui-tabs-panel:visible").ready(function() {
+            triggerAll();
+         }); 
 
-      $("#tabspanel + div.ui-tabs").on("tabsload", function() {
-         triggerAll();
-      });
+         $("#tabspanel + div.ui-tabs").on("tabsload", function() {
+            triggerAll();
+         });
+      }, 300);
    }
 });
 JAVASCRIPT;
