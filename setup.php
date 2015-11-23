@@ -67,7 +67,7 @@ function plugin_init_itilcategorygroups() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_itilcategorygroups() {
    return array('name'           => __('ItilCategory Groups', 'itilcategorygroups'),
-                'version'        => '0.90+1.0.1',
+                'version'        => '0.90+1.0.2',
                 'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
                 'homepage'       => 'http://www.teclib.com');
 }
