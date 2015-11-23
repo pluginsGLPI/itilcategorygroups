@@ -33,7 +33,7 @@ Ensuite, pour chacune des vos catégories, vous pouvez définir quel group sera 
    </authors>
    <versions>
       <version>
-         <num>0.90+1.0</num>
+         <num>0.90+1.0.2</num>
          <compatibility>0.90</compatibility>
          <compatibility>0.85</compatibility>
       </version>
