@@ -8,7 +8,56 @@ $JS = <<<JAVASCRIPT
 var groups_url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
 var tickets_id = getUrlParameter('id');
 
-var redefineDropdown = function (id, url, tickets_id) {
+var triggerNewTicket = function() {
+   cat = getItilcategories_id();
+   if (cat == 0) {
+      console.log(cat);
+      return;
+      
+   } else {
+   
+      //var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
+       
+      var assign_select_dom_id = $("input[id*='_groups_id_assign'").val();
+      console.log(assign_select_dom_id);
+      var type = $("select[id^='dropdown_type']").val();
+      
+      redefineDropdown(assign_select_dom_id, groups_url, 0, type);
+   }
+};
+
+var triggerupdateTicket = function() {
+   if (getItilcategories_id() == 0) {
+      return;
+   } else {
+      checkDOMChange("input[name='_itil_assign[groups_id]']", function() {
+         var assign_select_dom_id = $("input[name='_itil_assign[groups_id]']")[0].id;
+         var type = $("select[id^='dropdown_type']").val();
+         
+         redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);
+      });
+   }
+};
+
+var triggerAll = function() {
+   if (tickets_id == 'Not found') {
+      triggerNewTicket();
+   } else {
+      $(document).ajaxSend(function( event, jqxhr, settings ) {
+         if (settings.url.indexOf("dropdownItilActors.php") > 0 
+            && settings.data.indexOf("group") > 0
+               && settings.data.indexOf("assign") > 0
+            ) {
+          triggerupdateTicket();
+         }
+      });
+   }
+};
+
+var redefineDropdown = function (id, url, tickets_id, type) {
+cat = getItilcategories_id();
+console.log($('#' + id));
+
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,
@@ -21,6 +70,7 @@ var redefineDropdown = function (id, url, tickets_id) {
          data: function (term, page) {
             return {
                ticket_id:         tickets_id,
+               type : type,
                itilcategories_id: getItilcategories_id()
             };
          },
@@ -42,6 +92,7 @@ var redefineDropdown = function (id, url, tickets_id) {
                $.ajax(url, {
                   data: {
                      ticket_id: tickets_id,
+                     type : type,
                      itilcategories_id: getItilcategories_id()
                   },
                   dataType: 'json',
@@ -69,39 +120,6 @@ var redefineDropdown = function (id, url, tickets_id) {
          return markup.join('');
       }
    });
-};
-
-var triggerNewTicket = function() {
-   if (getItilcategories_id() == 0) {
-      return;
-   }
-   var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
-   redefineDropdown(assign_select_dom_id, groups_url, 0);
-};
-
-var triggerupdateTicket = function() {
-   if (getItilcategories_id() == 0) {
-      return;
-   }
-   checkDOMChange("input[name='_itil_assign[groups_id]']", function() {
-      var assign_select_dom_id = $("input[name='_itil_assign[groups_id]']")[0].id;
-      redefineDropdown(assign_select_dom_id, groups_url, tickets_id);
-   });
-};
-
-var triggerAll = function() {
-   if (tickets_id == undefined) {
-      triggerNewTicket();
-   } else {
-      $(document).ajaxSend(function( event, jqxhr, settings ) {
-         if (settings.url.indexOf("dropdownItilActors.php") > 0 
-            && settings.data.indexOf("group") > 0
-               && settings.data.indexOf("assign") > 0
-            ) {
-          triggerupdateTicket();
-         }
-      });
-   }
 };
 
 $(document).ready(function() {
