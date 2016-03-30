@@ -69,35 +69,35 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       if (! $group->can($ID, READ)) {
          return false;
       }
-
+      
       $canedit = $group->can($ID, UPDATE);
+      // Get data
+      $item = new self();
+      if (!$item->getFromDB($ID)) {
+         $item->getEmpty();
+      }
+
+      $rand = mt_rand();
+      echo "<form name='group_level_form$rand' id='group_level_form$rand' method='post'
+             action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
+      echo "<input type='hidden' name='".self::$items_id."' value='$ID' />";
+
+      echo "<div class='spaced'>";
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups')."</th></tr>";
+
+      echo "<tr class='tab_bg_2'><td class='center'>";
+      Dropdown::showFromArray('lvl', 
+                              array(NULL => "---",
+                                    1    => __('Level 1','itilcategorygroups'),
+                                    2    => __('Level 2','itilcategorygroups'),
+                                    3    => __('Level 3','itilcategorygroups'),
+                                    4    => __('Level 4','itilcategorygroups')), 
+                              array('value' => $item->fields['lvl']));
+      echo "</td></tr>";
+      
       if ($canedit) {
-         // Get data
-         $item = new self();
-         if (!$item->getFromDB($ID)) {
-            $item->getEmpty();
-         }
-
-         $rand = mt_rand();
-         echo "<form name='group_level_form$rand' id='group_level_form$rand' method='post'
-                action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
-         echo "<input type='hidden' name='".self::$items_id."' value='$ID' />";
-
-         echo "<div class='spaced'>";
-         echo "<table class='tab_cadre_fixe'>";
-         echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups')."</th></tr>";
-
-         echo "<tr class='tab_bg_2'><td class='center'>";
-         Dropdown::showFromArray('lvl', 
-                                 array(NULL => "---",
-                                       1    => __('Level 1','itilcategorygroups'),
-                                       2    => __('Level 2','itilcategorygroups'),
-                                       3    => __('Level 3','itilcategorygroups'),
-                                       4    => __('Level 4','itilcategorygroups')), 
-                                 array('value' => $item->fields['lvl']));
-         echo "</td></tr>";
-
-         echo "</td><td class='center'>";
+         echo "<tr class='tab_bg_1'><td class='center'>";
          if ($item->fields["id"]) {
             echo "<input type='hidden' name='id' value='".$item->fields["id"]."'>";
             echo "<input type='submit' name='update' value=\"".__('Save')."\"
@@ -106,10 +106,9 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
             echo "<input type='submit' name='add' value=\"".__('Save')."\" class='submit'>";
          }
          echo "</td></tr>";
-
-         echo "</table></div>";
-         Html::closeForm();
       }
+      echo "</table></div>";
+      Html::closeForm();
    }
 
    static function getAddSearchOptions($itemtype) {

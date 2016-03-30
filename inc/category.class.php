@@ -49,7 +49,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       $this->showFormHeader($options);
       
-      echo "<tr>";
+      echo "<tr class='tab_bg_1'>";
       echo "<td><label>".__('Name')." :</label></td>";
       echo "<td style='width:30%'>";
       echo Html::autocompletionTextField($this, "name");
@@ -62,7 +62,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       echo "</td></tr>";
 
       $rand = mt_rand();
-      echo "<tr>";
+      echo "<tr class='tab_bg_1'>";
       echo "<td><label for='dropdown_itilcategories_id$rand'>".__('Category')." :</label></td>";
       echo "<td>";
       Dropdown::show('ITILCategory', array(
@@ -71,7 +71,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       echo "</td><td colspan='2'></td></tr>";
       
       $rand = mt_rand();
-      echo "<tr>";
+      echo "<tr class='tab_bg_1'>";
       echo "<td><label for='dropdown_is_incident$rand'>".__('Visible for an incident')." :</label></td>";
       echo "<td>";
       Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, array('rand' => $rand));
@@ -88,11 +88,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       echo "<td align='left'>";
       echo "<textarea name='comment' id='comment' style='width:100%; height:70px;'>";
       echo $this->fields["comment"] . "</textarea>";
-      echo "</td></tr>";
+      echo "</td><td colspan='2'></td></tr>";
 
-      echo "<tr><td colspan='4'><hr></td></tr>";
+      echo "<tr class='tab_bg_1'><td colspan='4'><hr></td></tr>";
       
-      echo "<tr><td><label for='groups_id_level1[]'>".ucfirst(__('Level 1','itilcategorygroups'))." :</label></td>";
+      echo "<tr class='tab_bg_1'><td><label for='groups_id_level1[]'>".ucfirst(__('Level 1','itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(1, $this->fields['itilcategories_id'], $this->fields['view_all_lvl1']);
       echo "</td>";
@@ -101,7 +101,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       self::multipleDropdownGroup(2, $this->fields['itilcategories_id'], $this->fields['view_all_lvl2']);
       echo "</td></tr>";
       
-      echo "<tr><td><label for='groups_id_level3[]'>".ucfirst(__('Level 3','itilcategorygroups'))." :</label></td>";
+      echo "<tr class='tab_bg_1'><td><label for='groups_id_level3[]'>".ucfirst(__('Level 3','itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(3, $this->fields['itilcategories_id'], $this->fields['view_all_lvl3']);
       echo "</td>";
@@ -137,6 +137,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                 INNER JOIN glpi_plugin_itilcategorygroups_groups_levels gr_lvl
                   ON gr_lvl.groups_id = gr.id
                   AND gr_lvl.lvl = ".intval($level);
+      $query_gr .= getEntitiesRestrictRequest(" AND", "gr", '', $_SESSION["glpiactiveentities"], true);
       $res_gr = $DB->query($query_gr);
 
       if ($all == 1) {
@@ -230,7 +231,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @param int $itilcategories_id
     * @return string
     */
-   static function getSQLCondition($tickets_id, $itilcategories_id) {
+   static function getSQLCondition($tickets_id, $itilcategories_id, $type) {
       $ticket = new Ticket();
       $group  = new Group();
       $params = array('entities_id'  => $_SESSION['glpiactive_entity'],
@@ -241,10 +242,15 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $params['entities_id'] = $ticket->fields['entities_id'];
          $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE? 
             "`is_request`='1'" : "`is_incident`='1'");
+      }else{
+         if($type == Ticket::DEMAND_TYPE){
+            $params['condition'] = " AND `is_request` ='1'";
+         }else{
+            $params['condition'] = " AND `is_incident` = '1'";
+         }
       }
    
-      $found_groups = self::getGroupsForCategory($itilcategories_id, $params);
-      
+      $found_groups = self::getGroupsForCategory($itilcategories_id, $params, $type);
       $groups_id_toshow = array(); //init
       if (!empty($found_groups)) {
          for ($lvl=1; $lvl <= 4; $lvl++) {
@@ -358,6 +364,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                         LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
                            ON gl.groups_id = gr.id
                         WHERE gl.lvl != $level
+                        AND gr.is_assign
                         OR gl.lvl IS NULL");
       $groups_id = array();
       while ($row = $DB->fetch_assoc($res)) {
