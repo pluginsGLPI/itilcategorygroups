@@ -20,8 +20,6 @@ $default_options = array('display_emptychoice' => true,
                          'itemtype'            => 'Group', 
                          'condition'           => $rand);
 
-toolbox::logdebug($condition);
-
 if (! empty($condition)) {
    $_GET = array_merge($_GET, $default_options);
    $_SESSION['glpicondition'][$rand] = $condition;
