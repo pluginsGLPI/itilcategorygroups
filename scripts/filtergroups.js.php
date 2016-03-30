@@ -11,7 +11,6 @@ var tickets_id = getUrlParameter('id');
 var triggerNewTicket = function() {
    cat = getItilcategories_id();
    if (cat == 0) {
-      console.log(cat);
       return;
       
    } else {
@@ -19,7 +18,6 @@ var triggerNewTicket = function() {
       //var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
        
       var assign_select_dom_id = $("input[id*='_groups_id_assign'").val();
-      console.log(assign_select_dom_id);
       var type = $("select[id^='dropdown_type']").val();
       
       redefineDropdown(assign_select_dom_id, groups_url, 0, type);
@@ -56,8 +54,6 @@ var triggerAll = function() {
 
 var redefineDropdown = function (id, url, tickets_id, type) {
 cat = getItilcategories_id();
-console.log($('#' + id));
-
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,

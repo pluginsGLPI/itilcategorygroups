@@ -1,6 +1,4 @@
 var getItilcategories_id = function () {
-   //var cat_select_dom_id = $("[name=itilcategories_id]")[0].id;
-   //var itilcategories_id = $("#"+cat_select_dom_id).val();
    var itilcategories_id = $("input[name*='itilcategories_id'").val();
    return itilcategories_id;
 };
