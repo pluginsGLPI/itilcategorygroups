@@ -30,7 +30,7 @@
 
 function plugin_itilcategorygroups_install() {
    $migration = new Migration("0.84");
-   
+
    //order is important for install
    include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category.class.php");
    include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
@@ -90,7 +90,7 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options=array())
    // Table fields
    switch ($table.".".$field) {
       case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
-         Dropdown::showFromArray('lvl', 
+         Dropdown::showFromArray('lvl',
                                  array(NULL => "---",
                                        1    => __('Level 1', 'itilcategorygroups'),
                                        2    => __('Level 2', 'itilcategorygroups'),
@@ -111,14 +111,14 @@ function plugin_pre_item_update_itilcategorygroups($item) {
        && $item instanceof Group) {
       $group_level = new PluginItilcategorygroupsGroup_Level();
       if(! $group_level->getFromDB($item->fields['id'])) {
-         $group_level->add(array('groups_id'=> $item->fields['id'], 
+         $group_level->add(array('groups_id'=> $item->fields['id'],
                                  'lvl'    => $_REQUEST['lvl']));
       } else {
-         $group_level->update(array('groups_id'=> $item->fields['id'], 
+         $group_level->update(array('groups_id'=> $item->fields['id'],
                                     'lvl'    => $_REQUEST['lvl']));
       }
-      
-   }   
+
+   }
    return $item;
 }
 ?>

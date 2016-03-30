@@ -2,11 +2,11 @@
 
 class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
    static public $itemtype = "PluginItilcategorygroupsCategory";
-   static public $items_id = "plugin_itilcategorygroups_categories_id"; 
+   static public $items_id = "plugin_itilcategorygroups_categories_id";
 
    static function install(Migration $migration) {
       global $DB;
-      
+
       $table = getTableForItemType(__CLASS__);
       if (! TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
@@ -53,14 +53,14 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
             //insert "all groups for this lvl'
             foreach ($all_lvl as $itilcategories_id => $lvl) {
                foreach ($lvl as $lvl_num => $lvl_str) {
-                  $DB->query("UPDATE $parent_table SET view_all_lvl$lvl_num = 1 
+                  $DB->query("UPDATE $parent_table SET view_all_lvl$lvl_num = 1
                               WHERE itilcategories_id = $itilcategories_id");
                }
             }
 
             //insert groups in sub table
             foreach ($cat_groups as $cat_groups_data) {
-               $DB->query("REPLACE INTO glpi_plugin_itilcategorygroups_categories_groups 
+               $DB->query("REPLACE INTO glpi_plugin_itilcategorygroups_categories_groups
                               (plugin_itilcategorygroups_categories_id,
                                level,
                                itilcategories_id,
@@ -81,10 +81,10 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
          $migration->dropField($parent_table, "groups_id_levelfour");
          $migration->migrationOneTable($parent_table);
       }
-      
+
       return true;
    }
-   
+
    static function uninstall() {
       global $DB;
       $table = getTableForItemType(__CLASS__);

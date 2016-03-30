@@ -30,11 +30,11 @@
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
-   
+
    $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
-   
+
    $plugin = new Plugin();
-   if ($plugin->isInstalled('itilcategorygroups') 
+   if ($plugin->isInstalled('itilcategorygroups')
        && $plugin->isActivated('itilcategorygroups')) {
 
       if (Session::haveRight('config', UPDATE)) {
@@ -58,8 +58,8 @@ function plugin_init_itilcategorygroups() {
             = '/plugins/itilcategorygroups/front/category.form.php';
       }
 
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = array('scripts/function.js', 
-                                                                    'scripts/filtergroups.js.php', 
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = array('scripts/function.js',
+                                                                    'scripts/filtergroups.js.php',
                                                                     'scripts/multiple_group.js');
    }
 }

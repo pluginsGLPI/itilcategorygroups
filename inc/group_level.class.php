@@ -17,7 +17,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    static function canView() {
       return Session::haveRight('config', READ);
    }
-   
+
    static function canCreate() {
       return Session::haveRight('config', CREATE);
    }
@@ -69,7 +69,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       if (! $group->can($ID, READ)) {
          return false;
       }
-      
+
       $canedit = $group->can($ID, UPDATE);
       // Get data
       $item = new self();
@@ -87,15 +87,15 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups')."</th></tr>";
 
       echo "<tr class='tab_bg_2'><td class='center'>";
-      Dropdown::showFromArray('lvl', 
+      Dropdown::showFromArray('lvl',
                               array(NULL => "---",
                                     1    => __('Level 1','itilcategorygroups'),
                                     2    => __('Level 2','itilcategorygroups'),
                                     3    => __('Level 3','itilcategorygroups'),
-                                    4    => __('Level 4','itilcategorygroups')), 
+                                    4    => __('Level 4','itilcategorygroups')),
                               array('value' => $item->fields['lvl']));
       echo "</td></tr>";
-      
+
       if ($canedit) {
          echo "<tr class='tab_bg_1'><td class='center'>";
          if ($item->fields["id"]) {
@@ -112,7 +112,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    }
 
    static function getAddSearchOptions($itemtype) {
-      
+
       $opt = array();
 
       if ($itemtype == 'Group') {
@@ -134,9 +134,9 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       }
 
       $groups_id = array();
-      $query = "SELECT gl.groups_id 
-                FROM ".getTableForItemType(__CLASS__)." gl 
-                LEFT JOIN glpi_groups gr 
+      $query = "SELECT gl.groups_id
+                FROM ".getTableForItemType(__CLASS__)." gl
+                LEFT JOIN glpi_groups gr
                     ON gl.groups_id = gr.id
                 WHERE gl.lvl = $level".
                 getEntitiesRestrictRequest(" AND ", "gr", 'entities_id',
