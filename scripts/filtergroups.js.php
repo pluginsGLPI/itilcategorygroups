@@ -15,9 +15,9 @@ var triggerNewTicket = function() {
 
    } else {
 
-      //var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
+      var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
 
-      var assign_select_dom_id = $("input[id*='_groups_id_assign'").val();
+      //var assign_select_dom_id = $("input[id*='_groups_id_assign'").val();
       var type = $("select[id^='dropdown_type']").val();
 
       redefineDropdown(assign_select_dom_id, groups_url, 0, type);
