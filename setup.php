@@ -28,6 +28,8 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '0.90+1.0.4');
+
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
 
@@ -67,7 +69,7 @@ function plugin_init_itilcategorygroups() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_itilcategorygroups() {
    return array('name'           => __('ItilCategory Groups', 'itilcategorygroups'),
-                'version'        => '0.90+1.0.4',
+                'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
                 'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
                 'homepage'       => 'http://www.teclib.com');
 }
