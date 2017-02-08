@@ -38,7 +38,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    var $dohistory = true;
 
    static function getTypeName($nb=0) {
-      return __('Link ItilCategory - Groups','itilcategorygroups');
+      return __('Link ItilCategory - Groups', 'itilcategorygroups');
    }
 
    function showForm($id, $options = array()) {
@@ -92,20 +92,20 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       echo "<tr class='tab_bg_1'><td colspan='4'><hr></td></tr>";
 
-      echo "<tr class='tab_bg_1'><td><label for='groups_id_level1[]'>".ucfirst(__('Level 1','itilcategorygroups'))." :</label></td>";
+      echo "<tr class='tab_bg_1'><td><label for='groups_id_level1[]'>".ucfirst(__('Level 1', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(1, $this->fields['itilcategories_id'], $this->fields['view_all_lvl1']);
       echo "</td>";
-      echo "<td><label for='groups_id_level2[]'>".ucfirst(__('Level 2','itilcategorygroups'))." :</label></td>";
+      echo "<td><label for='groups_id_level2[]'>".ucfirst(__('Level 2', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(2, $this->fields['itilcategories_id'], $this->fields['view_all_lvl2']);
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'><td><label for='groups_id_level3[]'>".ucfirst(__('Level 3','itilcategorygroups'))." :</label></td>";
+      echo "<tr class='tab_bg_1'><td><label for='groups_id_level3[]'>".ucfirst(__('Level 3', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(3, $this->fields['itilcategories_id'], $this->fields['view_all_lvl3']);
       echo "</td>";
-      echo "<td><label for='groups_id_level4[]'>".ucfirst(__('Level 4','itilcategorygroups'))." :</label></td>";
+      echo "<td><label for='groups_id_level4[]'>".ucfirst(__('Level 4', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
       self::multipleDropdownGroup(4, $this->fields['itilcategories_id'], $this->fields['view_all_lvl4']);
       echo "</td></tr>";
@@ -195,7 +195,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       // quick fix :
       if (isset($_REQUEST['massiveaction'])) {
-         return ;
+         return;
       }
 
       $cat_group = new PluginItilcategorygroupsCategory_Group();
@@ -242,10 +242,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $params['entities_id'] = $ticket->fields['entities_id'];
          $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE?
             "`is_request`='1'" : "`is_incident`='1'");
-      }else{
-         if($type == Ticket::DEMAND_TYPE){
+      } else {
+         if ($type == Ticket::DEMAND_TYPE) {
             $params['condition'] = " AND `is_request` ='1'";
-         }else{
+         } else {
             $params['condition'] = " AND `is_incident` = '1'";
          }
       }

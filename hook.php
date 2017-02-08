@@ -110,7 +110,7 @@ function plugin_pre_item_update_itilcategorygroups($item) {
        && isset($_REQUEST['lvl'])
        && $item instanceof Group) {
       $group_level = new PluginItilcategorygroupsGroup_Level();
-      if(! $group_level->getFromDB($item->fields['id'])) {
+      if (! $group_level->getFromDB($item->fields['id'])) {
          $group_level->add(array('groups_id'=> $item->fields['id'],
                                  'lvl'    => $_REQUEST['lvl']));
       } else {
@@ -121,4 +121,3 @@ function plugin_pre_item_update_itilcategorygroups($item) {
    }
    return $item;
 }
-?>

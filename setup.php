@@ -76,7 +76,7 @@ function plugin_version_itilcategorygroups() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_itilcategorygroups_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85', 'lt')) {
+   if (version_compare(GLPI_VERSION, '0.85', 'lt')) {
       echo "This plugin requires GLPI 0.85";
       return false;
    }

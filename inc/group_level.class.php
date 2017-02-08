@@ -47,7 +47,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       if (! $withtemplate) {
          switch ($item->getType()) {
             case 'Group' :
-               return __('ItilCategory Groups','itilcategorygroups');
+               return __('ItilCategory Groups', 'itilcategorygroups');
          }
       }
       return '';
@@ -84,15 +84,15 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
       echo "<div class='spaced'>";
       echo "<table class='tab_cadre_fixe'>";
-      echo "<tr class='tab_bg_1'><th>".__('Level attribution','itilcategorygroups')."</th></tr>";
+      echo "<tr class='tab_bg_1'><th>".__('Level attribution', 'itilcategorygroups')."</th></tr>";
 
       echo "<tr class='tab_bg_2'><td class='center'>";
       Dropdown::showFromArray('lvl',
                               array(NULL => "---",
-                                    1    => __('Level 1','itilcategorygroups'),
-                                    2    => __('Level 2','itilcategorygroups'),
-                                    3    => __('Level 3','itilcategorygroups'),
-                                    4    => __('Level 4','itilcategorygroups')),
+                                    1    => __('Level 1', 'itilcategorygroups'),
+                                    2    => __('Level 2', 'itilcategorygroups'),
+                                    3    => __('Level 3', 'itilcategorygroups'),
+                                    4    => __('Level 4', 'itilcategorygroups')),
                               array('value' => $item->fields['lvl']));
       echo "</td></tr>";
 
