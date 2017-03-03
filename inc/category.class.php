@@ -30,8 +30,9 @@
 
 class PluginItilcategorygroupsCategory extends CommonDropdown {
 
-   public $first_level_menu  = "plugins";
-   public $second_level_menu = "itilcategorygroups";
+   public $first_level_menu      = "plugins";
+   public $second_level_menu     = "itilcategorygroups";
+   public $display_dropdowntitle = false;
 
    static $rightname         = 'config';
 
@@ -94,20 +95,20 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       echo "<tr class='tab_bg_1'><td><label for='groups_id_level1[]'>".ucfirst(__('Level 1', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
-      self::multipleDropdownGroup(1, $this->fields['itilcategories_id'], $this->fields['view_all_lvl1']);
+      $this->multipleDropdownGroup(1);
       echo "</td>";
       echo "<td><label for='groups_id_level2[]'>".ucfirst(__('Level 2', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
-      self::multipleDropdownGroup(2, $this->fields['itilcategories_id'], $this->fields['view_all_lvl2']);
+      $this->multipleDropdownGroup(2);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'><td><label for='groups_id_level3[]'>".ucfirst(__('Level 3', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
-      self::multipleDropdownGroup(3, $this->fields['itilcategories_id'], $this->fields['view_all_lvl3']);
+      $this->multipleDropdownGroup(3);
       echo "</td>";
       echo "<td><label for='groups_id_level4[]'>".ucfirst(__('Level 4', 'itilcategorygroups'))." :</label></td>";
       echo "<td>";
-      self::multipleDropdownGroup(4, $this->fields['itilcategories_id'], $this->fields['view_all_lvl4']);
+      $this->multipleDropdownGroup(4);
       echo "</td></tr>";
 
       $this->showFormButtons($options);
@@ -115,32 +116,30 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    }
 
-   static function multipleDropdownGroup($level, $itilcategories_id, $all) {
+   function multipleDropdownGroup($level) {
       global $DB;
 
       // find current values for this select
       $values = array();
-      if (! empty($itilcategories_id)) {
-         $query_val = "SELECT groups_id
-                       FROM glpi_plugin_itilcategorygroups_categories_groups
-                       WHERE itilcategories_id = $itilcategories_id
-                        AND level = $level";
-         $res_val = $DB->query($query_val);
-         while ($data_val = $DB->fetch_assoc($res_val)) {
-            $values[] = $data_val['groups_id'];
-         }
+      $res_val = $DB->query("SELECT `groups_id`
+         FROM glpi_plugin_itilcategorygroups_categories_groups
+         WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
+            OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
+         )
+         AND level = $level");
+      while ($data_val = $DB->fetch_assoc($res_val)) {
+         $values[] = $data_val['groups_id'];
       }
 
       // find possible values for this select
-      $query_gr = "SELECT gr.id, gr.name
-                FROM glpi_groups gr
-                INNER JOIN glpi_plugin_itilcategorygroups_groups_levels gr_lvl
-                  ON gr_lvl.groups_id = gr.id
-                  AND gr_lvl.lvl = ".intval($level);
-      $query_gr .= getEntitiesRestrictRequest(" AND", "gr", '', $_SESSION["glpiactiveentities"], true);
-      $res_gr = $DB->query($query_gr);
+      $res_gr = $DB->query("SELECT gr.id, gr.name
+         FROM glpi_groups gr
+         INNER JOIN glpi_plugin_itilcategorygroups_groups_levels gr_lvl
+            ON gr_lvl.groups_id = gr.id
+            AND gr_lvl.lvl = ".intval($level).
+            getEntitiesRestrictRequest(" AND", "gr", '', $_SESSION["glpiactiveentities"], true));
 
-      if ($all == 1) {
+      if ($this->fields["view_all_lvl$level"] == 1) {
          $checked = "checked='checked'";
          $disabled = "disabled='disabled'";
       } else {
