@@ -59,7 +59,7 @@ cat = getItilcategories_id();
       width:                   '80%',
       minimumInputLength:      0,
       quietMillis:             100,
-      minimumResultsForSearch: 50,
+      minimumResultsForSearch: {$CFG_GLPI['ajax_limit_count']},
       closeOnSelect:           false,
       ajax: {
          url: url,
@@ -68,7 +68,8 @@ cat = getItilcategories_id();
             return {
                ticket_id:         tickets_id,
                type : type,
-               itilcategories_id: getItilcategories_id()
+               itilcategories_id: getItilcategories_id(),
+               searchText: term
             };
          },
          results: function (data, page) {
