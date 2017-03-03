@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '0.90+1.0.4');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '0.90+1.0.5');
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
