@@ -39,6 +39,12 @@ Ensuite, pour chacune des vos catégories, vous pouvez définir quel group sera 
          <compatibility>9.1</compatibility>
       </version>
       <version>
+         <num>0.90+1.0.5</num>
+         <compatibility>0.85</compatibility>
+         <compatibility>0.90</compatibility>
+         <compatibility>9.1</compatibility>
+      </version>
+      <version>
          <num>0.90+1.0.3</num>
          <compatibility>0.90</compatibility>
          <compatibility>0.85</compatibility>
