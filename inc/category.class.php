@@ -30,8 +30,9 @@
 
 class PluginItilcategorygroupsCategory extends CommonDropdown {
 
-   public $first_level_menu  = "plugins";
-   public $second_level_menu = "itilcategorygroups";
+   public $first_level_menu      = "plugins";
+   public $second_level_menu     = "itilcategorygroups";
+   public $display_dropdowntitle = false;
 
    static $rightname         = 'config';
 
