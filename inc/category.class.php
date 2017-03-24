@@ -48,6 +48,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          return false;
       }
 
+      $this->initForm($id);
       $this->showFormHeader($options);
 
       echo "<tr class='tab_bg_1'>";
@@ -121,14 +122,16 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       // find current values for this select
       $values = array();
-      $res_val = $DB->query("SELECT `groups_id`
-         FROM glpi_plugin_itilcategorygroups_categories_groups
-         WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
-            OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
-         )
-         AND level = $level");
-      while ($data_val = $DB->fetch_assoc($res_val)) {
-         $values[] = $data_val['groups_id'];
+      if ($this->getID()) {
+         $res_val = $DB->query("SELECT `groups_id`
+            FROM glpi_plugin_itilcategorygroups_categories_groups
+            WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
+               OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
+            )
+            AND level = $level");
+         while ($data_val = $DB->fetch_assoc($res_val)) {
+            $values[] = $data_val['groups_id'];
+         }
       }
 
       // find possible values for this select
