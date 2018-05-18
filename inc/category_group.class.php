@@ -8,7 +8,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
-      if (! TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
          `id`                                      INT(11)    NOT NULL AUTO_INCREMENT,
          `plugin_itilcategorygroups_categories_id` INT(11)    NOT NULL DEFAULT '0',
@@ -28,7 +28,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
       $parent_table = "glpi_plugin_itilcategorygroups_categories";
 
       //we must migrate groups datas in sub table
-      if (FieldExists($parent_table, 'groups_id_levelone')) {
+      if ($DB->fieldExists($parent_table, 'groups_id_levelone')) {
          $all_lvl = $cat_groups = array();
 
          //foreach old levels
