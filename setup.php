@@ -31,9 +31,9 @@
 define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.0.2');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "0.85");
+define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.3");
 // Maximum GLPI version, exclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.3");
+define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.4");
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
@@ -82,7 +82,6 @@ function plugin_version_itilcategorygroups() {
          'glpi' => [
             'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
             'max' => PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
-            'dev' => true, //Required to allow 9.2-dev
           ]
        ]
    ];
