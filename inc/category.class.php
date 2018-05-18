@@ -376,172 +376,215 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       return $groups_id;
    }
 
-   function getSearchOptions() {
-      $tab = array();
+   function rawSearchOptions() {
 
-      $tab['common'] = __('Link ItilCategory - Groups', 'itilcategorygroups');
+      $tab = [];
 
-      $tab[1]['table']         = $this->getTable();
-      $tab[1]['field']         = 'name';
-      $tab[1]['name']          = __('Name');
-      $tab[1]['datatype']      = 'itemlink';
-      $tab[1]['checktype']     = 'text';
-      $tab[1]['displaytype']   = 'text';
-      $tab[1]['injectable']    = true;
-      $tab[1]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 'common',
+         'name'             => __('Link ItilCategory - Groups', 'itilcategorygroups'),
+      ];
 
-      $tab[2]['table']         = $this->getTable();
-      $tab[2]['field']         = 'is_incident';
-      $tab[2]['name']          = __('Visible for an incident');
-      $tab[2]['datatype']      = 'bool';
-      $tab[2]['checktype']     = 'bool';
-      $tab[2]['displaytype']   = 'bool';
-      $tab[2]['injectable']    = true;
+      $tab[] = [
+         'id'               => 1,
+         'table'            => $this->getTable(),
+         'field'            => 'name',
+         'name'             => __('Name'),
+         'datatype'         => 'itemlink',
+         'checktype'        => 'text',
+         'displaytype'      => 'text',
+         'injectable'       => true,
+         'massiveaction'    => false,
+      ];
 
-      $tab[3]['table']         = $this->getTable();
-      $tab[3]['field']         = 'is_request';
-      $tab[3]['name']          = __('Visible for a request');
-      $tab[3]['datatype']      = 'bool';
-      $tab[3]['checktype']     = 'bool';
-      $tab[3]['displaytype']   = 'bool';
-      $tab[3]['injectable']    = true;
+      $tab[] = [
+         'id'               => 2,
+         'table'            => $this->getTable(),
+         'field'            => 'is_incident',
+         'name'             => __('Visible for an incident'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
-      $tab[4]['table']         = 'glpi_itilcategories';
-      $tab[4]['field']         = 'name';
-      $tab[4]['name']          = __('Category');
-      $tab[4]['datatype']      = 'itemlink';
-      $tab[4]['checktype']     = 'text';
-      $tab[4]['displaytype']   = 'text';
-      $tab[4]['injectable']    = true;
+      $tab[] = [
+         'id'               => 3,
+         'table'            => $this->getTable(),
+         'field'            => 'is_request',
+         'name'             => __('Visible for a request'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
-      $tab[5]['table']         = $this->getTable();
-      $tab[5]['field']         = 'is_active';
-      $tab[5]['name']          = __('Active');
-      $tab[5]['datatype']      = 'bool';
-      $tab[5]['checktype']     = 'bool';
-      $tab[5]['displaytype']   = 'bool';
-      $tab[5]['injectable']    = true;
+      $tab[] = [
+         'id'               => 4,
+         'table'            => 'glpi_itilcategories',
+         'field'            => 'name',
+         'name'             => __('Category'),
+         'datatype'         => 'itemlink',
+         'checktype'        => 'text',
+         'displaytype'      => 'text',
+         'injectable'       => true,
+      ];
 
-      $tab[16]['table']         = $this->getTable();
-      $tab[16]['field']         = 'comment';
-      $tab[16]['name']          = __('Comments');
-      $tab[16]['datatype']      = 'text';
-      $tab[16]['checktype']     = 'text';
-      $tab[16]['displaytype']   = 'multiline_text';
-      $tab[16]['injectable']    = true;
+      $tab[] = [
+         'id'               => 5,
+         'table'            => $this->getTable(),
+         'field'            => 'is_active',
+         'name'             => __('Active'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
-      $tab[26]['table']         = 'glpi_groups';
-      $tab[26]['field']         = 'name';
-      $tab[26]['forcegroupby']  = true;
-      $tab[26]['name']          = __("Level 1", "itilcategorygroups");
-      $tab[26]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 1',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[26]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 16,
+         'table'            => $this->getTable(),
+         'field'            => 'comment',
+         'name'             => __('Comments'),
+         'datatype'         => 'text',
+         'checktype'        => 'text',
+         'displaytype'      => 'multiline_text',
+         'injectable'       => true,
+      ];
 
-      $tab[27]['table']         = 'glpi_groups';
-      $tab[27]['field']         = 'name';
-      $tab[27]['forcegroupby']  = true;
-      $tab[27]['name']          = __("Level 2", "itilcategorygroups");
-      $tab[27]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 2',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[27]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 26,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 1', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 1',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      $tab[28]['table']         = 'glpi_groups';
-      $tab[28]['field']         = 'name';
-      $tab[28]['forcegroupby']  = true;
-      $tab[28]['name']          = __("Level 3", "itilcategorygroups");
-      $tab[28]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 3',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[28]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 27,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 2', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 2',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      $tab[29]['table']         = 'glpi_groups';
-      $tab[29]['field']         = 'name';
-      $tab[29]['forcegroupby']  = true;
-      $tab[29]['name']          = __("Level 4", "itilcategorygroups");
-      $tab[29]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 4',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[29]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 28,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 3', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 3',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      /* id */
-      $tab[30]['table']         = $this->getTable();
-      $tab[30]['field']         = 'id';
-      $tab[30]['name']          = __('ID');
-      $tab[30]['injectable']    = false;
-      $tab[30]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 29,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 4', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 4',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      $tab[35]['table']          = $this->getTable();
-      $tab[35]['field']          = 'date_mod';
-      $tab[35]['massiveaction']  = false;
-      $tab[35]['name']           = __('Last update');
-      $tab[35]['datatype']       = 'datetime';
-      $tab[35]['massiveaction']  = false;
+      $tab[] = [
+         'id'               => 30,
+         'table'            => $this->getTable(),
+         'field'            => 'id',
+         'name'             => __('ID'),
+         'injectable'       => false,
+         'massiveaction'    => false,
+      ];
 
-      /* entity */
-      $tab[80]['table']         = 'glpi_entities';
-      $tab[80]['field']         = 'completename';
-      $tab[80]['name']          = __('Entity');
-      $tab[80]['injectable']    = false;
-      $tab[80]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 35,
+         'table'            => $this->getTable(),
+         'field'            => 'date_mod',
+         'name'             => __('Last update'),
+         'datatype'         => 'datetime',
+         'massiveaction'    => false,
+      ];
 
-      $tab[86]['table']         = $this->getTable();
-      $tab[86]['field']         = 'is_recursive';
-      $tab[86]['name']          = __('Child entities');
-      $tab[86]['datatype']      = 'bool';
-      $tab[86]['checktype']     = 'bool';
-      $tab[86]['displaytype']   = 'bool';
-      $tab[86]['injectable']    = true;
+      $tab[] = [
+         'id'               => 80,
+         'table'            => 'glpi_entities',
+         'field'            => 'completename',
+         'name'             => __('Entity'),
+         'injectable'       => false,
+         'massiveaction'    => false,
+      ];
+
+      $tab[] = [
+         'id'               => 86,
+         'table'            => $this->getTable(),
+         'field'            => 'is_recursive',
+         'name'             => __('Child entities'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
       return $tab;
    }
