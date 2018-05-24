@@ -9,8 +9,7 @@ var groups_url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_
 var tickets_id = getUrlParameter('id');
 
 var triggerNewTicket = function() {
-   cat = getItilcategories_id();
-   if (cat == 0) {
+   if (getItilcategories_id() == 0) {
       return;
 
    } else {
@@ -50,8 +49,6 @@ var triggerAll = function() {
 };
 
 var redefineDropdown = function (id, url, tickets_id, type) {
-   cat = getItilcategories_id();
-
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,
