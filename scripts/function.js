@@ -1,5 +1,5 @@
 var getItilcategories_id = function () {
-   var itilcategories_id = $("input[name*='itilcategories_id']").val();
+   var itilcategories_id = $("[name*='itilcategories_id']").val();
    return itilcategories_id;
 };
 

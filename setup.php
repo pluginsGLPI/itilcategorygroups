@@ -68,16 +68,26 @@ function plugin_init_itilcategorygroups() {
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_itilcategorygroups() {
-   return array('name'           => __('ItilCategory Groups', 'itilcategorygroups'),
-                'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
-                'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
-                'homepage'       => 'http://www.teclib.com');
+   return [
+      'name'           => __('ItilCategory Groups', 'itilcategorygroups'),
+      'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
+      'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
+      'homepage'       => 'http://www.teclib.com',
+      'license'        => 'GPLv2+',
+      'requirements'   => [
+         'glpi' => [
+            'min' => '9.3',
+            'dev' => true
+         ]
+      ]
+   ];
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_itilcategorygroups_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '0.85', 'lt')) {
-      echo "This plugin requires GLPI 0.85";
+   $version = rtrim(GLPI_VERSION, '-dev');
+   if (version_compare($version, '9.3', 'lt')) {
+      echo "This plugin requires GLPI 9.3";
       return false;
    }
    return true;

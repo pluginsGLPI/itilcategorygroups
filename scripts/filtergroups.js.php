@@ -9,15 +9,11 @@ var groups_url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_
 var tickets_id = getUrlParameter('id');
 
 var triggerNewTicket = function() {
-   cat = getItilcategories_id();
-   if (cat == 0) {
+   if (getItilcategories_id() == 0) {
       return;
 
    } else {
-
-      var assign_select_dom_id = $("*[name='_groups_id_assign']")[0].id;
-
-      //var assign_select_dom_id = $("input[id*='_groups_id_assign'").val();
+      var assign_select_dom_id = $("*[name='_groups_id_assign']").eq(0).attr("id");
       var type = $("select[id^='dropdown_type']").val();
 
       redefineDropdown(assign_select_dom_id, groups_url, 0, type);
@@ -53,8 +49,6 @@ var triggerAll = function() {
 };
 
 var redefineDropdown = function (id, url, tickets_id, type) {
-cat = getItilcategories_id();
-
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,
@@ -103,34 +97,20 @@ cat = getItilcategories_id();
             }
          }
       },
-      formatResult: function(result, container, query, escapeMarkup) {
-         var markup=[];
-         window.Select2.util.markMatch(result.text, query.term, markup, escapeMarkup);
-         if (result.level) {
-            var a='';
-            var i=result.level;
-            while (i>1) {
-               a = a+'&nbsp;&nbsp;&nbsp;';
-               i=i-1;
-            }
-            return a+'&raquo;'+markup.join('');
-         }
-         return markup.join('');
-      }
+      templateResult: formatResult
    });
 };
 
 $(document).ready(function() {
    if (location.pathname.indexOf('ticket.form.php') >= 0) {
-      setTimeout(function() {
-         $(".ui-tabs-panel:visible").ready(function() {
+      var delayedTrigger = function () {
+         setTimeout(function() {
             triggerAll();
-         });
+         }, 50);
+      };
 
-         $("#tabspanel + div.ui-tabs").on("tabsload", function() {
-            triggerAll();
-         });
-      }, 300);
+      $(".ui-tabs-panel:visible").ready(delayedTrigger);
+      $("#tabspanel + div.ui-tabs").on("tabsload", delayedTrigger);
    }
 });
 JAVASCRIPT;
