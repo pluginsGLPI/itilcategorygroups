@@ -30,6 +30,11 @@
 
 define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.0.1');
 
+// Minimal GLPI version, inclusive
+define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "0.85");
+// Maximum GLPI version, exclusive
+define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.3");
+
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
 
@@ -68,18 +73,42 @@ function plugin_init_itilcategorygroups() {
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_itilcategorygroups() {
-   return array('name'           => __('ItilCategory Groups', 'itilcategorygroups'),
-                'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
-                'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
-                'homepage'       => 'http://www.teclib.com');
+   return [
+      'name'           => __('ItilCategory Groups', 'itilcategorygroups'),
+      'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
+      'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
+      'homepage'       => 'http://www.teclib.com',
+      'requirements'   => [
+         'glpi' => [
+            'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
+            'max' => PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
+            'dev' => true, //Required to allow 9.2-dev
+          ]
+       ]
+   ];
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_itilcategorygroups_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '0.85', 'lt')) {
-      echo "This plugin requires GLPI 0.85";
-      return false;
+
+   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
+   if (!method_exists('Plugin', 'checkGlpiVersion')) {
+      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
+      $matchMinGlpiReq = version_compare($version, PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI, '>=');
+      $matchMaxGlpiReq = version_compare($version, PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI, '<');
+
+      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
+         echo vsprintf(
+            'This plugin requires GLPI >= %1$s and < %2$s.',
+            [
+               PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
+               PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
+            ]
+         );
+         return false;
+      }
    }
+
    return true;
 }
 
