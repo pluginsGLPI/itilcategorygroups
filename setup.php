@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.0.1');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.0.2');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "0.85");
