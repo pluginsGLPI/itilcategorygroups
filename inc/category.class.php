@@ -552,12 +552,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       $table = getTableForItemType(__CLASS__);
 
-      if (TableExists("glpi_plugin_itilcategorygroups_categories_groups")
-          && FieldExists("glpi_plugin_itilcategorygroups_categories_groups", 'is_active')) {
+      if ($DB->tableExists("glpi_plugin_itilcategorygroups_categories_groups")
+          && $DB->fieldExists("glpi_plugin_itilcategorygroups_categories_groups", 'is_active')) {
          $migration->renameTable("glpi_plugin_itilcategorygroups_categories_groups", $table);
       }
 
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
          `id` INT(11) NOT NULL AUTO_INCREMENT,
          `is_active` TINYINT(1) NOT NULL DEFAULT '0',
@@ -584,7 +584,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $DB->query($query);
       }
 
-      if (!FieldExists($table, 'view_all_lvl1')) {
+      if (!$DB->fieldExists($table, 'view_all_lvl1')) {
          $migration->addField($table, 'view_all_lvl1', "TINYINT(1) NOT NULL DEFAULT '0'",
                               array('after' => 'itilcategories_id'));
          $migration->addField($table, 'view_all_lvl2', "TINYINT(1) NOT NULL DEFAULT '0'",
