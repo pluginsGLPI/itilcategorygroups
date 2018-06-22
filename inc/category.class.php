@@ -38,11 +38,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    var $dohistory = true;
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Link ItilCategory - Groups', 'itilcategorygroups');
    }
 
-   function showForm($id, $options = array()) {
+   function showForm($id, $options = []) {
 
       if (! $this->can($id, READ)) {
          return false;
@@ -60,29 +60,29 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $rand = mt_rand();
       echo "<td><label for='dropdown_is_active$rand'>".__('Active')." :</label></td>";
       echo "<td style='width:30%'>";
-      Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, array('rand' => $rand));
+      Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, ['rand' => $rand]);
       echo "</td></tr>";
 
       $rand = mt_rand();
       echo "<tr class='tab_bg_1'>";
       echo "<td><label for='dropdown_itilcategories_id$rand'>".__('Category')." :</label></td>";
       echo "<td>";
-      Dropdown::show('ITILCategory', array(
+      Dropdown::show('ITILCategory', [
          'value' => $this->fields['itilcategories_id'],
-         'rand' => $rand));
+         'rand' => $rand]);
       echo "</td><td colspan='2'></td></tr>";
 
       $rand = mt_rand();
       echo "<tr class='tab_bg_1'>";
       echo "<td><label for='dropdown_is_incident$rand'>".__('Visible for an incident')." :</label></td>";
       echo "<td>";
-      Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, array('rand' => $rand));
+      Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, ['rand' => $rand]);
       echo "</td>";
 
       $rand = mt_rand();
       echo "<td><label for='dropdown_is_request$rand'>".__('Visible for a request')." :</label></td>";
       echo "<td>";
-      Dropdown::showYesNo('is_request', $this->fields['is_request'], -1, array('rand' => $rand));
+      Dropdown::showYesNo('is_request', $this->fields['is_request'], -1, ['rand' => $rand]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -121,7 +121,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       global $DB;
 
       // find current values for this select
-      $values = array();
+      $values = [];
       if ($this->getID()) {
          $res_val = $DB->query("SELECT `groups_id`
             FROM glpi_plugin_itilcategorygroups_categories_groups
@@ -193,7 +193,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $this->post_updateItem();
    }
 
-   function post_updateItem($history=1) {
+   function post_updateItem($history = 1) {
 
       // quick fix :
       if (isset($_REQUEST['massiveaction'])) {
@@ -210,16 +210,16 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             $found_cat_groups = $cat_group->find("itilcategories_id = ".$this->input["itilcategories_id"].
                                                  " AND level = $lvl");
             foreach ($found_cat_groups as $id => $current_cat_group) {
-               $cat_group->delete(array('id' => $current_cat_group['id']));
+               $cat_group->delete(['id' => $current_cat_group['id']]);
             }
 
             //insert new saved
             if (isset($this->input["groups_id_level$lvl"])) {
                foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
-                  $cat_group->add(array('plugin_itilcategorygroups_categories_id' => $this->input["id"],
+                  $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input["id"],
                                         'level'                                   => $lvl,
                                         'itilcategories_id'                       => $this->input["itilcategories_id"],
-                                        'groups_id'                               => $groups_id));
+                                        'groups_id'                               => $groups_id]);
                }
             }
          }
@@ -236,8 +236,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    static function getSQLCondition($tickets_id, $itilcategories_id, $type) {
       $ticket = new Ticket();
       $group  = new Group();
-      $params = array('entities_id'  => $_SESSION['glpiactive_entity'],
-                      'is_recursive' => 1);
+      $params = ['entities_id'  => $_SESSION['glpiactive_entity'],
+                      'is_recursive' => 1];
 
       if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
@@ -253,7 +253,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
 
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params, $type);
-      $groups_id_toshow = array(); //init
+      $groups_id_toshow = []; //init
       if (!empty($found_groups)) {
          for ($lvl=1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
@@ -280,7 +280,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $condition = "";
       if (count($groups_id_toshow) > 0) {
          // transform found groups (2 dimensions) in a flat array
-         $groups_id_toshow_flat = array();
+         $groups_id_toshow_flat = [];
          array_walk_recursive($groups_id_toshow, function($v, $k) use(&$groups_id_toshow_flat) {
             array_push($groups_id_toshow_flat, $v);
          });
@@ -297,7 +297,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @param array $params
     * @return array
     */
-   static function getGroupsForCategory($itilcategories_id, $params = array()) {
+   static function getGroupsForCategory($itilcategories_id, $params = []) {
       global $DB;
 
       //define default options
@@ -310,7 +310,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $options[$key] = $value;
       }
 
-      $groups   = array();
+      $groups   = [];
       $category = new ITILCategory();
       $table    = getTableForItemType(__CLASS__);
 
@@ -368,7 +368,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                         WHERE gl.lvl != $level
                         AND gr.is_assign
                         OR gl.lvl IS NULL");
-      $groups_id = array();
+      $groups_id = [];
       while ($row = $DB->fetch_assoc($res)) {
          $groups_id[$row['id']] = $row['id'];
       }
@@ -629,13 +629,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       if (!$DB->fieldExists($table, 'view_all_lvl1')) {
          $migration->addField($table, 'view_all_lvl1', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl2', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl3', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl4', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->migrationOneTable($table);
       }
 

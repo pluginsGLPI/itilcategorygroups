@@ -49,25 +49,25 @@ function plugin_init_itilcategorygroups() {
       }
 
       Plugin::registerClass('PluginItilcategorygroupsCategory',
-                            array('forwardentityfrom' => 'ITILCategory'));
+                            ['forwardentityfrom' => 'ITILCategory']);
       Plugin::registerClass('PluginItilcategorygroupsGroup_Level',
-                            array('addtabon' => 'Group'));
+                            ['addtabon' => 'Group']);
 
       if (Session::haveRight('config', READ)) {
          // add to 'Admin' menu :
-         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('admin' => 'PluginItilcategorygroupsMenu');
+         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = ['admin' => 'PluginItilcategorygroupsMenu'];
 
          // other hook :
-         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
+         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = ['Group' => 'plugin_pre_item_update_itilcategorygroups'];
       }
       if (Session::haveRight('config', UPDATE)) {
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
             = '/plugins/itilcategorygroups/front/category.form.php';
       }
 
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = array('scripts/function.js',
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/function.js',
                                                                     'scripts/filtergroups.js.php',
-                                                                    'scripts/multiple_group.js');
+                                                                    'scripts/multiple_group.js'];
    }
 }
 
