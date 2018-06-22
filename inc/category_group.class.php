@@ -29,10 +29,10 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
 
       //we must migrate groups datas in sub table
       if ($DB->fieldExists($parent_table, 'groups_id_levelone')) {
-         $all_lvl = $cat_groups = array();
+         $all_lvl = $cat_groups = [];
 
          //foreach old levels
-         foreach (array(1=>'one', 2=>'two', 3=>'three', 4=>'four') as $lvl_num => $lvl_str) {
+         foreach ([1=>'one', 2=>'two', 3=>'three', 4=>'four'] as $lvl_num => $lvl_str) {
             $query = "SELECT id, itilcategories_id, groups_id_level$lvl_str FROM $parent_table";
             $res = $DB->query($query);
             while ($data = $DB->fetch_assoc($res)) {
@@ -42,11 +42,11 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
                }
 
                if ($data["groups_id_level$lvl_str"] > 0) {
-                  $cat_groups[] = array(
+                  $cat_groups[] = [
                      'plugin_itilcategorygroups_categories_id' => $data['id'],
                      'level'                                   => $lvl_num,
                      'itilcategories_id'                       => $data['itilcategories_id'],
-                     'groups_id'                               => $data["groups_id_level$lvl_str"]);
+                     'groups_id'                               => $data["groups_id_level$lvl_str"]];
                }
             }
 

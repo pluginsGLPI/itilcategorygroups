@@ -10,7 +10,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       return self::$items_id;
    }
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Level attribution', 'itilcategorygroups');
    }
 
@@ -42,7 +42,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       return $DB->query("DROP TABLE IF EXISTS `$table`");
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       if (! $withtemplate) {
          switch ($item->getType()) {
@@ -54,7 +54,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    }
 
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
 
       if ($item->getType() == 'Group') {
          self::showForGroup($item);
@@ -88,12 +88,12 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
       echo "<tr class='tab_bg_2'><td class='center'>";
       Dropdown::showFromArray('lvl',
-                              array(NULL => "---",
+                              [null => "---",
                                     1    => __('Level 1', 'itilcategorygroups'),
                                     2    => __('Level 2', 'itilcategorygroups'),
                                     3    => __('Level 3', 'itilcategorygroups'),
-                                    4    => __('Level 4', 'itilcategorygroups')),
-                              array('value' => $item->fields['lvl']));
+                                    4    => __('Level 4', 'itilcategorygroups')],
+                              ['value' => $item->fields['lvl']]);
       echo "</td></tr>";
 
       if ($canedit) {
@@ -113,14 +113,14 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
    static function getAddSearchOptions($itemtype) {
 
-      $opt = array();
+      $opt = [];
 
       if ($itemtype == 'Group') {
          $opt[9978]['table']      = getTableForItemType(__CLASS__);
          $opt[9978]['field']      = 'lvl';
          $opt[9978]['name']       = __('Level attribution', 'itilcategorygroups');
          $opt[9978]['linkfield']  = 'lvl';
-         $opt[9978]['joinparams'] = array('jointype' => 'child');
+         $opt[9978]['joinparams'] = ['jointype' => 'child'];
       }
 
       return $opt;
@@ -133,7 +133,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
          $entities_id = $_SESSION['glpiactive_entity'];
       }
 
-      $groups_id = array();
+      $groups_id = [];
       $query = "SELECT gl.groups_id
                 FROM ".getTableForItemType(__CLASS__)." gl
                 LEFT JOIN glpi_groups gr
