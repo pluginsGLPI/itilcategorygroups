@@ -17,8 +17,8 @@ $condition = PluginItilcategorygroupsCategory::getSQLCondition(intval($ticket_id
                                                                intval($_REQUEST['itilcategories_id']), $_REQUEST['type']);
 $rand = mt_rand();
 $default_options = ['display_emptychoice' => true,
-                         'itemtype'            => 'Group',
-                         'condition'           => $rand];
+                    'itemtype'            => 'Group',
+                    'condition'           => $rand];
 
 
 if (! empty($condition)) {

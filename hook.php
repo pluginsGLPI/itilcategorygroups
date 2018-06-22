@@ -92,10 +92,10 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = []) {
       case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
          Dropdown::showFromArray('lvl',
                                  [null => "---",
-                                       1    => __('Level 1', 'itilcategorygroups'),
-                                       2    => __('Level 2', 'itilcategorygroups'),
-                                       3    => __('Level 3', 'itilcategorygroups'),
-                                       4    => __('Level 4', 'itilcategorygroups')]);
+                                  1    => __('Level 1', 'itilcategorygroups'),
+                                  2    => __('Level 2', 'itilcategorygroups'),
+                                  3    => __('Level 3', 'itilcategorygroups'),
+                                  4    => __('Level 4', 'itilcategorygroups')]);
          return true;
    }
 
@@ -112,10 +112,10 @@ function plugin_pre_item_update_itilcategorygroups($item) {
       $group_level = new PluginItilcategorygroupsGroup_Level();
       if (! $group_level->getFromDB($item->fields['id'])) {
          $group_level->add(['groups_id'=> $item->fields['id'],
-                                 'lvl'    => $_REQUEST['lvl']]);
+                            'lvl'    => $_REQUEST['lvl']]);
       } else {
          $group_level->update(['groups_id'=> $item->fields['id'],
-                                    'lvl'    => $_REQUEST['lvl']]);
+                               'lvl'    => $_REQUEST['lvl']]);
       }
 
    }

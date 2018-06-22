@@ -89,10 +89,10 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       echo "<tr class='tab_bg_2'><td class='center'>";
       Dropdown::showFromArray('lvl',
                               [null => "---",
-                                    1    => __('Level 1', 'itilcategorygroups'),
-                                    2    => __('Level 2', 'itilcategorygroups'),
-                                    3    => __('Level 3', 'itilcategorygroups'),
-                                    4    => __('Level 4', 'itilcategorygroups')],
+                               1    => __('Level 1', 'itilcategorygroups'),
+                               2    => __('Level 2', 'itilcategorygroups'),
+                               3    => __('Level 3', 'itilcategorygroups'),
+                               4    => __('Level 4', 'itilcategorygroups')],
                               ['value' => $item->fields['lvl']]);
       echo "</td></tr>";
 
