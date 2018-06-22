@@ -217,9 +217,9 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             if (isset($this->input["groups_id_level$lvl"])) {
                foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
                   $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input["id"],
-                                        'level'                                   => $lvl,
-                                        'itilcategories_id'                       => $this->input["itilcategories_id"],
-                                        'groups_id'                               => $groups_id]);
+                                   'level'                                   => $lvl,
+                                   'itilcategories_id'                       => $this->input["itilcategories_id"],
+                                   'groups_id'                               => $groups_id]);
                }
             }
          }
@@ -237,7 +237,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $ticket = new Ticket();
       $group  = new Group();
       $params = ['entities_id'  => $_SESSION['glpiactive_entity'],
-                      'is_recursive' => 1];
+                 'is_recursive' => 1];
 
       if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
