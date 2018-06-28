@@ -1,15 +1,15 @@
-# ITILCATEGORY GROUPS
-# Copyright (C) 2014 TECLIB'
-# This file is distributed under the same license as the ITILCATEGORY GROUPS package.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015
+# Kaya Zeren <kayazeren@gmail.com>, 2015,2018
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-29 10:27+0100\n"
-"PO-Revision-Date: 2017-09-23 21:40+0000\n"
+"POT-Creation-Date: 2018-06-22 14:52+0000\n"
+"PO-Revision-Date: 2018-06-27 02:57+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
@@ -18,39 +18,43 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: hook.php:69 hook.php:93 inc/category_group.class.php:120
-#: inc/category_group.class.php:240 inc/group_level.class.php:96
+#: hook.php:77
+msgid "Level "
+msgstr "Düzey"
+
+#: hook.php:95 inc/category.class.php:97 inc/category.class.php:459
+#: inc/group_level.class.php:92
 msgid "Level 1"
 msgstr "1. Düzey"
 
-#: hook.php:70 hook.php:94 inc/category_group.class.php:128
-#: inc/category_group.class.php:245 inc/group_level.class.php:97
+#: hook.php:96 inc/category.class.php:101 inc/category.class.php:483
+#: inc/group_level.class.php:93
 msgid "Level 2"
 msgstr "2. Düzey"
 
-#: hook.php:71 hook.php:95 inc/category_group.class.php:137
-#: inc/category_group.class.php:250 inc/group_level.class.php:98
+#: hook.php:97 inc/category.class.php:106 inc/category.class.php:507
+#: inc/group_level.class.php:94
 msgid "Level 3"
 msgstr "3. Düzey"
 
-#: hook.php:72 hook.php:96 inc/category_group.class.php:145
-#: inc/category_group.class.php:255 inc/group_level.class.php:99
+#: hook.php:98 inc/category.class.php:110 inc/category.class.php:531
+#: inc/group_level.class.php:95
 msgid "Level 4"
 msgstr "4. Düzey"
 
-#: setup.php:51 inc/category_group.class.php:39
-#: inc/category_group.class.php:186
+#: inc/category.class.php:42 inc/category.class.php:385 inc/menu.class.php:6
 msgid "Link ItilCategory - Groups"
 msgstr "ItilKategori - Gruplar Bağlantısı"
 
-#: setup.php:77
+#: inc/category.class.php:175
+msgid "A link with this category already exists"
+msgstr "Bu kategoriye bir bağlantı zaten var"
+
+#: inc/menu.class.php:10 inc/group_level.class.php:50 setup.php:77
 msgid "ItilCategory Groups"
 msgstr "ItilKategori Grupları"
 
-#: inc/group_level.class.php:14 inc/group_level.class.php:90
-#: inc/group_level.class.php:126
+#: inc/group_level.class.php:14 inc/group_level.class.php:87
+#: inc/group_level.class.php:121
 msgid "Level attribution"
 msgstr "Düzey özellikleri"
-
-msgid "A link with this category already exists"
-msgstr "Bu kategoriye bir bağlantı zaten var"
