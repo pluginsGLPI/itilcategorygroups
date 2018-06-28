@@ -28,12 +28,12 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.0.2');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.1.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "0.85");
+define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.3");
 // Maximum GLPI version, exclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.3");
+define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.4");
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
@@ -49,25 +49,25 @@ function plugin_init_itilcategorygroups() {
       }
 
       Plugin::registerClass('PluginItilcategorygroupsCategory',
-                            array('forwardentityfrom' => 'ITILCategory'));
+                            ['forwardentityfrom' => 'ITILCategory']);
       Plugin::registerClass('PluginItilcategorygroupsGroup_Level',
-                            array('addtabon' => 'Group'));
+                            ['addtabon' => 'Group']);
 
       if (Session::haveRight('config', READ)) {
          // add to 'Admin' menu :
-         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = array('admin' => 'PluginItilcategorygroupsMenu');
+         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = ['admin' => 'PluginItilcategorygroupsMenu'];
 
          // other hook :
-         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = array('Group' => 'plugin_pre_item_update_itilcategorygroups');
+         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = ['Group' => 'plugin_pre_item_update_itilcategorygroups'];
       }
       if (Session::haveRight('config', UPDATE)) {
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
             = '/plugins/itilcategorygroups/front/category.form.php';
       }
 
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = array('scripts/function.js',
-                                                                    'scripts/filtergroups.js.php',
-                                                                    'scripts/multiple_group.js');
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/function.js',
+                                                               'scripts/filtergroups.js.php',
+                                                               'scripts/multiple_group.js'];
    }
 }
 
@@ -82,7 +82,6 @@ function plugin_version_itilcategorygroups() {
          'glpi' => [
             'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
             'max' => PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
-            'dev' => true, //Required to allow 9.2-dev
           ]
        ]
    ];

@@ -2,7 +2,7 @@
 
 class PluginItilcategorygroupsMenu extends CommonGLPI {
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Link ItilCategory - Groups', 'itilcategorygroups');
    }
 
@@ -12,7 +12,7 @@ class PluginItilcategorygroupsMenu extends CommonGLPI {
 
    static function getMenuContent() {
       global $CFG_GLPI;
-      $menu          = array();
+      $menu          = [];
       $menu['title'] = self::getMenuName();
       $menu['page']  = '/plugins/itilcategorygroups/front/category.php';
 

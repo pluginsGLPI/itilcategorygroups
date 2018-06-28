@@ -38,11 +38,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    var $dohistory = true;
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Link ItilCategory - Groups', 'itilcategorygroups');
    }
 
-   function showForm($id, $options = array()) {
+   function showForm($id, $options = []) {
 
       if (! $this->can($id, READ)) {
          return false;
@@ -60,29 +60,29 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $rand = mt_rand();
       echo "<td><label for='dropdown_is_active$rand'>".__('Active')." :</label></td>";
       echo "<td style='width:30%'>";
-      Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, array('rand' => $rand));
+      Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, ['rand' => $rand]);
       echo "</td></tr>";
 
       $rand = mt_rand();
       echo "<tr class='tab_bg_1'>";
       echo "<td><label for='dropdown_itilcategories_id$rand'>".__('Category')." :</label></td>";
       echo "<td>";
-      Dropdown::show('ITILCategory', array(
+      Dropdown::show('ITILCategory', [
          'value' => $this->fields['itilcategories_id'],
-         'rand' => $rand));
+         'rand' => $rand]);
       echo "</td><td colspan='2'></td></tr>";
 
       $rand = mt_rand();
       echo "<tr class='tab_bg_1'>";
       echo "<td><label for='dropdown_is_incident$rand'>".__('Visible for an incident')." :</label></td>";
       echo "<td>";
-      Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, array('rand' => $rand));
+      Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, ['rand' => $rand]);
       echo "</td>";
 
       $rand = mt_rand();
       echo "<td><label for='dropdown_is_request$rand'>".__('Visible for a request')." :</label></td>";
       echo "<td>";
-      Dropdown::showYesNo('is_request', $this->fields['is_request'], -1, array('rand' => $rand));
+      Dropdown::showYesNo('is_request', $this->fields['is_request'], -1, ['rand' => $rand]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -121,7 +121,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       global $DB;
 
       // find current values for this select
-      $values = array();
+      $values = [];
       if ($this->getID()) {
          $res_val = $DB->query("SELECT `groups_id`
             FROM glpi_plugin_itilcategorygroups_categories_groups
@@ -193,7 +193,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $this->post_updateItem();
    }
 
-   function post_updateItem($history=1) {
+   function post_updateItem($history = 1) {
 
       // quick fix :
       if (isset($_REQUEST['massiveaction'])) {
@@ -210,16 +210,16 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             $found_cat_groups = $cat_group->find("itilcategories_id = ".$this->input["itilcategories_id"].
                                                  " AND level = $lvl");
             foreach ($found_cat_groups as $id => $current_cat_group) {
-               $cat_group->delete(array('id' => $current_cat_group['id']));
+               $cat_group->delete(['id' => $current_cat_group['id']]);
             }
 
             //insert new saved
             if (isset($this->input["groups_id_level$lvl"])) {
                foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
-                  $cat_group->add(array('plugin_itilcategorygroups_categories_id' => $this->input["id"],
-                                        'level'                                   => $lvl,
-                                        'itilcategories_id'                       => $this->input["itilcategories_id"],
-                                        'groups_id'                               => $groups_id));
+                  $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input["id"],
+                                   'level'                                   => $lvl,
+                                   'itilcategories_id'                       => $this->input["itilcategories_id"],
+                                   'groups_id'                               => $groups_id]);
                }
             }
          }
@@ -236,8 +236,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    static function getSQLCondition($tickets_id, $itilcategories_id, $type) {
       $ticket = new Ticket();
       $group  = new Group();
-      $params = array('entities_id'  => $_SESSION['glpiactive_entity'],
-                      'is_recursive' => 1);
+      $params = ['entities_id'  => $_SESSION['glpiactive_entity'],
+                 'is_recursive' => 1];
 
       if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
          // == UPDATE EXISTING TICKET ==
@@ -253,7 +253,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
 
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params, $type);
-      $groups_id_toshow = array(); //init
+      $groups_id_toshow = []; //init
       if (!empty($found_groups)) {
          for ($lvl=1; $lvl <= 4; $lvl++) {
             if (isset($found_groups['groups_id_level'.$lvl])) {
@@ -280,7 +280,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $condition = "";
       if (count($groups_id_toshow) > 0) {
          // transform found groups (2 dimensions) in a flat array
-         $groups_id_toshow_flat = array();
+         $groups_id_toshow_flat = [];
          array_walk_recursive($groups_id_toshow, function($v, $k) use(&$groups_id_toshow_flat) {
             array_push($groups_id_toshow_flat, $v);
          });
@@ -297,7 +297,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @param array $params
     * @return array
     */
-   static function getGroupsForCategory($itilcategories_id, $params = array()) {
+   static function getGroupsForCategory($itilcategories_id, $params = []) {
       global $DB;
 
       //define default options
@@ -310,7 +310,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $options[$key] = $value;
       }
 
-      $groups   = array();
+      $groups   = [];
       $category = new ITILCategory();
       $table    = getTableForItemType(__CLASS__);
 
@@ -368,7 +368,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                         WHERE gl.lvl != $level
                         AND gr.is_assign
                         OR gl.lvl IS NULL");
-      $groups_id = array();
+      $groups_id = [];
       while ($row = $DB->fetch_assoc($res)) {
          $groups_id[$row['id']] = $row['id'];
       }
@@ -376,172 +376,215 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       return $groups_id;
    }
 
-   function getSearchOptions() {
-      $tab = array();
+   function rawSearchOptions() {
 
-      $tab['common'] = __('Link ItilCategory - Groups', 'itilcategorygroups');
+      $tab = [];
 
-      $tab[1]['table']         = $this->getTable();
-      $tab[1]['field']         = 'name';
-      $tab[1]['name']          = __('Name');
-      $tab[1]['datatype']      = 'itemlink';
-      $tab[1]['checktype']     = 'text';
-      $tab[1]['displaytype']   = 'text';
-      $tab[1]['injectable']    = true;
-      $tab[1]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 'common',
+         'name'             => __('Link ItilCategory - Groups', 'itilcategorygroups'),
+      ];
 
-      $tab[2]['table']         = $this->getTable();
-      $tab[2]['field']         = 'is_incident';
-      $tab[2]['name']          = __('Visible for an incident');
-      $tab[2]['datatype']      = 'bool';
-      $tab[2]['checktype']     = 'bool';
-      $tab[2]['displaytype']   = 'bool';
-      $tab[2]['injectable']    = true;
+      $tab[] = [
+         'id'               => 1,
+         'table'            => $this->getTable(),
+         'field'            => 'name',
+         'name'             => __('Name'),
+         'datatype'         => 'itemlink',
+         'checktype'        => 'text',
+         'displaytype'      => 'text',
+         'injectable'       => true,
+         'massiveaction'    => false,
+      ];
 
-      $tab[3]['table']         = $this->getTable();
-      $tab[3]['field']         = 'is_request';
-      $tab[3]['name']          = __('Visible for a request');
-      $tab[3]['datatype']      = 'bool';
-      $tab[3]['checktype']     = 'bool';
-      $tab[3]['displaytype']   = 'bool';
-      $tab[3]['injectable']    = true;
+      $tab[] = [
+         'id'               => 2,
+         'table'            => $this->getTable(),
+         'field'            => 'is_incident',
+         'name'             => __('Visible for an incident'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
-      $tab[4]['table']         = 'glpi_itilcategories';
-      $tab[4]['field']         = 'name';
-      $tab[4]['name']          = __('Category');
-      $tab[4]['datatype']      = 'itemlink';
-      $tab[4]['checktype']     = 'text';
-      $tab[4]['displaytype']   = 'text';
-      $tab[4]['injectable']    = true;
+      $tab[] = [
+         'id'               => 3,
+         'table'            => $this->getTable(),
+         'field'            => 'is_request',
+         'name'             => __('Visible for a request'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
-      $tab[5]['table']         = $this->getTable();
-      $tab[5]['field']         = 'is_active';
-      $tab[5]['name']          = __('Active');
-      $tab[5]['datatype']      = 'bool';
-      $tab[5]['checktype']     = 'bool';
-      $tab[5]['displaytype']   = 'bool';
-      $tab[5]['injectable']    = true;
+      $tab[] = [
+         'id'               => 4,
+         'table'            => 'glpi_itilcategories',
+         'field'            => 'name',
+         'name'             => __('Category'),
+         'datatype'         => 'itemlink',
+         'checktype'        => 'text',
+         'displaytype'      => 'text',
+         'injectable'       => true,
+      ];
 
-      $tab[16]['table']         = $this->getTable();
-      $tab[16]['field']         = 'comment';
-      $tab[16]['name']          = __('Comments');
-      $tab[16]['datatype']      = 'text';
-      $tab[16]['checktype']     = 'text';
-      $tab[16]['displaytype']   = 'multiline_text';
-      $tab[16]['injectable']    = true;
+      $tab[] = [
+         'id'               => 5,
+         'table'            => $this->getTable(),
+         'field'            => 'is_active',
+         'name'             => __('Active'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
-      $tab[26]['table']         = 'glpi_groups';
-      $tab[26]['field']         = 'name';
-      $tab[26]['forcegroupby']  = true;
-      $tab[26]['name']          = __("Level 1", "itilcategorygroups");
-      $tab[26]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 1',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[26]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 16,
+         'table'            => $this->getTable(),
+         'field'            => 'comment',
+         'name'             => __('Comments'),
+         'datatype'         => 'text',
+         'checktype'        => 'text',
+         'displaytype'      => 'multiline_text',
+         'injectable'       => true,
+      ];
 
-      $tab[27]['table']         = 'glpi_groups';
-      $tab[27]['field']         = 'name';
-      $tab[27]['forcegroupby']  = true;
-      $tab[27]['name']          = __("Level 2", "itilcategorygroups");
-      $tab[27]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 2',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[27]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 26,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 1', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 1',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      $tab[28]['table']         = 'glpi_groups';
-      $tab[28]['field']         = 'name';
-      $tab[28]['forcegroupby']  = true;
-      $tab[28]['name']          = __("Level 3", "itilcategorygroups");
-      $tab[28]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 3',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[28]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 27,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 2', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 2',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      $tab[29]['table']         = 'glpi_groups';
-      $tab[29]['field']         = 'name';
-      $tab[29]['forcegroupby']  = true;
-      $tab[29]['name']          = __("Level 4", "itilcategorygroups");
-      $tab[29]['joinparams']    = array(
-                                    'beforejoin' => array(
-                                       'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
-                                       'joinparams' => array(
-                                          'condition'  => 'AND NEWTABLE.level = 4',
-                                          'jointype'   => 'child',
-                                          'beforejoin' => array(
-                                             'table'      => 'glpi_plugin_itilcategorygroups_categories',
-                                             'joinparams' => array(
-                                                'jointype'  => 'child'
-                                             )
-                                          )
-                                       )
-                                    )
-                                 );
-      $tab[29]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 28,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 3', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 3',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      /* id */
-      $tab[30]['table']         = $this->getTable();
-      $tab[30]['field']         = 'id';
-      $tab[30]['name']          = __('ID');
-      $tab[30]['injectable']    = false;
-      $tab[30]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 29,
+         'table'            => 'glpi_groups',
+         'field'            => 'name',
+         'name'             => __('Level 4', 'itilcategorygroups'),
+         'forcegroupby'     => true,
+         'joinparams'       => [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
+               'joinparams' => [
+                  'condition'  => 'AND NEWTABLE.level = 4',
+                  'jointype'   => 'child',
+                  'beforejoin' => [
+                     'table'      => 'glpi_plugin_itilcategorygroups_categories',
+                     'joinparams' => [
+                        'jointype'  => 'child'
+                     ]
+                  ]
+               ]
+            ]
+         ],
+         'massiveaction'    => false,
+      ];
 
-      $tab[35]['table']          = $this->getTable();
-      $tab[35]['field']          = 'date_mod';
-      $tab[35]['massiveaction']  = false;
-      $tab[35]['name']           = __('Last update');
-      $tab[35]['datatype']       = 'datetime';
-      $tab[35]['massiveaction']  = false;
+      $tab[] = [
+         'id'               => 30,
+         'table'            => $this->getTable(),
+         'field'            => 'id',
+         'name'             => __('ID'),
+         'injectable'       => false,
+         'massiveaction'    => false,
+      ];
 
-      /* entity */
-      $tab[80]['table']         = 'glpi_entities';
-      $tab[80]['field']         = 'completename';
-      $tab[80]['name']          = __('Entity');
-      $tab[80]['injectable']    = false;
-      $tab[80]['massiveaction'] = false;
+      $tab[] = [
+         'id'               => 35,
+         'table'            => $this->getTable(),
+         'field'            => 'date_mod',
+         'name'             => __('Last update'),
+         'datatype'         => 'datetime',
+         'massiveaction'    => false,
+      ];
 
-      $tab[86]['table']         = $this->getTable();
-      $tab[86]['field']         = 'is_recursive';
-      $tab[86]['name']          = __('Child entities');
-      $tab[86]['datatype']      = 'bool';
-      $tab[86]['checktype']     = 'bool';
-      $tab[86]['displaytype']   = 'bool';
-      $tab[86]['injectable']    = true;
+      $tab[] = [
+         'id'               => 80,
+         'table'            => 'glpi_entities',
+         'field'            => 'completename',
+         'name'             => __('Entity'),
+         'injectable'       => false,
+         'massiveaction'    => false,
+      ];
+
+      $tab[] = [
+         'id'               => 86,
+         'table'            => $this->getTable(),
+         'field'            => 'is_recursive',
+         'name'             => __('Child entities'),
+         'datatype'         => 'bool',
+         'checktype'        => 'bool',
+         'displaytype'      => 'bool',
+         'injectable'       => true,
+      ];
 
       return $tab;
    }
@@ -586,13 +629,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       if (!$DB->fieldExists($table, 'view_all_lvl1')) {
          $migration->addField($table, 'view_all_lvl1', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl2', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl3', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl4', "TINYINT(1) NOT NULL DEFAULT '0'",
-                              array('after' => 'itilcategories_id'));
+                              ['after' => 'itilcategories_id']);
          $migration->migrationOneTable($table);
       }
 
