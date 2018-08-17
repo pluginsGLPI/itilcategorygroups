@@ -267,7 +267,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                } else {
                   foreach ($found_groups['groups_id_level'.$lvl] as $groups_id) {
                      if (countElementsInTableForEntity("glpi_groups", $ticket->getEntityID(),
-                                                       "`id`='$groups_id'") > 0) {
+                                                       ['id' => $groups_id]) > 0) {
                         $group->getFromDB($groups_id);
                         $groups_id_toshow[] = $group->getID();
                      }
