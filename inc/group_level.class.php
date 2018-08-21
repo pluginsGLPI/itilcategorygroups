@@ -33,7 +33,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
          PRIMARY KEY (`id`),
          KEY         `groups_id` (`groups_id`),
          KEY         `lvl` (`lvl`)
-      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
    }
 
    static function uninstall() {

@@ -623,7 +623,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          KEY `is_request` (`is_request`),
          KEY `is_recursive` (`is_recursive`),
          KEY date_mod (date_mod)
-         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;";
+         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;";
          $DB->query($query);
       }
 
