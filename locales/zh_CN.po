@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# liAnGjiA <liangjia@qq.com>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-22 14:52+0000\n"
+"PO-Revision-Date: 2018-07-07 03:52+0000\n"
+"Last-Translator: liAnGjiA <liangjia@qq.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hook.php:77
+msgid "Level "
+msgstr "级别"
+
+#: hook.php:95 inc/category.class.php:97 inc/category.class.php:459
+#: inc/group_level.class.php:92
+msgid "Level 1"
+msgstr "级别 1"
+
+#: hook.php:96 inc/category.class.php:101 inc/category.class.php:483
+#: inc/group_level.class.php:93
+msgid "Level 2"
+msgstr "级别 2"
+
+#: hook.php:97 inc/category.class.php:106 inc/category.class.php:507
+#: inc/group_level.class.php:94
+msgid "Level 3"
+msgstr "级别 3"
+
+#: hook.php:98 inc/category.class.php:110 inc/category.class.php:531
+#: inc/group_level.class.php:95
+msgid "Level 4"
+msgstr "级别 4"
+
+#: inc/category.class.php:42 inc/category.class.php:385 inc/menu.class.php:6
+msgid "Link ItilCategory - Groups"
+msgstr ""
+
+#: inc/category.class.php:175
+msgid "A link with this category already exists"
+msgstr ""
+
+#: inc/menu.class.php:10 inc/group_level.class.php:50 setup.php:77
+msgid "ItilCategory Groups"
+msgstr ""
+
+#: inc/group_level.class.php:14 inc/group_level.class.php:87
+#: inc/group_level.class.php:121
+msgid "Level attribution"
+msgstr "级别属性"
