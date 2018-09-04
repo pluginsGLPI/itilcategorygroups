@@ -24,8 +24,8 @@ var triggerupdateTicket = function() {
    if (getItilcategories_id() == 0) {
       return;
    } else {
-      checkDOMChange("input[name='_itil_assign[groups_id]']", function() {
-         var assign_select_dom_id = $("input[name='_itil_assign[groups_id]']")[0].id;
+      checkDOMChange("select[name='_itil_assign[groups_id]']", function() {
+         var assign_select_dom_id = $("select[name='_itil_assign[groups_id]']")[0].id;
          var type = $("select[id^='dropdown_type']").val();
 
          redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);

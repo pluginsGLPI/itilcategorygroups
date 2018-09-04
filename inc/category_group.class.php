@@ -21,7 +21,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
          KEY `level`                                   (`level`),
          KEY `itilcategories_id`                       (`itilcategories_id`),
          KEY `groups_id`                               (`groups_id`)
-         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;";
+         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;";
          $DB->query($query);
       }
 
