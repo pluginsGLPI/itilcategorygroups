@@ -58,12 +58,14 @@ var redefineDropdown = function (id, url, tickets_id, type) {
       ajax: {
          url: url,
          dataType: 'json',
-         data: function (term, page) {
+         type: 'POST',
+         data: function (params, page) {
+            query = params;
             return {
                ticket_id:         tickets_id,
                type : type,
                itilcategories_id: getItilcategories_id(),
-               searchText: term
+               searchText: params.term
             };
          },
          results: function (data, page) {
@@ -71,6 +73,7 @@ var redefineDropdown = function (id, url, tickets_id, type) {
             return { results: data.results, more: more };
          }
       },
+      templateResult: formatResult,
       initSelection: function (element, callback) {
          var id = $(element).val();
          var defaultid = '0';
@@ -96,8 +99,7 @@ var redefineDropdown = function (id, url, tickets_id, type) {
                });
             }
          }
-      },
-      templateResult: formatResult
+      }
    });
 };
 
