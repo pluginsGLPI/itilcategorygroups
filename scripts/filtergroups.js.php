@@ -54,7 +54,6 @@ var redefineDropdown = function (id, url, tickets_id, type) {
       minimumInputLength:      0,
       quietMillis:             100,
       minimumResultsForSearch: {$CFG_GLPI['ajax_limit_count']},
-      closeOnSelect:           false,
       ajax: {
          url: url,
          dataType: 'json',
