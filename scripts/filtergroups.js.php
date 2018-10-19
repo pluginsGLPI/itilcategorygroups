@@ -49,6 +49,10 @@ var triggerAll = function() {
 };
 
 var redefineDropdown = function (id, url, tickets_id, type) {
+   if (typeof templateResult === "undefined" && typeof formatResult !== "undefined") {
+      var templateResult = formatResult;
+   }
+
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,
@@ -72,7 +76,7 @@ var redefineDropdown = function (id, url, tickets_id, type) {
             return { results: data.results, more: more };
          }
       },
-      templateResult: formatResult,
+      templateResult: templateResult,
       initSelection: function (element, callback) {
          var id = $(element).val();
          var defaultid = '0';
