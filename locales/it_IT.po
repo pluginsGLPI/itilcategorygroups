@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Pierfrancesco Passerini <p.passerini@gmail.com>, 2018
 # Giudy <spam@habilitas.it>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-22 14:52+0000\n"
-"PO-Revision-Date: 2018-06-22 14:53+0000\n"
-"Last-Translator: Cédric Anne\n"
+"PO-Revision-Date: 2018-09-25 13:40+0000\n"
+"Last-Translator: Pierfrancesco Passerini <p.passerini@gmail.com>\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +21,7 @@ msgstr ""
 
 #: hook.php:77
 msgid "Level "
-msgstr ""
+msgstr "Livello"
 
 #: hook.php:95 inc/category.class.php:97 inc/category.class.php:459
 #: inc/group_level.class.php:92

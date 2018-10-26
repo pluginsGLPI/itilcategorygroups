@@ -49,12 +49,15 @@ var triggerAll = function() {
 };
 
 var redefineDropdown = function (id, url, tickets_id, type) {
+   if (typeof templateResult === "undefined" && typeof formatResult !== "undefined") {
+      var templateResult = formatResult;
+   }
+
    $('#' + id).select2({
       width:                   '80%',
       minimumInputLength:      0,
       quietMillis:             100,
       minimumResultsForSearch: {$CFG_GLPI['ajax_limit_count']},
-      closeOnSelect:           false,
       ajax: {
          url: url,
          dataType: 'json',
@@ -73,7 +76,7 @@ var redefineDropdown = function (id, url, tickets_id, type) {
             return { results: data.results, more: more };
          }
       },
-      templateResult: formatResult,
+      templateResult: templateResult,
       initSelection: function (element, callback) {
          var id = $(element).val();
          var defaultid = '0';
