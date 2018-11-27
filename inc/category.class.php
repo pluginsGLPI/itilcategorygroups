@@ -170,7 +170,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    function prepareInputForAdd($input) {
       $cat = new self();
-      $found_cat = $cat->find("itilcategories_id = ".$this->input["itilcategories_id"]);
+      $found_cat = $cat->find(['itilcategories_id' => $this->input["itilcategories_id"]]);
       if (count($found_cat) > 0) {
          Session::addMessageAfterRedirect(__("A link with this category already exists", "itilcategorygroups"));
          return false;
@@ -207,8 +207,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          if ($this->input["view_all_lvl$lvl"] != 1) {
 
             //delete old groups values
-            $found_cat_groups = $cat_group->find("itilcategories_id = ".$this->input["itilcategories_id"].
-                                                 " AND level = $lvl");
+            $found_cat_groups = $cat_group->find(
+               [
+                  'itilcategories_id' => $this->input["itilcategories_id"],
+                  'level' => $lvl
+               ]
+            );
             foreach ($found_cat_groups as $id => $current_cat_group) {
                $cat_group->delete(['id' => $current_cat_group['id']]);
             }
@@ -277,7 +281,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          }
       }
 
-      $condition = "";
+      $condition = [];
       if (count($groups_id_toshow) > 0) {
          // transform found groups (2 dimensions) in a flat array
          $groups_id_toshow_flat = [];
@@ -285,8 +289,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             array_push($groups_id_toshow_flat, $v);
          });
 
-         $newarray = implode(", ", $groups_id_toshow_flat);
-         $condition = " id IN ($newarray)";
+         $condition['id'] = $groups_id_toshow_flat;
       }
       return $condition;
    }

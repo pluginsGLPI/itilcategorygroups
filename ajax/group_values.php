@@ -13,22 +13,19 @@ if (! isset($_REQUEST['itilcategories_id'])) {
 
 $ticket_id = (isset($_REQUEST['ticket_id'])) ? $_REQUEST['ticket_id'] : 0;
 
-$condition = PluginItilcategorygroupsCategory::getSQLCondition(intval($ticket_id),
-                                                               intval($_REQUEST['itilcategories_id']), $_REQUEST['type']);
-$rand = mt_rand();
-$default_options = ['display_emptychoice' => true,
-                    'itemtype'            => 'Group',
-                    'condition'           => $rand];
-
-
-if (! empty($condition)) {
-   $_GET = array_merge($_GET, $default_options);
-   $_SESSION['glpicondition'][$rand] = $condition;
-
-} else {
-   $_GET = array_merge($_GET, $default_options);
-   $_SESSION['glpicondition'][$rand]  = getEntitiesRestrictRequest(" ", "", "entities_id",
-                                                       $_SESSION['glpiactive_entity'], 1). "AND glpi_groups.is_assign";
+$condition = PluginItilcategorygroupsCategory::getSQLCondition(
+   intval($ticket_id),
+   intval($_REQUEST['itilcategories_id']),
+   $_REQUEST['type']
+);
+if (empty($condition)) {
+   $condition = [
+      'glpi_groups.is_assign' => 1,
+   ] + getEntitiesRestrictCriteria("", "entities_id", $_SESSION['glpiactive_entity'], 1);
 }
-$_POST += $default_options; // fix for glpi 9.1
+
+$_POST['display_emptychoice'] = true;
+$_POST['itemtype']            = 'Group';
+$_POST['condition']           = Dropdown::addNewCondition($condition);
+
 require ("../../../ajax/getDropdownValue.php");
