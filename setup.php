@@ -28,12 +28,12 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.1.3');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.2.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.3");
+define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.4");
 // Maximum GLPI version, exclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.4");
+define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.5");
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
