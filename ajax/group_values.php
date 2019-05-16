@@ -23,7 +23,7 @@ $condition = PluginItilcategorygroupsCategory::getSQLCondition(
    $_REQUEST['type']
 );
 
-if (! $canApplyFilter && empty($condition)) {
+if (! $canApplyFilter || empty($condition)) {
    $condition = [
       'glpi_groups.is_assign' => 1,
    ] + getEntitiesRestrictCriteria("", "entities_id", $_SESSION['glpiactive_entity'], 1);

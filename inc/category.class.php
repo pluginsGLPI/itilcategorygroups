@@ -70,7 +70,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       Dropdown::show('ITILCategory', [
          'value' => $this->fields['itilcategories_id'],
          'rand' => $rand]);
-      echo "</td><td colspan='2'></td></tr>";
+      echo "</td>";
+
+      // Groups restriction
+      $rand = mt_rand();
+      echo "<td><label for='dropdown_is_groups_restriction$rand'>".__('Display only the groups on the next level')." :</label></td>";
+      echo "<td style='width:30%'>";
+      Dropdown::showYesNo('is_groups_restriction', $this->fields['is_groups_restriction'], -1, ['rand' => $rand]);
+      echo "</td></tr>";
 
       $rand = mt_rand();
       echo "<tr class='tab_bg_1'>";
@@ -406,7 +413,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $category = new ITILCategory();
       if ($category->getFromDB($itilcategories_id)) {
          $table = getTableForItemType(__CLASS__);
-         $query = "SELECT is_active FROM `$table` WHERE itilcategories_id = $itilcategories_id AND is_active = '1'";
+         $query = "SELECT is_active FROM `$table` WHERE itilcategories_id = $itilcategories_id AND is_active = '1' AND is_groups_restriction = '1'";
          $data = $DB->request($query);
          // A category rule exist for this ticket
          if (count($data)) {
@@ -675,6 +682,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          `is_recursive` TINYINT(1) NOT NULL DEFAULT '1',
          `is_incident` TINYINT(1) NOT NULL DEFAULT '1',
          `is_request` TINYINT(1) NOT NULL DEFAULT '1',
+         `is_groups_restriction` TINYINT(1) NOT NULL DEFAULT '0',
          PRIMARY KEY (`id`),
          KEY `entities_id` (`entities_id`),
          KEY `itilcategories_id` (`itilcategories_id`),
@@ -694,6 +702,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $migration->addField($table, 'view_all_lvl3', "TINYINT(1) NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
          $migration->addField($table, 'view_all_lvl4', "TINYINT(1) NOT NULL DEFAULT '0'",
+                              ['after' => 'itilcategories_id']);
+         $migration->migrationOneTable($table);
+      }
+
+      if (!$DB->fieldExists($table, 'is_groups_restriction')) {
+         $migration->addField($table, 'is_groups_restriction', "TINYINT(1) NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
          $migration->migrationOneTable($table);
       }
