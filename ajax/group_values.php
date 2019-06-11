@@ -13,19 +13,26 @@ if (! isset($_REQUEST['itilcategories_id'])) {
 
 $ticket_id = (isset($_REQUEST['ticket_id'])) ? $_REQUEST['ticket_id'] : 0;
 
+$canApplyFilter = PluginItilcategorygroupsCategory::canApplyFilter(
+   intval($_REQUEST['itilcategories_id'])
+);
+
 $condition = PluginItilcategorygroupsCategory::getSQLCondition(
    intval($ticket_id),
    intval($_REQUEST['itilcategories_id']),
    $_REQUEST['type']
 );
-if (empty($condition)) {
+
+if (! $canApplyFilter || empty($condition)) {
    $condition = [
       'glpi_groups.is_assign' => 1,
    ] + getEntitiesRestrictCriteria("", "entities_id", $_SESSION['glpiactive_entity'], 1);
 }
 
-$_POST['display_emptychoice'] = true;
-$_POST['itemtype']            = 'Group';
-$_POST['condition']           = Dropdown::addNewCondition($condition);
+if (! empty($condition)) {
+   $_POST['display_emptychoice'] = true;
+   $_POST['itemtype'] = 'Group';
+   $_POST['condition'] = Dropdown::addNewCondition($condition);
 
-require ("../../../ajax/getDropdownValue.php");
+   require "../../../ajax/getDropdownValue.php";
+}

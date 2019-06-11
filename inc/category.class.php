@@ -70,7 +70,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       Dropdown::show('ITILCategory', [
          'value' => $this->fields['itilcategories_id'],
          'rand' => $rand]);
-      echo "</td><td colspan='2'></td></tr>";
+      echo "</td>";
+
+      // Groups restriction
+      $rand = mt_rand();
+      echo "<td><label for='dropdown_is_groups_restriction$rand'>".__('Display only the groups on the next level')." :</label></td>";
+      echo "<td style='width:30%'>";
+      Dropdown::showYesNo('is_groups_restriction', $this->fields['is_groups_restriction'], -1, ['rand' => $rand]);
+      echo "</td></tr>";
 
       $rand = mt_rand();
       echo "<tr class='tab_bg_1'>";
@@ -255,7 +262,29 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             $params['condition'] = " AND `is_incident` = '1'";
          }
       }
-
+      // == CHECKS FOR LEVEL VISIBILITY ==
+      $level = 0;
+      $categoryGroup = new PluginItilcategorygroupsCategory_Group();
+      $table = getTableForItemType(get_class($categoryGroup));
+      // All groups assigned to the ticket
+      foreach ($ticket->getGroups(2) as $element) {
+         $groupsId = $element['groups_id'];
+         $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
+         if (!empty($data_level)) {
+            $level = $data_level > $level ? $data_level : $level;
+         }
+         // Don't display groups already assigned to the ticket in the dropdown
+         $params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
+      }
+      // No group assigned to the ticket
+      // Selects the level min that will be displayed
+      if ($level == 0) {
+         $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
+         $params['condition'] .= " AND cat_gr.level = '$level'";
+      } else {
+         $level_max = $level + 1;
+         $params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
+      }
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params, $type);
       $groups_id_toshow = []; //init
       if (!empty($found_groups)) {
@@ -358,6 +387,40 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
 
       return $groups;
+   }
+   /**
+    * Helper to make a database request and extract the first element
+    * @param string $query
+    * @param string $selector
+    * @return mixed
+    */
+   public static function getFirst($query, $selector) {
+      global $DB;
+      $data = $DB->request($query);
+      if (count($data)) {
+         $data = json_decode("[" . $data->next()["$selector"] . "]", true);
+         return array_shift($data);
+      }
+      return null;
+   }
+   /**
+    * Method used to check if the default filter must be applied
+    * @param string $itilcategories_id
+    * @return bool
+    */
+   public static function canApplyFilter($itilcategories_id) {
+      global $DB;
+      $category = new ITILCategory();
+      if ($category->getFromDB($itilcategories_id)) {
+         $table = getTableForItemType(__CLASS__);
+         $query = "SELECT is_active FROM `$table` WHERE itilcategories_id = $itilcategories_id AND is_active = '1' AND is_groups_restriction = '1'";
+         $data = $DB->request($query);
+         // A category rule exist for this ticket
+         if (count($data)) {
+            return true;
+         }
+      }
+      return false;
    }
 
 
@@ -619,6 +682,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          `is_recursive` TINYINT(1) NOT NULL DEFAULT '1',
          `is_incident` TINYINT(1) NOT NULL DEFAULT '1',
          `is_request` TINYINT(1) NOT NULL DEFAULT '1',
+         `is_groups_restriction` TINYINT(1) NOT NULL DEFAULT '0',
          PRIMARY KEY (`id`),
          KEY `entities_id` (`entities_id`),
          KEY `itilcategories_id` (`itilcategories_id`),
@@ -642,6 +706,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          $migration->migrationOneTable($table);
       }
 
+      if (!$DB->fieldExists($table, 'is_groups_restriction')) {
+         $migration->addField($table, 'is_groups_restriction', "TINYINT(1) NOT NULL DEFAULT '0'",
+                              ['after' => 'itilcategories_id']);
+         $migration->migrationOneTable($table);
+      }
+
       return true;
    }
 
@@ -652,3 +722,4 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       return true;
    }
 }
+
