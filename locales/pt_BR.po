@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# polar147 <andrei_simoni@hotmail.com>, 2017
+# Andrei Bernardo Simoni <andrei_simoni@hotmail.com>, 2017
+# Rui Melo <viper5000pt@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-22 14:52+0000\n"
-"PO-Revision-Date: 2018-06-22 14:53+0000\n"
-"Last-Translator: Cédric Anne\n"
+"POT-Creation-Date: 2019-11-12 09:40+0000\n"
+"PO-Revision-Date: 2019-02-26 14:56+0000\n"
+"Last-Translator: Rui Melo <viper5000pt@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,33 +21,33 @@ msgstr ""
 
 #: hook.php:77
 msgid "Level "
-msgstr ""
+msgstr "Nível"
 
-#: hook.php:95 inc/category.class.php:97 inc/category.class.php:459
+#: hook.php:95 inc/category.class.php:104 inc/category.class.php:525
 #: inc/group_level.class.php:92
 msgid "Level 1"
 msgstr "Nível 1"
 
-#: hook.php:96 inc/category.class.php:101 inc/category.class.php:483
+#: hook.php:96 inc/category.class.php:108 inc/category.class.php:549
 #: inc/group_level.class.php:93
 msgid "Level 2"
 msgstr "Nível 2"
 
-#: hook.php:97 inc/category.class.php:106 inc/category.class.php:507
+#: hook.php:97 inc/category.class.php:113 inc/category.class.php:573
 #: inc/group_level.class.php:94
 msgid "Level 3"
 msgstr "Nível 3"
 
-#: hook.php:98 inc/category.class.php:110 inc/category.class.php:531
+#: hook.php:98 inc/category.class.php:117 inc/category.class.php:597
 #: inc/group_level.class.php:95
 msgid "Level 4"
 msgstr "Nível 4"
 
-#: inc/category.class.php:42 inc/category.class.php:385 inc/menu.class.php:6
+#: inc/category.class.php:42 inc/category.class.php:451 inc/menu.class.php:6
 msgid "Link ItilCategory - Groups"
 msgstr "Link ItilCategory - Grupos"
 
-#: inc/category.class.php:175
+#: inc/category.class.php:182
 msgid "A link with this category already exists"
 msgstr "Já existe um link com esta categoria"
 
