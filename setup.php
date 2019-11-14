@@ -77,7 +77,7 @@ function plugin_version_itilcategorygroups() {
       'name'           => __('ItilCategory Groups', 'itilcategorygroups'),
       'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
       'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
-      'homepage'       => 'http://www.teclib.com',
+      'homepage'       => 'https://github.com/pluginsGLPI/itilcategorygroups',
       'requirements'   => [
          'glpi' => [
             'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
