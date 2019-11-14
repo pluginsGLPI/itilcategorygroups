@@ -42,6 +42,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       return __('Link ItilCategory - Groups', 'itilcategorygroups');
    }
 
+   static function canCreate() {
+      return static::canUpdate();
+   }
+
+   static function canPurge() {
+      return static::canUpdate();
+   }
+
    function showForm($id, $options = []) {
 
       if (! $this->can($id, READ)) {
