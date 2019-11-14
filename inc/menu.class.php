@@ -14,7 +14,8 @@ class PluginItilcategorygroupsMenu extends CommonGLPI {
       global $CFG_GLPI;
       $menu          = [];
       $menu['title'] = self::getMenuName();
-      $menu['page']  = '/plugins/itilcategorygroups/front/category.php';
+      $menu['page']  = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.php';
+      $menu['icon']  = PluginItilcategorygroupsCategory::getIcon();
 
       if (Session::haveRight('config', READ)) {
 

@@ -4,8 +4,9 @@ include ("../../../inc/includes.php");
 //change mimetype
 header("Content-type: application/javascript");
 
+$web_dir = Plugin::getWebDir('itilcategorygroups');
 $JS = <<<JAVASCRIPT
-var groups_url = '{$CFG_GLPI['root_doc']}/plugins/itilcategorygroups/ajax/group_values.php';
+var groups_url = '{$web_dir}/ajax/group_values.php';
 var tickets_id = getUrlParameter('id');
 
 var triggerNewTicket = function() {
