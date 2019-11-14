@@ -461,6 +461,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          'displaytype'      => 'text',
          'injectable'       => true,
          'massiveaction'    => false,
+         'autocomplete'     => true,
       ];
 
       $tab[] = [
