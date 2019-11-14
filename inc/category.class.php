@@ -144,7 +144,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
             )
             AND level = $level");
-         while ($data_val = $DB->fetch_assoc($res_val)) {
+         while ($data_val = $DB->fetchAssoc($res_val)) {
             $values[] = $data_val['groups_id'];
          }
       }
@@ -167,7 +167,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       echo "<span id='select_level_$level'>";
       echo "<select name='groups_id_level".$level."[]' id='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
-      while ($data_gr = $DB->fetch_assoc($res_gr)) {
+      while ($data_gr = $DB->fetchAssoc($res_gr)) {
          if (in_array($data_gr['id'], $values)) {
             $selected = "selected";
          } else {
@@ -443,7 +443,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                         AND gr.is_assign
                         OR gl.lvl IS NULL");
       $groups_id = [];
-      while ($row = $DB->fetch_assoc($res)) {
+      while ($row = $DB->fetchAssoc($res)) {
          $groups_id[$row['id']] = $row['id'];
       }
 
@@ -729,6 +729,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $table = getTableForItemType(__CLASS__);
       $DB->query("DROP TABLE IF EXISTS`$table`");
       return true;
+   }
+
+   static function getIcon() {
+      return "fas fa-users";
    }
 }
 

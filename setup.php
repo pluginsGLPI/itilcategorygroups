@@ -28,12 +28,12 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.3.1');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.4.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.4");
+define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.5");
 // Maximum GLPI version, exclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.5");
+define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.6");
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
@@ -62,7 +62,7 @@ function plugin_init_itilcategorygroups() {
       }
       if (Session::haveRight('config', UPDATE)) {
          $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
-            = '/plugins/itilcategorygroups/front/category.form.php';
+            = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.form.php';
       }
 
       $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/function.js',
@@ -85,33 +85,4 @@ function plugin_version_itilcategorygroups() {
           ]
        ]
    ];
-}
-
-// Optional : check prerequisites before install : may print errors or add to message after redirect
-function plugin_itilcategorygroups_check_prerequisites() {
-
-   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
-   if (!method_exists('Plugin', 'checkGlpiVersion')) {
-      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
-      $matchMinGlpiReq = version_compare($version, PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI, '>=');
-      $matchMaxGlpiReq = version_compare($version, PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI, '<');
-
-      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
-         echo vsprintf(
-            'This plugin requires GLPI >= %1$s and < %2$s.',
-            [
-               PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
-               PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
-            ]
-         );
-         return false;
-      }
-   }
-
-   return true;
-}
-
-// Uninstall process for plugin : need to return true if succeeded : may display messages or add to message after redirect
-function plugin_itilcategorygroups_check_config() {
-      return true;
 }
