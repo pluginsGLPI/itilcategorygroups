@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 09:40+0000\n"
+"POT-Creation-Date: 2020-02-07 13:12+0000\n"
 "PO-Revision-Date: 2019-02-26 14:19+0000\n"
 "Last-Translator: Rui Melo <viper5000pt@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/pt_PT/)\n"
@@ -22,31 +22,31 @@ msgstr ""
 msgid "Level "
 msgstr "Nível"
 
-#: hook.php:95 inc/category.class.php:104 inc/category.class.php:525
+#: hook.php:95 inc/category.class.php:112 inc/category.class.php:534
 #: inc/group_level.class.php:92
 msgid "Level 1"
 msgstr "Nível 1"
 
-#: hook.php:96 inc/category.class.php:108 inc/category.class.php:549
+#: hook.php:96 inc/category.class.php:116 inc/category.class.php:558
 #: inc/group_level.class.php:93
 msgid "Level 2"
 msgstr "Nível 2"
 
-#: hook.php:97 inc/category.class.php:113 inc/category.class.php:573
+#: hook.php:97 inc/category.class.php:121 inc/category.class.php:582
 #: inc/group_level.class.php:94
 msgid "Level 3"
 msgstr "Nível 3"
 
-#: hook.php:98 inc/category.class.php:117 inc/category.class.php:597
+#: hook.php:98 inc/category.class.php:125 inc/category.class.php:606
 #: inc/group_level.class.php:95
 msgid "Level 4"
 msgstr "Nível 4"
 
-#: inc/category.class.php:42 inc/category.class.php:451 inc/menu.class.php:6
+#: inc/category.class.php:42 inc/category.class.php:459 inc/menu.class.php:6
 msgid "Link ItilCategory - Groups"
 msgstr "Link da Categoria - Grupos"
 
-#: inc/category.class.php:182
+#: inc/category.class.php:190
 msgid "A link with this category already exists"
 msgstr "O link nesta categoria já existe"
 
