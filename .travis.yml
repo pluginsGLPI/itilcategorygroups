@@ -9,7 +9,7 @@ before_script:
   - composer install --optimize-autoloader --prefer-dist --no-interaction --no-progress --no-suggest
 
 script:
-  - vendor/bin/robo --no-interaction code:cs
+  - vendor/bin/robo --no-interaction code:cs --strict
 
 matrix:
   allow_failures:
