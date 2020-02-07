@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.3.0');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.3.1');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.4");
@@ -77,7 +77,7 @@ function plugin_version_itilcategorygroups() {
       'name'           => __('ItilCategory Groups', 'itilcategorygroups'),
       'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
       'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
-      'homepage'       => 'http://www.teclib.com',
+      'homepage'       => 'https://github.com/pluginsGLPI/itilcategorygroups',
       'requirements'   => [
          'glpi' => [
             'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,

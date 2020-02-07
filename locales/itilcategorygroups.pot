@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-28 08:34+0000\n"
+"POT-Creation-Date: 2020-02-07 13:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,31 +21,31 @@ msgstr ""
 msgid "Level "
 msgstr ""
 
-#: hook.php:95 inc/category.class.php:97 inc/category.class.php:459
+#: hook.php:95 inc/category.class.php:112 inc/category.class.php:534
 #: inc/group_level.class.php:92
 msgid "Level 1"
 msgstr ""
 
-#: hook.php:96 inc/category.class.php:101 inc/category.class.php:483
+#: hook.php:96 inc/category.class.php:116 inc/category.class.php:558
 #: inc/group_level.class.php:93
 msgid "Level 2"
 msgstr ""
 
-#: hook.php:97 inc/category.class.php:106 inc/category.class.php:507
+#: hook.php:97 inc/category.class.php:121 inc/category.class.php:582
 #: inc/group_level.class.php:94
 msgid "Level 3"
 msgstr ""
 
-#: hook.php:98 inc/category.class.php:110 inc/category.class.php:531
+#: hook.php:98 inc/category.class.php:125 inc/category.class.php:606
 #: inc/group_level.class.php:95
 msgid "Level 4"
 msgstr ""
 
-#: inc/category.class.php:42 inc/category.class.php:385 inc/menu.class.php:6
+#: inc/category.class.php:42 inc/category.class.php:459 inc/menu.class.php:6
 msgid "Link ItilCategory - Groups"
 msgstr ""
 
-#: inc/category.class.php:175
+#: inc/category.class.php:190
 msgid "A link with this category already exists"
 msgstr ""
 
