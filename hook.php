@@ -29,12 +29,14 @@
  ---------------------------------------------------------------------- */
 
 function plugin_itilcategorygroups_install() {
+   $dir = Plugin::getPhpDir('itilcategorygroups');
+
    $migration = new Migration("0.84");
 
    //order is important for install
-   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category.class.php");
-   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
-   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/group_level.class.php");
+   include_once($dir . "/inc/category.class.php");
+   include_once($dir . "/inc/category_group.class.php");
+   include_once($dir . "/inc/group_level.class.php");
    PluginItilcategorygroupsCategory::install($migration);
    PluginItilcategorygroupsCategory_Group::install($migration);
    PluginItilcategorygroupsGroup_Level::install($migration);
@@ -42,9 +44,11 @@ function plugin_itilcategorygroups_install() {
 }
 
 function plugin_itilcategorygroups_uninstall() {
-   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category_group.class.php");
-   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/category.class.php");
-   include_once(GLPI_ROOT."/plugins/itilcategorygroups/inc/group_level.class.php");
+   $dir = Plugin::getPhpDir('itilcategorygroups');
+
+   include_once($dir . "/inc/category_group.class.php");
+   include_once($dir . "/inc/category.class.php");
+   include_once($dir . "/inc/group_level.class.php");
    PluginItilcategorygroupsCategory_Group::uninstall();
    PluginItilcategorygroupsCategory::uninstall();
    PluginItilcategorygroupsGroup_Level::uninstall();

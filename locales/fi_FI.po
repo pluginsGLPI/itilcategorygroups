@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 13:12+0000\n"
+"POT-Creation-Date: 2020-07-03 19:16+0000\n"
 "PO-Revision-Date: 2018-11-06 04:17+0000\n"
 "Last-Translator: Markku Vepsä\n"
 "Language-Team: Finnish (Finland) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/fi_FI/)\n"
@@ -18,41 +18,41 @@ msgstr ""
 "Language: fi_FI\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:77
+#: hook.php:81
 msgid "Level "
 msgstr "Taso"
 
-#: hook.php:95 inc/category.class.php:112 inc/category.class.php:534
+#: hook.php:99 inc/category.class.php:112 inc/category.class.php:534
 #: inc/group_level.class.php:92
 msgid "Level 1"
 msgstr "Taso 1"
 
-#: hook.php:96 inc/category.class.php:116 inc/category.class.php:558
+#: hook.php:100 inc/category.class.php:116 inc/category.class.php:558
 #: inc/group_level.class.php:93
 msgid "Level 2"
 msgstr "Taso 2"
 
-#: hook.php:97 inc/category.class.php:121 inc/category.class.php:582
+#: hook.php:101 inc/category.class.php:121 inc/category.class.php:582
 #: inc/group_level.class.php:94
 msgid "Level 3"
 msgstr "Taso 3"
 
-#: hook.php:98 inc/category.class.php:125 inc/category.class.php:606
+#: hook.php:102 inc/category.class.php:125 inc/category.class.php:606
 #: inc/group_level.class.php:95
 msgid "Level 4"
 msgstr "Taso 4"
 
-#: inc/category.class.php:42 inc/category.class.php:459 inc/menu.class.php:6
+#: inc/menu.class.php:6 inc/category.class.php:42 inc/category.class.php:459
 msgid "Link ItilCategory - Groups"
 msgstr "Linkki Tikettikategoria - Ryhmät"
-
-#: inc/category.class.php:190
-msgid "A link with this category already exists"
-msgstr "Linkki tähän kategoriaan on jo olemassa"
 
 #: inc/menu.class.php:10 inc/group_level.class.php:50 setup.php:77
 msgid "ItilCategory Groups"
 msgstr "Tikettikategoria ryhmät"
+
+#: inc/category.class.php:190
+msgid "A link with this category already exists"
+msgstr "Linkki tähän kategoriaan on jo olemassa"
 
 #: inc/group_level.class.php:14 inc/group_level.class.php:87
 #: inc/group_level.class.php:121
