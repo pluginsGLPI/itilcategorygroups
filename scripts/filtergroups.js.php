@@ -4,6 +4,8 @@ include ("../../../inc/includes.php");
 //change mimetype
 header("Content-type: application/javascript");
 
+$idor_token = Session::getNewIDORToken('Group');
+
 $web_dir = Plugin::getWebDir('itilcategorygroups');
 $JS = <<<JAVASCRIPT
 var groups_url = '{$web_dir}/ajax/group_values.php';
@@ -69,7 +71,8 @@ var redefineDropdown = function (id, url, tickets_id, type) {
                ticket_id:         tickets_id,
                type : type,
                itilcategories_id: getItilcategories_id(),
-               searchText: params.term
+               searchText: params.term,
+               _idor_token: "{$idor_token}"
             };
          },
          results: function (data, page) {
