@@ -27,12 +27,14 @@ var triggerupdateTicket = function() {
    if (getItilcategories_id() == 0) {
       return;
    } else {
-      checkDOMChange("select[name='_itil_assign[groups_id]']", function() {
-         var assign_select_dom_id = $("select[name='_itil_assign[groups_id]']")[0].id;
-         var type = $("select[id^='dropdown_type']").val();
+      setTimeout( function() {
+         $("select[name='_itil_assign[groups_id]']").each(function() {
+            var assign_select_dom_id = $(this).attr('id');
+            var type = $("select[id^='dropdown_type']").val();
 
-         redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);
-      });
+            redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);
+         });
+      }, 100);
    }
 };
 
@@ -45,7 +47,7 @@ var triggerAll = function() {
             && settings.data.indexOf("group") > 0
                && settings.data.indexOf("assign") > 0
             ) {
-          triggerupdateTicket();
+            triggerupdateTicket();
          }
       });
    }
