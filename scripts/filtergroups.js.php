@@ -28,7 +28,7 @@ var triggerupdateTicket = function() {
       return;
    } else {
       setTimeout( function() {
-         $("select[name='_itil_assign[groups_id]']").each(function() {
+         $("select[name='_itil_assign[groups_id]']:not(.plugin_redefined)").each(function() {
             var assign_select_dom_id = $(this).attr('id');
             var type = $("select[id^='dropdown_type']").val();
 
@@ -58,7 +58,7 @@ var redefineDropdown = function (id, url, tickets_id, type) {
       var templateResult = formatResult;
    }
 
-   $('#' + id).select2({
+   $('#' + id).addClass('plugin_redefined').select2({
       width:                   '80%',
       minimumInputLength:      0,
       quietMillis:             100,
