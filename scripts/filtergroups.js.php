@@ -27,14 +27,12 @@ var triggerupdateTicket = function() {
    if (getItilcategories_id() == 0) {
       return;
    } else {
-      setTimeout( function() {
-         $("select[name='_itil_assign[groups_id]']:not(.plugin_redefined)").each(function() {
-            var assign_select_dom_id = $(this).attr('id');
-            var type = $("select[id^='dropdown_type']").val();
+      $("select[name='_itil_assign[groups_id]']:not(.plugin_redefined)").each(function() {
+         var assign_select_dom_id = $(this).attr('id');
+         var type = $("select[id^='dropdown_type']").val();
 
-            redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);
-         });
-      }, 100);
+         redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);
+      });
    }
 };
 
@@ -42,7 +40,7 @@ var triggerAll = function() {
    if (tickets_id == 'Not found') {
       triggerNewTicket();
    } else {
-      $(document).ajaxSend(function( event, jqxhr, settings ) {
+      $(document).ajaxComplete(function( event, jqxhr, settings ) {
          if (settings.url.indexOf("dropdownItilActors.php") > 0
             && settings.data.indexOf("group") > 0
                && settings.data.indexOf("assign") > 0
