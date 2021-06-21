@@ -45,7 +45,9 @@ var triggerAll = function() {
             && settings.data.indexOf("group") > 0
                && settings.data.indexOf("assign") > 0
             ) {
-            triggerupdateTicket();
+            setTimeout(() => {
+               triggerupdateTicket();
+            }, 50);
          }
       });
    }
