@@ -7,23 +7,24 @@ header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 Session::checkLoginUser();
 
-if (! isset($_REQUEST['itilcategories_id'])) {
-   exit;
+$tickets_id = (int) $_REQUEST['ticket_id'] ?? 0;
+$ticket = new Ticket;
+$ticket->getFromDB($tickets_id);
+
+if (!isset($_REQUEST['itilcategories_id'])) {
+   $_REQUEST['itilcategories_id'] = $ticket->fields['itilcategories_id'];
+}
+if (!isset($_REQUEST['type'])) {
+   $_REQUEST['type'] = $ticket->fields['type'];
 }
 
-$ticket_id = (isset($_REQUEST['ticket_id'])) ? $_REQUEST['ticket_id'] : 0;
-
-$canApplyFilter = PluginItilcategorygroupsCategory::canApplyFilter(
-   intval($_REQUEST['itilcategories_id'])
-);
-
 $condition = PluginItilcategorygroupsCategory::getSQLCondition(
-   intval($ticket_id),
+   $tickets_id,
    intval($_REQUEST['itilcategories_id']),
    $_REQUEST['type']
 );
 
-if (! $canApplyFilter || empty($condition)) {
+if (empty($condition)) {
    $condition = [
       'glpi_groups.is_assign' => 1,
    ] + getEntitiesRestrictCriteria("", "entities_id", $_SESSION['glpiactive_entity'], 1);
