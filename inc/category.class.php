@@ -82,7 +82,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       // Groups restriction
       $rand = mt_rand();
-      echo "<td><label for='dropdown_is_groups_restriction$rand'>".__('Display only the groups on the next level')." :</label></td>";
+      echo "<td><label for='dropdown_is_groups_restriction$rand'>".__('Display only the groups of the next level')." :</label></td>";
       echo "<td style='width:30%'>";
       Dropdown::showYesNo('is_groups_restriction', $this->fields['is_groups_restriction'], -1, ['rand' => $rand]);
       echo "</td></tr>";
@@ -270,29 +270,37 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             $params['condition'] = " AND `is_incident` = '1'";
          }
       }
-      // == CHECKS FOR LEVEL VISIBILITY ==
-      $level = 0;
-      $categoryGroup = new PluginItilcategorygroupsCategory_Group();
-      $table = getTableForItemType(get_class($categoryGroup));
-      // All groups assigned to the ticket
-      foreach ($ticket->getGroups(2) as $element) {
-         $groupsId = $element['groups_id'];
-         $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
-         if (!empty($data_level)) {
-            $level = $data_level > $level ? $data_level : $level;
+
+      $current_setup = new self;
+      $current_setup->getFromDBByCrit([
+         'itilcategories_id' => (int) $itilcategories_id
+      ]);
+      if ($current_setup->fields['is_groups_restriction']) {
+         // == CHECKS FOR LEVEL VISIBILITY ==
+         $level = 0;
+         $categoryGroup = new PluginItilcategorygroupsCategory_Group();
+         $table = getTableForItemType(get_class($categoryGroup));
+         // All groups assigned to the ticket
+         foreach ($ticket->getGroups(2) as $element) {
+            $groupsId = $element['groups_id'];
+            $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
+            if (!empty($data_level)) {
+               $level = $data_level > $level ? $data_level : $level;
+            }
+            // Don't display groups already assigned to the ticket in the dropdown
+            $params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
          }
-         // Don't display groups already assigned to the ticket in the dropdown
-         $params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
+         // No group assigned to the ticket
+         // Selects the level min that will be displayed
+         if ($level == 0) {
+            $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
+            $params['condition'] .= " AND cat_gr.level = '$level'";
+         } else {
+            $level_max = $level + 1;
+            $params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
+         }
       }
-      // No group assigned to the ticket
-      // Selects the level min that will be displayed
-      if ($level == 0) {
-         $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
-         $params['condition'] .= " AND cat_gr.level = '$level'";
-      } else {
-         $level_max = $level + 1;
-         $params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
-      }
+
       $found_groups = self::getGroupsForCategory($itilcategories_id, $params, $type);
       $groups_id_toshow = []; //init
       if (!empty($found_groups)) {

@@ -27,8 +27,8 @@ var triggerupdateTicket = function() {
    if (getItilcategories_id() == 0) {
       return;
    } else {
-      checkDOMChange("select[name='_itil_assign[groups_id]']", function() {
-         var assign_select_dom_id = $("select[name='_itil_assign[groups_id]']")[0].id;
+      $("select[name='_itil_assign[groups_id]']:not(.plugin_redefined)").each(function() {
+         var assign_select_dom_id = $(this).attr('id');
          var type = $("select[id^='dropdown_type']").val();
 
          redefineDropdown(assign_select_dom_id, groups_url, tickets_id, type);
@@ -40,12 +40,14 @@ var triggerAll = function() {
    if (tickets_id == 'Not found') {
       triggerNewTicket();
    } else {
-      $(document).ajaxSend(function( event, jqxhr, settings ) {
+      $(document).ajaxComplete(function( event, jqxhr, settings ) {
          if (settings.url.indexOf("dropdownItilActors.php") > 0
             && settings.data.indexOf("group") > 0
                && settings.data.indexOf("assign") > 0
             ) {
-          triggerupdateTicket();
+            setTimeout(() => {
+               triggerupdateTicket();
+            }, 50);
          }
       });
    }
@@ -56,7 +58,7 @@ var redefineDropdown = function (id, url, tickets_id, type) {
       var templateResult = formatResult;
    }
 
-   $('#' + id).select2({
+   $('#' + id).addClass('plugin_redefined').select2({
       width:                   '80%',
       minimumInputLength:      0,
       quietMillis:             100,
