@@ -28,12 +28,14 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Plugin\Hooks;
+
 define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.4.2');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "9.5");
+define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "10.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "9.6");
+define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "10.0.99");
 
 function plugin_init_itilcategorygroups() {
    global $PLUGIN_HOOKS;
@@ -65,9 +67,11 @@ function plugin_init_itilcategorygroups() {
             = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.form.php';
       }
 
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/function.js',
-                                                               'scripts/filtergroups.js.php',
-                                                               'scripts/multiple_group.js'];
+      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/multiple_group.js'];
+
+      $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = [
+         'PluginItilcategorygroupsCategory', 'filterActors',
+      ];
    }
 }
 

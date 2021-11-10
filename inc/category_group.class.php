@@ -35,21 +35,25 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType(__CLASS__);
       if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-         `id`                                      INT(11)    NOT NULL AUTO_INCREMENT,
-         `plugin_itilcategorygroups_categories_id` INT(11)    NOT NULL DEFAULT '0',
-         `level`                                   TINYINT(1) NOT NULL DEFAULT '0',
-         `itilcategories_id`                       INT(11)    NOT NULL DEFAULT '0',
-         `groups_id`                               INT(11)    NOT NULL DEFAULT '0',
+         `id`                                      INT     {$default_key_sign} NOT NULL AUTO_INCREMENT,
+         `plugin_itilcategorygroups_categories_id` INT     {$default_key_sign} NOT NULL DEFAULT '0',
+         `level`                                   TINYINT NOT NULL DEFAULT '0',
+         `itilcategories_id`                       INT     {$default_key_sign} NOT NULL DEFAULT '0',
+         `groups_id`                               INT     {$default_key_sign} NOT NULL DEFAULT '0',
          PRIMARY KEY (`id`),
          UNIQUE KEY `group_lvl_unicity` (plugin_itilcategorygroups_categories_id, level, groups_id),
          KEY `plugin_itilcategorygroups_categories_id` (`plugin_itilcategorygroups_categories_id`),
          KEY `level`                                   (`level`),
          KEY `itilcategories_id`                       (`itilcategories_id`),
          KEY `groups_id`                               (`groups_id`)
-         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;";
+         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->query($query);
       }
 

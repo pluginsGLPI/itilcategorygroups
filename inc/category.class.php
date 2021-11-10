@@ -62,7 +62,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       echo "<tr class='tab_bg_1'>";
       echo "<td><label>".__('Name')." :</label></td>";
       echo "<td style='width:30%'>";
-      echo Html::autocompletionTextField($this, "name");
+      echo Html::input(
+         'name',
+         [
+            'value' => $this->fields['name'],
+         ]
+      );
       echo "</td>";
 
       $rand = mt_rand();
@@ -246,98 +251,123 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    }
 
-   /**
-    * get SQL condition for filtered dropdown assign groups
-    * @param int $tickets_id
-    * @param int $itilcategories_id
-    * @return string
-    */
-   static function getSQLCondition($tickets_id, $itilcategories_id, $type) {
-      $ticket = new Ticket();
-      $group  = new Group();
-      $params = ['entities_id'  => $_SESSION['glpiactive_entity'],
-                 'is_recursive' => 1];
 
-      if (!empty($tickets_id) && $ticket->getFromDB($tickets_id)) {
-         // == UPDATE EXISTING TICKET ==
-         $params['entities_id'] = $ticket->fields['entities_id'];
-         $params['condition'] = " AND ".($ticket->fields['type'] == Ticket::DEMAND_TYPE?
-            "`is_request`='1'" : "`is_incident`='1'");
-      } else {
-         if ($type == Ticket::DEMAND_TYPE) {
-            $params['condition'] = " AND `is_request` ='1'";
-         } else {
-            $params['condition'] = " AND `is_incident` = '1'";
-         }
-      }
+    static function filterActors(array $params = []): array
+    {
+        $itemtype = $params['params']['itemtype'];
+        $items_id = $params['params']['items_id'];
 
-      $current_setup = new self;
-      $current_setup->getFromDBByCrit([
-         'itilcategories_id' => (int) $itilcategories_id
-      ]);
-      if ($current_setup->fields['is_groups_restriction']) {
-         // == CHECKS FOR LEVEL VISIBILITY ==
-         $level = 0;
-         $categoryGroup = new PluginItilcategorygroupsCategory_Group();
-         $table = getTableForItemType(get_class($categoryGroup));
-         // All groups assigned to the ticket
-         foreach ($ticket->getGroups(2) as $element) {
-            $groupsId = $element['groups_id'];
-            $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
-            if (!empty($data_level)) {
-               $level = $data_level > $level ? $data_level : $level;
+        if ($itemtype == 'Ticket' && $params['params']['actortype'] == 'assign') {
+            $ticket = new Ticket;
+            $group  = new Group();
+
+            $group_params = [
+                'entities_id'  => $_SESSION['glpiactive_entity'],
+                'is_recursive' => 1
+            ];
+
+            $type = $params['params']['item']['type'] ?? Ticket::INCIDENT_TYPE;
+
+            if (!empty($items_id) && $ticket->getFromDB($items_id)) {
+                // == UPDATE EXISTING TICKET ==
+                $group_params['entities_id'] = $ticket->fields['entities_id'];
+                $group_params['condition'] = " AND " . ($ticket->fields['type'] == Ticket::DEMAND_TYPE ?
+                    "`is_request`='1'" : "`is_incident`='1'");
+            } else {
+                if ($type == Ticket::DEMAND_TYPE) {
+                    $group_params['condition'] = " AND `is_request` ='1'";
+                } else {
+                    $group_params['condition'] = " AND `is_incident` = '1'";
+                }
             }
-            // Don't display groups already assigned to the ticket in the dropdown
-            $params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
-         }
-         // No group assigned to the ticket
-         // Selects the level min that will be displayed
-         if ($level == 0) {
-            $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
-            $params['condition'] .= " AND cat_gr.level = '$level'";
-         } else {
-            $level_max = $level + 1;
-            $params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
-         }
-      }
 
-      $found_groups = self::getGroupsForCategory($itilcategories_id, $params, $type);
-      $groups_id_toshow = []; //init
-      if (!empty($found_groups)) {
-         for ($lvl=1; $lvl <= 4; $lvl++) {
-            if (isset($found_groups['groups_id_level'.$lvl])) {
-               if ($found_groups['groups_id_level'.$lvl] === "all") {
-                  foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $params['entities_id']) as $groups_id) {
-                     if ($group->getFromDB($groups_id)) {
-                        $groups_id_toshow[] = $group->getID();
-                     }
-                  }
+            $itilcategories_id = $params['params']['item']['itilcategories_id'] ?? $ticket->fields['itilcategories_id'];
 
-               } else {
-                  foreach ($found_groups['groups_id_level'.$lvl] as $groups_id) {
-                     if (countElementsInTableForEntity("glpi_groups", $ticket->getEntityID(),
-                                                       ['id' => $groups_id]) > 0) {
-                        $group->getFromDB($groups_id);
-                        $groups_id_toshow[] = $group->getID();
-                     }
-                  }
-               }
+            $current_setup = new self;
+            $current_setup->getFromDBByCrit([
+                'itilcategories_id' => $itilcategories_id
+            ]);
+
+            if ($current_setup->fields['is_groups_restriction'] ?? false) {
+                // == CHECKS FOR LEVEL VISIBILITY ==
+                $level = 0;
+                $categoryGroup = new PluginItilcategorygroupsCategory_Group();
+                $table = getTableForItemType(get_class($categoryGroup));
+                // All groups assigned to the ticket
+                foreach ($ticket->getGroups(2) as $element) {
+                    $groupsId = $element['groups_id'];
+                    $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
+                    if (!empty($data_level)) {
+                        $level = $data_level > $level ? $data_level : $level;
+                    }
+                    // Don't display groups already assigned to the ticket in the dropdown
+                    $group_params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
+                }
+                // No group assigned to the ticket
+                // Selects the level min that will be displayed
+                if ($level == 0) {
+                    $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
+                    $group_params['condition'] .= " AND cat_gr.level = '$level'";
+                } else {
+                    $level_max = $level + 1;
+                    $group_params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
+                }
             }
-         }
-      }
 
-      $condition = [];
-      if (count($groups_id_toshow) > 0) {
-         // transform found groups (2 dimensions) in a flat array
-         $groups_id_toshow_flat = [];
-         array_walk_recursive($groups_id_toshow, function($v, $k) use(&$groups_id_toshow_flat) {
-            array_push($groups_id_toshow_flat, $v);
-         });
+            $found_groups = self::getGroupsForCategory($itilcategories_id, $group_params, $type);
+            $groups_id_toshow = []; //init
+            if (!empty($found_groups)) {
+                for ($lvl = 1; $lvl <= 4; $lvl++) {
+                    if (isset($found_groups['groups_id_level' . $lvl])) {
+                        if ($found_groups['groups_id_level' . $lvl] === "all") {
+                            foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $group_params['entities_id']) as $groups_id) {
+                                if ($group->getFromDB($groups_id)) {
+                                    $groups_id_toshow[] = $group->getID();
+                                }
+                            }
+                        } else {
+                            foreach ($found_groups['groups_id_level' . $lvl] as $groups_id) {
+                                if (countElementsInTableForEntity(
+                                    "glpi_groups",
+                                    $ticket->getEntityID(),
+                                    ['id' => $groups_id]
+                                ) > 0) {
+                                    $group->getFromDB($groups_id);
+                                    $groups_id_toshow[] = $group->getID();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-         $condition['id'] = $groups_id_toshow_flat;
-      }
-      return $condition;
-   }
+            foreach ($params['actors'] as $index => &$actor) {
+                //remove groups in children nodes
+                if (isset($actor['children'])) {
+                    foreach ($actor['children'] as $index_child => &$child) {
+                        if ($child['itemtype'] == "Group" && !in_array($child['items_id'], $groups_id_toshow)) {
+                            unset($actor['children'][$index_child]);
+                        }
+                    }
+
+                    if (count($actor['children']) > 0) {
+                        // reindex correctly children (to avoid select2 fails)
+                        $actor['children'] = array_values($actor['children']);
+                    } else {
+                        // otherwise remove empty parent
+                        unset($params['actors'][$index]);
+                    }
+                } else {
+                    // remove direct groups (don't sure this exists)
+                    if ($actor['itemtype'] == "Group" && !in_array($actor['items_id'], $groups_id_toshow)) {
+                        unset($params['actors'][$index]);
+                    }
+                }
+            }
+        }
+
+        return $params;
+    }
 
    /**
     * get groups for category
@@ -414,7 +444,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       global $DB;
       $data = $DB->request($query);
       if (count($data)) {
-         $data = json_decode("[" . $data->next()["$selector"] . "]", true);
+         $data = json_decode("[" . $data->current()["$selector"] . "]", true);
          return array_shift($data);
       }
       return null;
@@ -676,6 +706,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType(__CLASS__);
 
       if ($DB->tableExists("glpi_plugin_itilcategorygroups_categories_groups")
@@ -685,21 +719,21 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-         `id` INT(11) NOT NULL AUTO_INCREMENT,
-         `is_active` TINYINT(1) NOT NULL DEFAULT '0',
-         `name` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
-         `comment` TEXT COLLATE utf8_unicode_ci,
+         `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+         `is_active` TINYINT NOT NULL DEFAULT '0',
+         `name` VARCHAR(255) DEFAULT '',
+         `comment` TEXT,
          `date_mod` DATE default NULL,
-         `itilcategories_id` INT(11) NOT NULL DEFAULT '0',
-         `view_all_lvl1` TINYINT(1) NOT NULL DEFAULT '0',
-         `view_all_lvl2` TINYINT(1) NOT NULL DEFAULT '0',
-         `view_all_lvl3` TINYINT(1) NOT NULL DEFAULT '0',
-         `view_all_lvl4` TINYINT(1) NOT NULL DEFAULT '0',
-         `entities_id` INT(11) NOT NULL DEFAULT '0',
-         `is_recursive` TINYINT(1) NOT NULL DEFAULT '1',
-         `is_incident` TINYINT(1) NOT NULL DEFAULT '1',
-         `is_request` TINYINT(1) NOT NULL DEFAULT '1',
-         `is_groups_restriction` TINYINT(1) NOT NULL DEFAULT '0',
+         `itilcategories_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
+         `view_all_lvl1` TINYINT NOT NULL DEFAULT '0',
+         `view_all_lvl2` TINYINT NOT NULL DEFAULT '0',
+         `view_all_lvl3` TINYINT NOT NULL DEFAULT '0',
+         `view_all_lvl4` TINYINT NOT NULL DEFAULT '0',
+         `entities_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
+         `is_recursive` TINYINT NOT NULL DEFAULT '1',
+         `is_incident` TINYINT NOT NULL DEFAULT '1',
+         `is_request` TINYINT NOT NULL DEFAULT '1',
+         `is_groups_restriction` TINYINT NOT NULL DEFAULT '0',
          PRIMARY KEY (`id`),
          KEY `entities_id` (`entities_id`),
          KEY `itilcategories_id` (`itilcategories_id`),
@@ -707,24 +741,24 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          KEY `is_request` (`is_request`),
          KEY `is_recursive` (`is_recursive`),
          KEY date_mod (date_mod)
-         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;";
+         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->query($query);
       }
 
       if (!$DB->fieldExists($table, 'view_all_lvl1')) {
-         $migration->addField($table, 'view_all_lvl1', "TINYINT(1) NOT NULL DEFAULT '0'",
+         $migration->addField($table, 'view_all_lvl1', "TINYINT NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
-         $migration->addField($table, 'view_all_lvl2', "TINYINT(1) NOT NULL DEFAULT '0'",
+         $migration->addField($table, 'view_all_lvl2', "TINYINT NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
-         $migration->addField($table, 'view_all_lvl3', "TINYINT(1) NOT NULL DEFAULT '0'",
+         $migration->addField($table, 'view_all_lvl3', "TINYINT NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
-         $migration->addField($table, 'view_all_lvl4', "TINYINT(1) NOT NULL DEFAULT '0'",
+         $migration->addField($table, 'view_all_lvl4', "TINYINT NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
          $migration->migrationOneTable($table);
       }
 
       if (!$DB->fieldExists($table, 'is_groups_restriction')) {
-         $migration->addField($table, 'is_groups_restriction', "TINYINT(1) NOT NULL DEFAULT '0'",
+         $migration->addField($table, 'is_groups_restriction', "TINYINT NOT NULL DEFAULT '0'",
                               ['after' => 'itilcategories_id']);
          $migration->migrationOneTable($table);
       }

@@ -53,15 +53,20 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType(__CLASS__);
+
       return $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
-         `id`                int(11) NOT NULL auto_increment,
-         `groups_id` int(11) NOT NULL,
-         `lvl`             int(11) DEFAULT NULL,
+         `id`        int {$default_key_sign} NOT NULL auto_increment,
+         `groups_id` int {$default_key_sign} NOT NULL,
+         `lvl`       int DEFAULT NULL,
          PRIMARY KEY (`id`),
          KEY         `groups_id` (`groups_id`),
          KEY         `lvl` (`lvl`)
-      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
+      ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;");
    }
 
    static function uninstall() {
