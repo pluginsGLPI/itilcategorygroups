@@ -30,7 +30,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.4.2');
+define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.5.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "10.0.0");
