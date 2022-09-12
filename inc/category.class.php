@@ -142,7 +142,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       // find current values for this select
       $values = [];
-      if ($this->getID()) {
+      if (!$this->isNewItem()) {
          $res_val = $DB->query("SELECT `groups_id`
             FROM glpi_plugin_itilcategorygroups_categories_groups
             WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
