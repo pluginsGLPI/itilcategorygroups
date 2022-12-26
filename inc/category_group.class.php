@@ -92,17 +92,16 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
 
             //insert groups in sub table
             foreach ($cat_groups as $cat_groups_data) {
-               $DB->query("REPLACE INTO glpi_plugin_itilcategorygroups_categories_groups
-                              (plugin_itilcategorygroups_categories_id,
-                               level,
-                               itilcategories_id,
-                               groups_id)
-                           VALUES (
-                              ".$cat_groups_data['plugin_itilcategorygroups_categories_id'].",
-                              ".$cat_groups_data['level'].",
-                              ".$cat_groups_data['itilcategories_id'].",
-                              ".$cat_groups_data['groups_id']."
-                           )");
+               $DB->updateOrInsert('glpi_plugin_itilcategorygroups_categories_groups', [
+                  'plugin_itilcategorygroups_categories_id' => $cat_groups_data['plugin_itilcategorygroups_categories_id'],
+                  'level'                                   => $cat_groups_data['level'],
+                  'groups_id'                               => $cat_groups_data['groups_id'],
+                  'itilcategories_id'                       => $cat_groups_data['itilcategories_id']
+               ], [
+                  'plugin_itilcategorygroups_categories_id' => $cat_groups_data['plugin_itilcategorygroups_categories_id'],
+                  'level'                                   => $cat_groups_data['level'],
+                  'groups_id'                               => $cat_groups_data['groups_id'],
+               ]);
             }
          }
 
