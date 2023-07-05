@@ -167,14 +167,20 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
       }
 
       $groups_id = [];
-      $query = "SELECT gl.groups_id
-                FROM ".getTableForItemType(__CLASS__)." gl
-                LEFT JOIN glpi_groups gr
-                    ON gl.groups_id = gr.id
-                WHERE gl.lvl = $level".
-                getEntitiesRestrictRequest(" AND ", "gr", 'entities_id',
-                                           $entities_id, true);
-      foreach ($DB->request($query) as $data) {
+      $it = $DB->request([
+         'SELECT' => ['gl.groups_id'],
+         'FROM'   => getTableForItemType(__CLASS__).' AS gl',
+         'LEFT JOIN' => [
+            'glpi_groups AS gr' => [
+               'ON' => [
+                  'gl'  => 'groups_id',
+                  'gr'  => 'id'
+               ]
+            ]
+         ],
+         'WHERE' => ['gl.lvl' => $level] + getEntitiesRestrictCriteria('gr', 'entities_id', $entities_id, true)
+      ]);
+      foreach ($it as $data) {
          $groups_id[] = $data['groups_id'];
       }
       return $groups_id;

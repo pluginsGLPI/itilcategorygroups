@@ -143,24 +143,43 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       // find current values for this select
       $values = [];
       if (!$this->isNewItem()) {
-         $res_val = $DB->query("SELECT `groups_id`
-            FROM glpi_plugin_itilcategorygroups_categories_groups
-            WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
-               OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
-            )
-            AND level = $level");
-         while ($data_val = $DB->fetchAssoc($res_val)) {
+         $it = $DB->request([
+            'SELECT' => ['groups_id'],
+            'FROM'   => 'glpi_plugin_itilcategorygroups_categories_groups',
+            'WHERE' => [
+               'OR' => [
+                   'itilcategories_id' => $this->fields['itilcategories_id'],
+                   'plugin_itilcategorygroups_categories_id' => $this->getID()
+               ],
+               'level' => $level,
+            ]
+         ]);
+         foreach ($it as $data_val) {
             $values[] = $data_val['groups_id'];
          }
       }
 
       // find possible values for this select
-      $res_gr = $DB->query("SELECT gr.id, gr.name
-         FROM glpi_groups gr
-         INNER JOIN glpi_plugin_itilcategorygroups_groups_levels gr_lvl
-            ON gr_lvl.groups_id = gr.id
-            AND gr_lvl.lvl = ".intval($level).
-            getEntitiesRestrictRequest(" AND", "gr", '', $_SESSION["glpiactiveentities"], true));
+      $join_criteria = [
+         'gr_lvl.lvl' => (int) $level,
+      ];
+      $entity_restrict = getEntitiesRestrictCriteria('gr', '', $_SESSION['glpiactiveentities'], true);
+      if (!empty($entity_restrict)) {
+          $join_criteria += $entity_restrict;
+      }
+      $it = $DB->request([
+         'SELECT' => ['gr.id', 'gr.name'],
+         'FROM'   => 'glpi_groups AS gr',
+         'INNER JOIN' => [
+            'glpi_plugin_itilcategorygroups_groups_levels AS gr_lvl' => [
+               'ON' => [
+                  'gr_lvl' => 'groups_id',
+                  'gr'     => 'id',
+                   $join_criteria
+               ]
+            ]
+         ]
+      ]);
 
       if ($this->fields["view_all_lvl$level"] == 1) {
          $checked = "checked='checked'";
@@ -172,7 +191,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       echo "<span id='select_level_$level'>";
       echo "<select name='groups_id_level".$level."[]' id='groups_id_level".$level."[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
-      while ($data_gr = $DB->fetchAssoc($res_gr)) {
+      foreach ($it as $data_gr) {
          if (in_array($data_gr['id'], $values)) {
             $selected = "selected";
          } else {
@@ -263,21 +282,24 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
             $group_params = [
                 'entities_id'  => $_SESSION['glpiactive_entity'],
-                'is_recursive' => 1
+                'is_recursive' => 1,
             ];
 
-            $type = $params['params']['item']['type'] ?? Ticket::INCIDENT_TYPE;
+            $type = (int) ($params['params']['item']['type'] ?? Ticket::INCIDENT_TYPE);
 
             if (!empty($items_id) && $ticket->getFromDB($items_id)) {
                 // == UPDATE EXISTING TICKET ==
                 $group_params['entities_id'] = $ticket->fields['entities_id'];
-                $group_params['condition'] = " AND " . ($ticket->fields['type'] == Ticket::DEMAND_TYPE ?
-                    "`is_request`='1'" : "`is_incident`='1'");
-            } else {
-                if ($type == Ticket::DEMAND_TYPE) {
-                    $group_params['condition'] = " AND `is_request` ='1'";
+                if ((int) $ticket->fields['type'] === Ticket::DEMAND_TYPE) {
+                    $group_params['condition'] = ['is_request' => 1];
                 } else {
-                    $group_params['condition'] = " AND `is_incident` = '1'";
+                    $group_params['condition'] = ['is_incident' => 1];
+                }
+            } else {
+                if ($type === Ticket::DEMAND_TYPE) {
+                    $group_params['condition'] = ['is_request' => 1];
+                } else {
+                    $group_params['condition'] = ['is_incident' => 1];
                 }
             }
 
@@ -296,21 +318,34 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                 // All groups assigned to the ticket
                 foreach ($ticket->getGroups(2) as $element) {
                     $groupsId = $element['groups_id'];
-                    $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
+                    $data_level = self::getFirst([
+                       'SELECT' => ['level'],
+                       'FROM'   => $table,
+                       'WHERE' => [
+                          'itilcategories_id' => $itilcategories_id,
+                          'groups_id'         => $groupsId
+                       ]
+                    ], 'level');
                     if (!empty($data_level)) {
                         $level = $data_level > $level ? $data_level : $level;
                     }
                     // Don't display groups already assigned to the ticket in the dropdown
-                    $group_params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
+                    $group_params['condition'][] = ['cat_gr.groups_id' => ['<>', $groupsId]];
                 }
                 // No group assigned to the ticket
                 // Selects the level min that will be displayed
                 if ($level == 0) {
-                    $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
-                    $group_params['condition'] .= " AND cat_gr.level = '$level'";
+                    $level = self::getFirst([
+                       'SELECT' => [new QueryExpression('MIN(level) AS level')],
+                       'FROM'   => $table,
+                       'WHERE' => [
+                          'itilcategories_id' => $itilcategories_id
+                       ]
+                    ], 'level');
+                    $group_params['condition'][] = ['cat_gr.level' => $level];
                 } else {
                     $level_max = $level + 1;
-                    $group_params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
+                    $group_params['condition'][] = ['cat_gr.level' => [$level, $level_max]]; // If level is $level or $level_max
                 }
             }
 
@@ -381,7 +416,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       //define default options
       $options['entities_id']  = 0;
       $options['is_recursive'] = 0;
-      $options['condition']    = " AND cat.is_incident = '1'";
+      $options['condition']    = ['cat.is_incident' => 1];
 
       // override default options with params
       foreach ($params as $key => $value) {
@@ -393,29 +428,39 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $table    = getTableForItemType(__CLASS__);
 
       if ($category->getFromDB($itilcategories_id)) {
-         $entity_restrict = getEntitiesRestrictRequest(" AND ", "cat", "entities_id",
-                                                       $options['entities_id'],
-                                                       $options['is_recursive']);
-
          // increase size of group concat to avoid errors
          $DB->query("SET SESSION group_concat_max_len = 1000000");
 
          // retrieve all groups associated to this cat
-         $query = "SELECT
-                     cat.*,
-                     GROUP_CONCAT(\"{\\\"gr_id\\\":\",
-                                  cat_gr.groups_id,
-                                  \", \\\"lvl\\\": \",
-                                  cat_gr.level,
-                                  \"}\") as groups_level
-                   FROM `$table` cat
-                   LEFT JOIN glpi_plugin_itilcategorygroups_categories_groups cat_gr
-                     ON cat_gr.plugin_itilcategorygroups_categories_id = cat.id
-                   WHERE cat.itilcategories_id = '$itilcategories_id' ".
-                   $options['condition'].$entity_restrict.
-                   " AND cat.is_active = '1'
-                   ORDER BY cat.entities_id DESC";
-         foreach ($DB->request($query) as $data) {
+         $criteria = [
+            'SELECT' => [
+               'cat.*',
+               new QueryExpression("GROUP_CONCAT(\"{\\\"gr_id\\\":\",cat_gr.groups_id,\", \\\"lvl\\\": \",cat_gr.level,\"}\") as groups_level")
+            ],
+            'FROM' => "{$table} AS cat",
+            'LEFT JOIN' => [
+               'glpi_plugin_itilcategorygroups_categories_groups AS cat_gr' => [
+                  'ON' => [
+                     'cat' => 'id',
+                     'cat_gr' => 'plugin_itilcategorygroups_categories_id'
+                  ]
+               ]
+            ],
+            'WHERE' => [
+               'cat.itilcategories_id' => $itilcategories_id,
+               'cat.is_active'         => 1,
+            ],
+            'ORDER' => ['cat.entities_id DESC'],
+         ];
+         if (is_array($options['condition'])) {
+            $criteria['WHERE'] = array_merge($criteria['WHERE'], $options['condition']);
+         } else {
+            $criteria['WHERE'][] = new QueryExpression($options['condition']);
+         }
+         $criteria['WHERE'] += getEntitiesRestrictCriteria('cat', 'entities_id', $options['entities_id'], $options['is_recursive']);
+         $it = $DB->request($criteria);
+
+         foreach ($it as $data) {
             $groups_level = json_decode("[".$data['groups_level']."]", true);
 
             for ($level = 1; $level <= 4; $level++) {
@@ -436,13 +481,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
    /**
     * Helper to make a database request and extract the first element
-    * @param string $query
+    * @param array $criteria
     * @param string $selector
     * @return mixed
     */
-   public static function getFirst($query, $selector) {
+   public static function getFirst($criteria, $selector) {
       global $DB;
-      $data = $DB->request($query);
+      $data = $DB->request($criteria);
       if (count($data)) {
          $data = json_decode("[" . $data->current()["$selector"] . "]", true);
          return array_shift($data);
@@ -458,11 +503,18 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       global $DB;
       $category = new ITILCategory();
       if ($category->getFromDB($itilcategories_id)) {
-         $table = getTableForItemType(__CLASS__);
-         $query = "SELECT is_active FROM `$table` WHERE itilcategories_id = $itilcategories_id AND is_active = '1' AND is_groups_restriction = '1'";
-         $data = $DB->request($query);
+         $it = $DB->request([
+            'SELECT' => ['id'],
+            'FROM'   => getTableForItemType(__CLASS__),
+            'WHERE'  => [
+               'itilcategories_id' => $itilcategories_id,
+               'is_active'         => 1,
+               'is_groups_restriction' => 1
+            ],
+            'LIMIT'  => 1
+         ]);
          // A category rule exist for this ticket
-         if (count($data)) {
+         if (count($it)) {
             return true;
          }
       }
@@ -473,15 +525,29 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    static function getOthersGroupsID($level = 0) {
       global $DB;
 
-      $res = $DB->query("SELECT gr.id
-                        FROM glpi_groups gr
-                        LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
-                           ON gl.groups_id = gr.id
-                        WHERE gl.lvl != $level
-                        AND gr.is_assign
-                        OR gl.lvl IS NULL");
+      $it = $DB->request([
+         'SELECT' => ['gr.id'],
+         'FROM' => 'glpi_groups AS gr',
+         'LEFT JOIN' => [
+            'glpi_plugin_itilcategorygroups_groups_levels AS gl' => [
+               'ON' => [
+                  'gl' => 'groups_id',
+                  'gr' => 'id'
+               ]
+            ]
+         ],
+         'WHERE' => [
+            'OR' => [
+               'AND' => [
+                  'gl.lvl' => ['<>', $level],
+                  'gr.is_assign' => 1
+               ],
+               'gl.lvl' => null
+            ]
+         ]
+      ]);
       $groups_id = [];
-      while ($row = $DB->fetchAssoc($res)) {
+      foreach ($it as $row) {
          $groups_id[$row['id']] = $row['id'];
       }
 
@@ -575,7 +641,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             'beforejoin' => [
                'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                'joinparams' => [
-                  'condition'  => 'AND NEWTABLE.level = 1',
+                  'condition'  => ['NEWTABLE.level' => 1],
                   'jointype'   => 'child',
                   'beforejoin' => [
                      'table'      => 'glpi_plugin_itilcategorygroups_categories',
@@ -599,7 +665,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             'beforejoin' => [
                'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                'joinparams' => [
-                  'condition'  => 'AND NEWTABLE.level = 2',
+                  'condition'  => ['NEWTABLE.level' => 2],
                   'jointype'   => 'child',
                   'beforejoin' => [
                      'table'      => 'glpi_plugin_itilcategorygroups_categories',
@@ -623,7 +689,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             'beforejoin' => [
                'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                'joinparams' => [
-                  'condition'  => 'AND NEWTABLE.level = 3',
+                  'condition'  => ['NEWTABLE.level' => 3],
                   'jointype'   => 'child',
                   'beforejoin' => [
                      'table'      => 'glpi_plugin_itilcategorygroups_categories',
@@ -647,7 +713,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
             'beforejoin' => [
                'table'      => 'glpi_plugin_itilcategorygroups_categories_groups',
                'joinparams' => [
-                  'condition'  => 'AND NEWTABLE.level = 4',
+                  'condition'  => ['NEWTABLE.level' => 4],
                   'jointype'   => 'child',
                   'beforejoin' => [
                      'table'      => 'glpi_plugin_itilcategorygroups_categories',
