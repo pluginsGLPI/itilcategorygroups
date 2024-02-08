@@ -2,7 +2,7 @@
    <name>ItilCategory Groups</name>
    <key>itilcategorygroups</key>
    <state>stable</state>
-   <logo>https://raw.githubusercontent.com/PluginsGLPI/itilcategorygroups/master/itilcategorygroups.png</logo>
+   <logo>https://raw.githubusercontent.com/PluginsGLPI/itilcategorygroups/main/itilcategorygroups.png</logo>
    <description>
       <short>
          <en>This plugins aims to filter assignable groups in ticket by selected category</en>
@@ -28,7 +28,7 @@ Potom, pro každou z kategorií požadavku je možné určit která skupina bude
    <homepage>https://github.com/pluginsGLPI/itilcategorygroups</homepage>
    <download>https://github.com/pluginsGLPI/itilcategorygroups/releases</download>
    <issues>https://github.com/pluginsGLPI/itilcategorygroups/issues</issues>
-   <readme>https://raw.githubusercontent.com/pluginsGLPI/itilcategorygroups/master/README.md</readme>
+   <readme>https://raw.githubusercontent.com/pluginsGLPI/itilcategorygroups/main/README.md</readme>
    <authors>
       <author>Teclib'</author>
       <author>Walid Nouh</author>
@@ -158,6 +158,6 @@ Potom, pro každou z kategorií požadavku je možné určit která skupina bude
 
    </tags>
    <screenshots>
-      <screenshot>https://raw.githubusercontent.com/PluginsGLPI/itilcategorygroups/master/screenshots/category_config.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/PluginsGLPI/itilcategorygroups/main/screenshots/category_config.png</screenshot>
    </screenshots>
 </root>
