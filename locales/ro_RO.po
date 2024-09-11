@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-13 08:32+0000\n"
+"POT-Creation-Date: 2024-09-11 07:36+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2015\n"
-"Language-Team: Romanian (Romania) (http://www.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/ro_RO/)\n"
+"Language-Team: Romanian (Romania) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/ro_RO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "A link with this category already exists"
 msgstr "Un link cu aceasta categorie deja exista"
 
-#: inc/group_level.class.php:83 inc/menu.class.php:38 setup.php:79
+#: inc/menu.class.php:38 inc/group_level.class.php:83 setup.php:79
 msgid "ItilCategory Groups"
 msgstr "Grupuri - Categorii Itil"
 
@@ -30,23 +30,23 @@ msgstr "Grupuri - Categorii Itil"
 msgid "Level "
 msgstr ""
 
-#: inc/category.class.php:117 inc/category.class.php:572
-#: inc/group_level.class.php:125 hook.php:99
+#: hook.php:99 inc/category.class.php:117 inc/category.class.php:572
+#: inc/group_level.class.php:125
 msgid "Level 1"
 msgstr "Nivel 1"
 
-#: inc/category.class.php:121 inc/category.class.php:596
-#: inc/group_level.class.php:126 hook.php:100
+#: hook.php:100 inc/category.class.php:121 inc/category.class.php:596
+#: inc/group_level.class.php:126
 msgid "Level 2"
 msgstr "Nivel 2"
 
-#: inc/category.class.php:126 inc/category.class.php:620
-#: inc/group_level.class.php:127 hook.php:101
+#: hook.php:101 inc/category.class.php:126 inc/category.class.php:620
+#: inc/group_level.class.php:127
 msgid "Level 3"
 msgstr "Nivel 3"
 
-#: inc/category.class.php:130 inc/category.class.php:644
-#: inc/group_level.class.php:128 hook.php:102
+#: hook.php:102 inc/category.class.php:130 inc/category.class.php:644
+#: inc/group_level.class.php:128
 msgid "Level 4"
 msgstr "Nivel 4"
 
@@ -55,6 +55,6 @@ msgstr "Nivel 4"
 msgid "Level attribution"
 msgstr "Atribut Nivel"
 
-#: inc/category.class.php:42 inc/category.class.php:497 inc/menu.class.php:34
+#: inc/menu.class.php:34 inc/category.class.php:42 inc/category.class.php:497
 msgid "Link ItilCategory - Groups"
 msgstr "Link  Grupuri - Categorii  Itil"

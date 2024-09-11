@@ -3,59 +3,57 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexey Petukhov <lexx015@gmail.com>, 2021
-# Nikolai Petrov <techobsl@yandex.ru>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-11 07:36+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
-"Last-Translator: Alexey Petukhov <lexx015@gmail.com>, 2021\n"
-"Language-Team: Russian (Russia) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/ru_RU/)\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Spanish (Ecuador) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/es_EC/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru_RU\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: es_EC\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: inc/category.class.php:195
 msgid "A link with this category already exists"
-msgstr "Связь с этой категорией уже существует"
+msgstr "Ya existe un enlace con esta categoría"
 
 #: inc/menu.class.php:38 inc/group_level.class.php:83 setup.php:79
 msgid "ItilCategory Groups"
-msgstr "Группы ITIL Категории"
+msgstr "Grupos de ItilCategorías"
 
 #: hook.php:81
 msgid "Level "
-msgstr "Уровень"
+msgstr "Nivel "
 
 #: hook.php:99 inc/category.class.php:117 inc/category.class.php:572
 #: inc/group_level.class.php:125
 msgid "Level 1"
-msgstr "Уровень 1"
+msgstr "Nivel 1"
 
 #: hook.php:100 inc/category.class.php:121 inc/category.class.php:596
 #: inc/group_level.class.php:126
 msgid "Level 2"
-msgstr "Уровень 2"
+msgstr "Nivel 2"
 
 #: hook.php:101 inc/category.class.php:126 inc/category.class.php:620
 #: inc/group_level.class.php:127
 msgid "Level 3"
-msgstr "Уровень 3"
+msgstr "Nivel 3"
 
 #: hook.php:102 inc/category.class.php:130 inc/category.class.php:644
 #: inc/group_level.class.php:128
 msgid "Level 4"
-msgstr "Уровень 4"
+msgstr "Nivel 4"
 
 #: inc/group_level.class.php:42 inc/group_level.class.php:120
 #: inc/group_level.class.php:154
 msgid "Level attribution"
-msgstr "Атрибуция уровня"
+msgstr "Atribución de nivel"
 
 #: inc/menu.class.php:34 inc/category.class.php:42 inc/category.class.php:497
 msgid "Link ItilCategory - Groups"
-msgstr "Связь ITIL Категория - Группы"
+msgstr "Enlace ItilCategoría - Grupos"
