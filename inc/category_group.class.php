@@ -65,9 +65,11 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
 
          //foreach old levels
          foreach ([1=>'one', 2=>'two', 3=>'three', 4=>'four'] as $lvl_num => $lvl_str) {
-            $query = "SELECT id, itilcategories_id, groups_id_level$lvl_str FROM $parent_table";
-            $res = $DB->query($query);
-            while ($data = $DB->fetchAssoc($res)) {
+            $it = $DB->request([
+               'SELECT' => ['id', 'itilcategories_id', "groups_id_level{$lvl_str}"],
+               'FROM'   => $parent_table,
+            ]);
+            foreach ($it as $data) {
                //specific case (all group of this lvl), store it for further treatment
                if ($data["groups_id_level$lvl_str"] == -1) {
                   $all_lvl[$data['itilcategories_id']][$lvl_num] = $lvl_str;
@@ -85,8 +87,11 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
             //insert "all groups for this lvl'
             foreach ($all_lvl as $itilcategories_id => $lvl) {
                foreach ($lvl as $lvl_num => $lvl_str) {
-                  $DB->query("UPDATE $parent_table SET view_all_lvl$lvl_num = 1
-                              WHERE itilcategories_id = $itilcategories_id");
+                  $DB->update($parent_table, [
+                     "view_all_lvl$lvl_num" => 1,
+                  ], [
+                     'itilcategories_id' => $itilcategories_id,
+                  ]);
                }
             }
 
