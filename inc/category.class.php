@@ -134,16 +134,18 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
       $this->showFormButtons($options);
       Html::closeForm();
+      return true;
 
    }
 
    function multipleDropdownGroup($level) {
+      /** @var \DBmysql $DB */
       global $DB;
 
       // find current values for this select
       $values = [];
       if (!$this->isNewItem()) {
-         $res_val = $DB->query("SELECT `groups_id`
+         $res_val = $DB->doQuery("SELECT `groups_id`
             FROM glpi_plugin_itilcategorygroups_categories_groups
             WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
                OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
@@ -155,7 +157,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       }
 
       // find possible values for this select
-      $res_gr = $DB->query("SELECT gr.id, gr.name
+      $res_gr = $DB->doQuery("SELECT gr.id, gr.name
          FROM glpi_groups gr
          INNER JOIN glpi_plugin_itilcategorygroups_groups_levels gr_lvl
             ON gr_lvl.groups_id = gr.id
@@ -213,7 +215,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
       $this->post_updateItem();
    }
 
-   function post_updateItem($history = 1) {
+   function post_updateItem($history = true) {
 
       // quick fix :
       if (isset($_REQUEST['massiveaction'])) {
@@ -314,7 +316,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                 }
             }
 
-            $found_groups = self::getGroupsForCategory($itilcategories_id, $group_params, $type);
+            $found_groups = self::getGroupsForCategory($itilcategories_id, $group_params);
             $groups_id_toshow = []; //init
             if (!empty($found_groups)) {
                 for ($lvl = 1; $lvl <= 4; $lvl++) {
@@ -376,6 +378,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @return array
     */
    static function getGroupsForCategory($itilcategories_id, $params = []) {
+      /** @var \DBmysql $DB */
       global $DB;
 
       //define default options
@@ -398,7 +401,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
                                                        $options['is_recursive']);
 
          // increase size of group concat to avoid errors
-         $DB->query("SET SESSION group_concat_max_len = 1000000");
+         $DB->doQuery("SET SESSION group_concat_max_len = 1000000");
 
          // retrieve all groups associated to this cat
          $query = "SELECT
@@ -441,7 +444,9 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
     * @return mixed
     */
    public static function getFirst($query, $selector) {
+      /** @var \DBmysql $DB */
       global $DB;
+
       $data = $DB->request($query);
       if (count($data)) {
          $data = json_decode("[" . $data->current()["$selector"] . "]", true);
@@ -451,11 +456,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
    /**
     * Method used to check if the default filter must be applied
-    * @param string $itilcategories_id
+    * @param string|int $itilcategories_id
     * @return bool
     */
    public static function canApplyFilter($itilcategories_id) {
+      /** @var \DBmysql $DB */
       global $DB;
+
       $category = new ITILCategory();
       if ($category->getFromDB($itilcategories_id)) {
          $table = getTableForItemType(__CLASS__);
@@ -471,9 +478,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
 
    static function getOthersGroupsID($level = 0) {
+      /** @var \DBmysql $DB */
       global $DB;
 
-      $res = $DB->query("SELECT gr.id
+      $res = $DB->doQuery("SELECT gr.id
                         FROM glpi_groups gr
                         LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
                            ON gl.groups_id = gr.id
@@ -704,6 +712,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
 
    //----------------------------- Install process --------------------------//
    static function install(Migration $migration) {
+      /** @var \DBmysql $DB */
       global $DB;
 
       $default_charset = DBConnection::getDefaultCharset();
@@ -742,7 +751,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
          KEY `is_recursive` (`is_recursive`),
          KEY date_mod (date_mod)
          ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-         $DB->query($query);
+         $DB->doQuery($query);
       }
 
       if (!$DB->fieldExists($table, 'view_all_lvl1')) {
@@ -767,9 +776,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown {
    }
 
    static function uninstall() {
+      /** @var \DBmysql $DB */
       global $DB;
       $table = getTableForItemType(__CLASS__);
-      $DB->query("DROP TABLE IF EXISTS`$table`");
+      $DB->doQuery("DROP TABLE IF EXISTS`$table`");
       return true;
    }
 

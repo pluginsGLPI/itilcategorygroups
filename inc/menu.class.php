@@ -39,7 +39,6 @@ class PluginItilcategorygroupsMenu extends CommonGLPI {
    }
 
    static function getMenuContent() {
-      global $CFG_GLPI;
       $menu          = [];
       $menu['title'] = self::getMenuName();
       $menu['page']  = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.php';

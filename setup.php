@@ -38,6 +38,7 @@ define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "10.0.0");
 define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "10.0.99");
 
 function plugin_init_itilcategorygroups() {
+   /** @var array $PLUGIN_HOOKS */
    global $PLUGIN_HOOKS;
 
    $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
