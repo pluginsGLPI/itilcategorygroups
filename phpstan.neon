@@ -11,6 +11,9 @@ parameters:
         - setup.php
     scanDirectories:
         - ../../inc
+        - ../../src
+    stubFiles:
+        - ../../stubs/glpi_constants.php
 
 rules:
     - GlpiProject\Tools\PHPStan\Rules\GlobalVarTypeRule
