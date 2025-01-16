@@ -33,6 +33,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
    static public $items_id = "plugin_itilcategorygroups_categories_id";
 
    static function install(Migration $migration) {
+      /** @var \DBmysql $DB */
       global $DB;
 
       $default_charset = DBConnection::getDefaultCharset();
@@ -54,7 +55,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
          KEY `itilcategories_id`                       (`itilcategories_id`),
          KEY `groups_id`                               (`groups_id`)
          ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-         $DB->query($query);
+         $DB->doQuery($query);
       }
 
       $parent_table = "glpi_plugin_itilcategorygroups_categories";
@@ -66,7 +67,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
          //foreach old levels
          foreach ([1=>'one', 2=>'two', 3=>'three', 4=>'four'] as $lvl_num => $lvl_str) {
             $query = "SELECT id, itilcategories_id, groups_id_level$lvl_str FROM $parent_table";
-            $res = $DB->query($query);
+            $res = $DB->doQuery($query);
             while ($data = $DB->fetchAssoc($res)) {
                //specific case (all group of this lvl), store it for further treatment
                if ($data["groups_id_level$lvl_str"] == -1) {
@@ -85,7 +86,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
             //insert "all groups for this lvl'
             foreach ($all_lvl as $itilcategories_id => $lvl) {
                foreach ($lvl as $lvl_num => $lvl_str) {
-                  $DB->query("UPDATE $parent_table SET view_all_lvl$lvl_num = 1
+                  $DB->doQuery("UPDATE $parent_table SET view_all_lvl$lvl_num = 1
                               WHERE itilcategories_id = $itilcategories_id");
                }
             }
@@ -117,9 +118,11 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild {
    }
 
    static function uninstall() {
+      /** @var \DBmysql $DB */
       global $DB;
+
       $table = getTableForItemType(__CLASS__);
-      $DB->query("DROP TABLE IF EXISTS`$table`");
+      $DB->doQuery("DROP TABLE IF EXISTS`$table`");
       return true;
    }
 }

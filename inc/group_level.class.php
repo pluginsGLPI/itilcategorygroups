@@ -51,6 +51,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    }
 
    static function install(Migration $migration) {
+      /** @var \DBmysql $DB */
       global $DB;
 
       $default_charset = DBConnection::getDefaultCharset();
@@ -59,7 +60,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
       $table = getTableForItemType(__CLASS__);
 
-      return $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
+      return $DB->doQuery("CREATE TABLE IF NOT EXISTS `$table` (
          `id`        int {$default_key_sign} NOT NULL auto_increment,
          `groups_id` int {$default_key_sign} NOT NULL,
          `lvl`       int DEFAULT NULL,
@@ -70,9 +71,11 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    }
 
    static function uninstall() {
+      /** @var \DBmysql $DB */
       global $DB;
+
       $table = getTableForItemType(__CLASS__);
-      return $DB->query("DROP TABLE IF EXISTS `$table`");
+      return $DB->doQuery("DROP TABLE IF EXISTS `$table`");
    }
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
@@ -89,15 +92,13 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
 
-      if ($item->getType() == 'Group') {
+      if ($item instanceof Group) {
          self::showForGroup($item);
       }
       return true;
    }
 
    static function showForGroup(Group $group) {
-      global $DB;
-
       $ID = $group->getField('id');
       if (! $group->can($ID, READ)) {
          return false;
@@ -160,6 +161,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild {
    }
 
    static function getAllGroupForALevel($level, $entities_id = -1) {
+      /** @var \DBmysql $DB */
       global $DB;
 
       if ($entities_id === -1) {
