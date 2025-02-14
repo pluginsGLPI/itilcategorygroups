@@ -30,62 +30,67 @@
 
 use Glpi\Plugin\Hooks;
 
-define ('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.5.1');
+define('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.5.1');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI", "10.0.0");
+define('PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI', '10.0.0');
 // Maximum GLPI version, exclusive
-define("PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI", "10.0.99");
+define('PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI', '10.0.99');
 
-function plugin_init_itilcategorygroups() {
-   /** @var array $PLUGIN_HOOKS */
-   global $PLUGIN_HOOKS;
+function plugin_init_itilcategorygroups()
+{
+    /** @var array $PLUGIN_HOOKS */
+    global $PLUGIN_HOOKS;
 
-   $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
+    $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
 
-   if (Plugin::isPluginActive('itilcategorygroups')) {
+    if (Plugin::isPluginActive('itilcategorygroups')) {
+        if (Session::haveRight('config', UPDATE)) {
+            $PLUGIN_HOOKS['config_page']['itilcategorygroups'] = 'front/category.php';
+        }
 
-      if (Session::haveRight('config', UPDATE)) {
-         $PLUGIN_HOOKS['config_page']['itilcategorygroups'] = 'front/category.php';
-      }
+        Plugin::registerClass(
+            'PluginItilcategorygroupsCategory',
+            ['forwardentityfrom' => 'ITILCategory'],
+        );
+        Plugin::registerClass(
+            'PluginItilcategorygroupsGroup_Level',
+            ['addtabon' => 'Group'],
+        );
 
-      Plugin::registerClass('PluginItilcategorygroupsCategory',
-                            ['forwardentityfrom' => 'ITILCategory']);
-      Plugin::registerClass('PluginItilcategorygroupsGroup_Level',
-                            ['addtabon' => 'Group']);
+        if (Session::haveRight('config', READ)) {
+            // add to 'Admin' menu :
+            $PLUGIN_HOOKS['menu_toadd']['itilcategorygroups'] = ['admin' => 'PluginItilcategorygroupsMenu'];
 
-      if (Session::haveRight('config', READ)) {
-         // add to 'Admin' menu :
-         $PLUGIN_HOOKS["menu_toadd"]['itilcategorygroups'] = ['admin' => 'PluginItilcategorygroupsMenu'];
+            // other hook :
+            $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = ['Group' => 'plugin_pre_item_update_itilcategorygroups'];
+        }
+        if (Session::haveRight('config', UPDATE)) {
+            $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
+               = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.form.php';
+        }
 
-         // other hook :
-         $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = ['Group' => 'plugin_pre_item_update_itilcategorygroups'];
-      }
-      if (Session::haveRight('config', UPDATE)) {
-         $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
-            = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.form.php';
-      }
+        $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/multiple_group.js'];
 
-      $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/multiple_group.js'];
-
-      $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = [
-         'PluginItilcategorygroupsCategory', 'filterActors',
-      ];
-   }
+        $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = [
+            'PluginItilcategorygroupsCategory', 'filterActors',
+        ];
+    }
 }
 
 // Get the name and the version of the plugin - Needed
-function plugin_version_itilcategorygroups() {
-   return [
-      'name'           => __('ItilCategory Groups', 'itilcategorygroups'),
-      'version'        => PLUGIN_ITILCATEGORYGROUPS_VERSION,
-      'author'         => "<a href='http://www.teclib.com'>TECLIB'</a>",
-      'homepage'       => 'https://github.com/pluginsGLPI/itilcategorygroups',
-      'requirements'   => [
-         'glpi' => [
-            'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
-            'max' => PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
-          ]
-       ]
-   ];
+function plugin_version_itilcategorygroups()
+{
+    return [
+        'name'         => __('ItilCategory Groups', 'itilcategorygroups'),
+        'version'      => PLUGIN_ITILCATEGORYGROUPS_VERSION,
+        'author'       => "<a href='http://www.teclib.com'>TECLIB'</a>",
+        'homepage'     => 'https://github.com/pluginsGLPI/itilcategorygroups',
+        'requirements' => [
+            'glpi' => [
+                'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
+                'max' => PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
+            ],
+        ],
+    ];
 }
