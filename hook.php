@@ -28,100 +28,111 @@
  * -------------------------------------------------------------------------
  */
 
-function plugin_itilcategorygroups_install() {
-   $dir = Plugin::getPhpDir('itilcategorygroups');
+function plugin_itilcategorygroups_install()
+{
+    $dir = Plugin::getPhpDir('itilcategorygroups');
 
-   $migration = new Migration("0.84");
+    $migration = new Migration('0.84');
 
-   //order is important for install
-   include_once($dir . "/inc/category.class.php");
-   include_once($dir . "/inc/category_group.class.php");
-   include_once($dir . "/inc/group_level.class.php");
-   PluginItilcategorygroupsCategory::install($migration);
-   PluginItilcategorygroupsCategory_Group::install($migration);
-   PluginItilcategorygroupsGroup_Level::install($migration);
-   return true;
+    //order is important for install
+    include_once($dir . '/inc/category.class.php');
+    include_once($dir . '/inc/category_group.class.php');
+    include_once($dir . '/inc/group_level.class.php');
+    PluginItilcategorygroupsCategory::install($migration);
+    PluginItilcategorygroupsCategory_Group::install($migration);
+    PluginItilcategorygroupsGroup_Level::install($migration);
+
+    return true;
 }
 
-function plugin_itilcategorygroups_uninstall() {
-   $dir = Plugin::getPhpDir('itilcategorygroups');
+function plugin_itilcategorygroups_uninstall()
+{
+    $dir = Plugin::getPhpDir('itilcategorygroups');
 
-   include_once($dir . "/inc/category_group.class.php");
-   include_once($dir . "/inc/category.class.php");
-   include_once($dir . "/inc/group_level.class.php");
-   PluginItilcategorygroupsCategory_Group::uninstall();
-   PluginItilcategorygroupsCategory::uninstall();
-   PluginItilcategorygroupsGroup_Level::uninstall();
-   return true;
+    include_once($dir . '/inc/category_group.class.php');
+    include_once($dir . '/inc/category.class.php');
+    include_once($dir . '/inc/group_level.class.php');
+    PluginItilcategorygroupsCategory_Group::uninstall();
+    PluginItilcategorygroupsCategory::uninstall();
+    PluginItilcategorygroupsGroup_Level::uninstall();
+
+    return true;
 }
 
-function plugin_itilcategorygroups_getAddSearchOptions($itemtype) {
-   if (isset($_SESSION['glpiactiveentities'])) {
-      $options = PluginItilcategorygroupsGroup_Level::getAddSearchOptions($itemtype);
-      return $options;
-   } else {
-      return null;
-   }
+function plugin_itilcategorygroups_getAddSearchOptions($itemtype)
+{
+    if (isset($_SESSION['glpiactiveentities'])) {
+        $options = PluginItilcategorygroupsGroup_Level::getAddSearchOptions($itemtype);
+
+        return $options;
+    } else {
+        return null;
+    }
 }
 
-function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num) {
+function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num)
+{
+    $searchopt = &Search::getOptions($type);
+    $table     = $searchopt[$ID]['table'];
+    $field     = $searchopt[$ID]['field'];
+    $value     = $data['raw']["ITEM_$num"];
 
-   $searchopt = &Search::getOptions($type);
-   $table = $searchopt[$ID]["table"];
-   $field = $searchopt[$ID]["field"];
-   $value = $data['raw']["ITEM_$num"];
+    switch ($table . '.' . $field) {
+        case 'glpi_plugin_itilcategorygroups_groups_levels.lvl':
+            switch ($value) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    return __('Level ' . $value, 'itilcategorygroups');
+            }
+    }
 
-   switch ($table.'.'.$field) {
-      case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
-         switch ($value) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-               return __('Level '.$value, 'itilcategorygroups');
-         }
-   }
-   return "";
+    return '';
 }
 
 // Display specific massive actions for plugin fields
-function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = []) {
+function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = [])
+{
+    $table     = $options['options']['table'];
+    $field     = $options['options']['field'];
+    $linkfield = $options['options']['linkfield'];
 
-   $table     = $options['options']['table'];
-   $field     = $options['options']['field'];
-   $linkfield = $options['options']['linkfield'];
+    // Table fields
+    switch ($table . '.' . $field) {
+        case 'glpi_plugin_itilcategorygroups_groups_levels.lvl':
+            Dropdown::showFromArray(
+                'lvl',
+                [null => '---',
+                    1 => __('Level 1', 'itilcategorygroups'),
+                    2 => __('Level 2', 'itilcategorygroups'),
+                    3 => __('Level 3', 'itilcategorygroups'),
+                    4 => __('Level 4', 'itilcategorygroups')],
+            );
 
-   // Table fields
-   switch ($table.".".$field) {
-      case "glpi_plugin_itilcategorygroups_groups_levels.lvl" :
-         Dropdown::showFromArray('lvl',
-                                 [null => "---",
-                                  1    => __('Level 1', 'itilcategorygroups'),
-                                  2    => __('Level 2', 'itilcategorygroups'),
-                                  3    => __('Level 3', 'itilcategorygroups'),
-                                  4    => __('Level 4', 'itilcategorygroups')]);
-         return true;
-   }
+            return true;
+    }
 
-   // Need to return false on non display item
-   return false;
+    // Need to return false on non display item
+    return false;
 }
 
 
 // Hook done on update item case
-function plugin_pre_item_update_itilcategorygroups($item) {
-   if (isset($_REQUEST['massiveaction'])
-       && isset($_REQUEST['lvl'])
-       && $item instanceof Group) {
-      $group_level = new PluginItilcategorygroupsGroup_Level();
-      if (! $group_level->getFromDB($item->fields['id'])) {
-         $group_level->add(['groups_id'=> $item->fields['id'],
-                            'lvl'    => $_REQUEST['lvl']]);
-      } else {
-         $group_level->update(['groups_id'=> $item->fields['id'],
-                               'lvl'    => $_REQUEST['lvl']]);
-      }
+function plugin_pre_item_update_itilcategorygroups($item)
+{
+    if (isset($_REQUEST['massiveaction'])
+        && isset($_REQUEST['lvl'])
+        && $item instanceof Group) {
+        $group_level = new PluginItilcategorygroupsGroup_Level();
+        if (!$group_level->getFromDB($item->fields['id'])) {
+            $group_level->add(['groups_id' => $item->fields['id'],
+                'lvl'                      => $_REQUEST['lvl']]);
+        } else {
+            $group_level->update(['groups_id' => $item->fields['id'],
+                'lvl'                         => $_REQUEST['lvl']]);
+        }
+    }
 
-   }
-   return $item;
+    return $item;
 }

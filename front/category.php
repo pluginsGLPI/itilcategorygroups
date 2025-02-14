@@ -28,11 +28,16 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include('../../../inc/includes.php');
 
-Html::header(PluginItilcategorygroupsCategory::getTypeName(), '',
-   "admin", "pluginitilcategorygroupsmenu", "model");
+Html::header(
+    PluginItilcategorygroupsCategory::getTypeName(),
+    '',
+    'admin',
+    'pluginitilcategorygroupsmenu',
+    'model',
+);
 
 $dropdown = new PluginItilcategorygroupsCategory();
 
-include (GLPI_ROOT."/front/dropdown.common.php");
+include(GLPI_ROOT . '/front/dropdown.common.php');
