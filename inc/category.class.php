@@ -149,24 +149,36 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         // find current values for this select
         $values = [];
         if (!$this->isNewItem()) {
-            $res_val = $DB->doQuery("SELECT `groups_id`
-            FROM glpi_plugin_itilcategorygroups_categories_groups
-            WHERE (`itilcategories_id` = {$this->fields['itilcategories_id']}
-               OR `plugin_itilcategorygroups_categories_id` = {$this->getID()}
-            )
-            AND level = $level");
-            while ($data_val = $DB->fetchAssoc($res_val)) {
+            $res_val = $DB->request([
+                'SELECT' => 'groups_id',
+                'FROM'   => 'glpi_plugin_itilcategorygroups_categories_groups',
+                'WHERE'  => [
+                    'OR' => [
+                        'itilcategories_id' => $this->fields['itilcategories_id'],
+                        'plugin_itilcategorygroups_categories_id' => $this->getID(),
+                    ],
+                    'level' => $level,
+                ],
+            ]);
+            foreach ($res_val as $data_val) {
                 $values[] = $data_val['groups_id'];
             }
         }
 
         // find possible values for this select
-        $res_gr = $DB->doQuery('SELECT gr.id, gr.name
-         FROM glpi_groups gr
-         INNER JOIN glpi_plugin_itilcategorygroups_groups_levels gr_lvl
-            ON gr_lvl.groups_id = gr.id
-            AND gr_lvl.lvl = ' . intval($level) .
-              getEntitiesRestrictRequest(' AND', 'gr', '', $_SESSION['glpiactiveentities'], true));
+        $res_gr = $DB->request([
+            'SELECT' => ['gr.id', 'gr.name'],
+            'FROM'   => 'glpi_groups gr',
+            'INNER JOIN' => [
+                'glpi_plugin_itilcategorygroups_groups_levels gr_lvl' => [
+                    'ON' => [
+                        'gr_lvl.groups_id' => 'gr.id',
+                        'gr_lvl.lvl'       => intval($level),
+                    ],
+                ],
+            ],
+            'WHERE' => getEntitiesRestrictRequest(' AND', 'gr', '', $_SESSION['glpiactiveentities'], true),
+        ]);
 
         if ($this->fields["view_all_lvl$level"] == 1) {
             $checked  = "checked='checked'";
@@ -178,7 +190,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         echo "<span id='select_level_$level'>";
         echo "<select name='groups_id_level" . $level . "[]' id='groups_id_level" . $level . "[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
-        while ($data_gr = $DB->fetchAssoc($res_gr)) {
+        foreach ($res_gr as $data_gr) {
             if (in_array($data_gr['id'], $values)) {
                 $selected = 'selected';
             } else {
@@ -498,15 +510,27 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         /** @var \DBmysql $DB */
         global $DB;
 
-        $res = $DB->doQuery("SELECT gr.id
-                        FROM glpi_groups gr
-                        LEFT JOIN glpi_plugin_itilcategorygroups_groups_levels gl
-                           ON gl.groups_id = gr.id
-                        WHERE gl.lvl != $level
-                        AND gr.is_assign
-                        OR gl.lvl IS NULL");
+        $res = $DB->request([
+            'SELECT' => 'gr.id',
+            'FROM'   => 'glpi_groups gr',
+            'LEFT JOIN' => [
+                'glpi_plugin_itilcategorygroups_groups_levels gl' => [
+                    'ON' => [
+                        'gl.groups_id' => 'gr.id',
+                    ],
+                ],
+            ],
+            'WHERE' => [
+                'OR' => [
+                    'NOT' => ['gl.lvl' => $level],
+                    'gl.lvl' => null,
+                ],
+                'gr.is_assign' => 1,
+            ],
+        ]);
+
         $groups_id = [];
-        while ($row = $DB->fetchAssoc($res)) {
+        foreach ($res as $row) {
             $groups_id[$row['id']] = $row['id'];
         }
 
