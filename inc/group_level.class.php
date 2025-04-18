@@ -189,7 +189,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
                 'glpi_groups' => [
                     'ON' => [
                         $table => 'groups_id',
-                        'glpi_groups' => 'id'
+                        'glpi_groups' => 'id',
                     ],
                 ],
             ],
