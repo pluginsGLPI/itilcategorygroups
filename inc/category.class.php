@@ -168,7 +168,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         // find possible values for this select
         $res_gr = $DB->request([
             'SELECT' => ['gr.id', 'gr.name'],
-            'FROM'   => 'glpi_groups gr',
+            'FROM'   => 'glpi_groups AS gr',
             'INNER JOIN' => [
                 'glpi_plugin_itilcategorygroups_groups_levels gr_lvl' => [
                     'ON' => [
@@ -177,7 +177,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                     ],
                 ],
             ],
-            'WHERE' => getEntitiesRestrictRequest(' AND', 'gr', '', $_SESSION['glpiactiveentities'], true),
+            'WHERE' => getEntitiesRestrictCriteria(
+                'gr',
+                $_SESSION['glpiactiveentities'],
+                true,
+            ),
         ]);
 
         if ($this->fields["view_all_lvl$level"] == 1) {
@@ -512,7 +516,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         $res = $DB->request([
             'SELECT' => 'gr.id',
-            'FROM'   => 'glpi_groups gr',
+            'FROM'   => 'glpi_groups AS gr',
             'LEFT JOIN' => [
                 'glpi_plugin_itilcategorygroups_groups_levels gl' => [
                     'ON' => [
@@ -521,11 +525,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ],
             'WHERE' => [
+                'NOT' => ['gl.lvl' => $level],
                 'OR' => [
-                    'NOT' => ['gl.lvl' => $level],
+                    'gr.is_assign' => 1,
                     'gl.lvl' => null,
                 ],
-                'gr.is_assign' => 1,
             ],
         ]);
 
