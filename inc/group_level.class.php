@@ -192,7 +192,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
             'WHERE' => [
                 'gl.lvl' => $level,
                 getEntitiesRestrictRequest(
-                    '',
+                    ' AND',
                     'gr',
                     'entities_id',
                     $entities_id,
