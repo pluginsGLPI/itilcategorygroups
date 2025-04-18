@@ -167,18 +167,24 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         // find possible values for this select
         $res_gr = $DB->request([
-            'SELECT' => ['gr.id', 'gr.name'],
-            'FROM'   => 'glpi_groups AS gr',
+            'SELECT' => ['glpi_groups.id', 'glpi_groups.name'],
+            'FROM'   => 'glpi_groups',
             'INNER JOIN' => [
-                'glpi_plugin_itilcategorygroups_groups_levels gr_lvl' => [
+                'glpi_plugin_itilcategorygroups_groups_levels' => [
                     'ON' => [
-                        'gr_lvl.groups_id' => 'gr.id',
-                        'gr_lvl.lvl'       => intval($level),
+                        'glpi_plugin_itilcategorygroups_groups_levels' => 'groups_id',
+                        'glpi_groups' => 'id',
+                        [
+                            'AND' => [
+                                'glpi_plugin_itilcategorygroups_groups_levels.lvl' => intval($level),
+                            ],
+                        ],
                     ],
                 ],
             ],
             'WHERE' => getEntitiesRestrictCriteria(
-                'gr',
+                'glpi_groups',
+                '',
                 $_SESSION['glpiactiveentities'],
                 true,
             ),
@@ -498,8 +504,15 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         $category = new ITILCategory();
         if ($category->getFromDB($itilcategories_id)) {
             $table = getTableForItemType(__CLASS__);
-            $query = "SELECT is_active FROM `$table` WHERE itilcategories_id = $itilcategories_id AND is_active = '1' AND is_groups_restriction = '1'";
-            $data  = $DB->request($query);
+            $data  = $DB->request([
+                'SELECT' => 'is_active',
+                'FROM'   => $table,
+                'WHERE'  => [
+                    'itilcategories_id' => $itilcategories_id,
+                    'is_active'        => 1,
+                    'is_groups_restriction' => 1,
+                ],
+            ]);
             // A category rule exist for this ticket
             if (count($data)) {
                 return true;
@@ -515,20 +528,23 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         global $DB;
 
         $res = $DB->request([
-            'SELECT' => 'gr.id',
-            'FROM'   => 'glpi_groups AS gr',
+            'SELECT' => 'glpi_groups.id',
+            'FROM'   => 'glpi_groups',
             'LEFT JOIN' => [
-                'glpi_plugin_itilcategorygroups_groups_levels gl' => [
+                'glpi_plugin_itilcategorygroups_groups_levels' => [
                     'ON' => [
-                        'gl.groups_id' => 'gr.id',
+                        'glpi_plugin_itilcategorygroups_groups_levels' => 'groups_id',
+                        'glpi_groups' => 'id',
                     ],
                 ],
             ],
             'WHERE' => [
-                'NOT' => ['gl.lvl' => $level],
                 'OR' => [
-                    'gr.is_assign' => 1,
-                    'gl.lvl' => null,
+                    [
+                        'NOT' => ['glpi_plugin_itilcategorygroups_groups_levels.lvl' => $level],
+                        'glpi_groups.is_assign' => 1,
+                    ],
+                    'glpi_plugin_itilcategorygroups_groups_levels.lvl' => null,
                 ],
             ],
         ]);
