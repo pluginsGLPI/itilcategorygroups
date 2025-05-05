@@ -29,7 +29,7 @@
  */
 
 include('../../../inc/includes.php');
-Session::checkRight("config", READ);
+Session::checkLoginUser();
 
 Html::header(
     PluginItilcategorygroupsCategory::getTypeName(),
