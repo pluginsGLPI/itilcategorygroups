@@ -28,11 +28,44 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+use Glpi\DBAL\QueryExpression;
+use Glpi\DBAL\QueryFunction;
+
+/**
+ * -------------------------------------------------------------------------
+ * ItilCategoryGroups plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of ItilCategoryGroups.
+ *
+ * ItilCategoryGroups is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * ItilCategoryGroups is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ItilCategoryGroups. If not, see <http://www.gnu.org/licenses/>.
+ * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2012-2022 by ItilCategoryGroups plugin team.
+ * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @link      https://github.com/pluginsGLPI/itilcategorygroups
+ * -------------------------------------------------------------------------
+ */
+
 class PluginItilcategorygroupsCategory extends CommonDropdown
 {
     public $first_level_menu      = 'plugins';
     public $second_level_menu     = 'itilcategorygroups';
     public $display_dropdowntitle = false;
+    public $can_be_translated = false;
 
     public static $rightname = 'config';
 
@@ -43,12 +76,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         return __('Link ItilCategory - Groups', 'itilcategorygroups');
     }
 
-    public static function canCreate()
+    public static function canCreate(): bool
     {
         return static::canUpdate();
     }
 
-    public static function canPurge()
+    public static function canPurge(): bool
     {
         return static::canUpdate();
     }
@@ -59,94 +92,23 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             return false;
         }
 
-        $this->initForm($id);
-        $this->showFormHeader($options);
-
-        echo "<tr class='tab_bg_1'>";
-        echo '<td><label>' . __('Name') . ' :</label></td>';
-        echo "<td style='width:30%'>";
-        echo Html::input(
-            'name',
+        TemplateRenderer::getInstance()->display(
+            '@itilcategorygroups/category.html.twig',
             [
-                'value' => $this->fields['name'],
+                'action'        => $this->getFormURL(),
+                'item'          => $this,
+                'show_level'    => (int) $this->fields['itilcategories_id'],
             ],
         );
-        echo '</td>';
-
-        $rand = mt_rand();
-        echo "<td><label for='dropdown_is_active$rand'>" . __('Active') . ' :</label></td>';
-        echo "<td style='width:30%'>";
-        Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, ['rand' => $rand]);
-        echo '</td></tr>';
-
-        $rand = mt_rand();
-        echo "<tr class='tab_bg_1'>";
-        echo "<td><label for='dropdown_itilcategories_id$rand'>" . __('Category') . ' :</label></td>';
-        echo '<td>';
-        Dropdown::show('ITILCategory', [
-            'value' => $this->fields['itilcategories_id'],
-            'rand'  => $rand]);
-        echo '</td>';
-
-        // Groups restriction
-        $rand = mt_rand();
-        echo "<td><label for='dropdown_is_groups_restriction$rand'>" . __('Display only the groups of the next level') . ' :</label></td>';
-        echo "<td style='width:30%'>";
-        Dropdown::showYesNo('is_groups_restriction', $this->fields['is_groups_restriction'], -1, ['rand' => $rand]);
-        echo '</td></tr>';
-
-        $rand = mt_rand();
-        echo "<tr class='tab_bg_1'>";
-        echo "<td><label for='dropdown_is_incident$rand'>" . __('Visible for an incident') . ' :</label></td>';
-        echo '<td>';
-        Dropdown::showYesNo('is_incident', $this->fields['is_incident'], -1, ['rand' => $rand]);
-        echo '</td>';
-
-        $rand = mt_rand();
-        echo "<td><label for='dropdown_is_request$rand'>" . __('Visible for a request') . ' :</label></td>';
-        echo '<td>';
-        Dropdown::showYesNo('is_request', $this->fields['is_request'], -1, ['rand' => $rand]);
-        echo '</td></tr>';
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td><label for='comment'>" . __('Comments') . ' : </label></td>';
-        echo "<td align='left'>";
-        echo "<textarea name='comment' id='comment' style='width:100%; height:70px;'>";
-        echo $this->fields['comment'] . '</textarea>';
-        echo "</td><td colspan='2'></td></tr>";
-
-        echo "<tr class='tab_bg_1'><td colspan='4'><hr></td></tr>";
-
-        echo "<tr class='tab_bg_1'><td><label for='groups_id_level1[]'>" . ucfirst(__('Level 1', 'itilcategorygroups')) . ' :</label></td>';
-        echo '<td>';
-        $this->multipleDropdownGroup(1);
-        echo '</td>';
-        echo "<td><label for='groups_id_level2[]'>" . ucfirst(__('Level 2', 'itilcategorygroups')) . ' :</label></td>';
-        echo '<td>';
-        $this->multipleDropdownGroup(2);
-        echo '</td></tr>';
-
-        echo "<tr class='tab_bg_1'><td><label for='groups_id_level3[]'>" . ucfirst(__('Level 3', 'itilcategorygroups')) . ' :</label></td>';
-        echo '<td>';
-        $this->multipleDropdownGroup(3);
-        echo '</td>';
-        echo "<td><label for='groups_id_level4[]'>" . ucfirst(__('Level 4', 'itilcategorygroups')) . ' :</label></td>';
-        echo '<td>';
-        $this->multipleDropdownGroup(4);
-        echo '</td></tr>';
-
-        $this->showFormButtons($options);
-        Html::closeForm();
 
         return true;
     }
 
-    public function multipleDropdownGroup($level)
+    public function getSavedValues($level)
     {
         /** @var \DBmysql $DB */
         global $DB;
 
-        // find current values for this select
         $values = [];
         if (!$this->isNewItem()) {
             $res_val = $DB->request([
@@ -161,12 +123,20 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ]);
             foreach ($res_val as $data_val) {
-                $values[] = $data_val['groups_id'];
+                $values[$data_val['groups_id']] = $data_val['groups_id'];
             }
         }
 
-        // find possible values for this select
-        $res_gr = $DB->request([
+        return $values;
+    }
+
+    public function multipleDropdownGroup($level)
+    {
+        /** @var \DBmysql $DB */
+        global $DB;
+
+        $values = [];
+        $res_val = $DB->request([
             'SELECT' => ['glpi_groups.id', 'glpi_groups.name'],
             'FROM'   => 'glpi_groups',
             'INNER JOIN' => [
@@ -190,30 +160,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             ),
         ]);
 
-        if ($this->fields["view_all_lvl$level"] == 1) {
-            $checked  = "checked='checked'";
-            $disabled = "disabled='disabled'";
-        } else {
-            $checked  = '';
-            $disabled = '';
+        foreach ($res_val as $data_val) {
+            $values[$data_val['id']] = $data_val['name'];
         }
 
-        echo "<span id='select_level_$level'>";
-        echo "<select name='groups_id_level" . $level . "[]' id='groups_id_level" . $level . "[]' $disabled multiple='multiple' class='chzn-select' data-placeholder='-----' style='width:160px;'>";
-        foreach ($res_gr as $data_gr) {
-            if (in_array($data_gr['id'], $values)) {
-                $selected = 'selected';
-            } else {
-                $selected = '';
-            }
-            echo "<option value='" . $data_gr['id'] . "' $selected>" . $data_gr['name'] . '</option>';
-        }
-        echo '</select>';
-        echo '</span>';
-        echo '<script>$("#select_level_' . $level . ' select").select2();</script>';
-        echo "<input type='hidden' name='view_all_lvl$level' value='0'>";
-        echo "&nbsp;<label for='view_all_lvl$level'>" . __('All') . ' ?&nbsp;</label>' .
-             "<input type='checkbox' name='view_all_lvl$level' id='view_all_lvl$level' $checked onclick='toggleSelect($level)'/>";
+        return $values;
     }
 
     public function prepareInputForAdd($input)
@@ -264,17 +215,19 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                         'level'             => $lvl,
                     ],
                 );
+
                 foreach ($found_cat_groups as $id => $current_cat_group) {
                     $cat_group->delete(['id' => $current_cat_group['id']]);
                 }
 
                 //insert new saved
-                if (isset($this->input["groups_id_level$lvl"])) {
+                if (isset($this->input["groups_id_level$lvl"]) && is_array($this->input["groups_id_level$lvl"])) {
                     foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
                         $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input['id'],
                             'level'                                                => $lvl,
                             'itilcategories_id'                                    => $this->input['itilcategories_id'],
-                            'groups_id'                                            => $groups_id]);
+                            'groups_id'                                            => $groups_id,
+                        ]);
                     }
                 }
             }
@@ -325,7 +278,15 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 // All groups assigned to the ticket
                 foreach ($ticket->getGroups(2) as $element) {
                     $groupsId   = $element['groups_id'];
-                    $data_level = self::getFirst("SELECT level FROM `$table` WHERE itilcategories_id = '$itilcategories_id' AND groups_id = '$groupsId'", 'level');
+                    $criteria = [
+                        'SELECT' => 'level',
+                        'FROM'   => $table,
+                        'WHERE'  => [
+                            'itilcategories_id' => $itilcategories_id,
+                            'groups_id'         => $groupsId,
+                        ],
+                    ];
+                    $data_level = self::getFirst($criteria, 'level');
                     if (!empty($data_level)) {
                         $level = $data_level > $level ? $data_level : $level;
                     }
@@ -335,7 +296,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 // No group assigned to the ticket
                 // Selects the level min that will be displayed
                 if ($level == 0) {
-                    $level = self::getFirst("SELECT MIN(level) as level FROM `$table` WHERE itilcategories_id = '$itilcategories_id'", 'level');
+                    $criteria = [
+                        'SELECT' => 'MIN(level) as level',
+                        'FROM'   => $table,
+                        'WHERE'  => [
+                            'itilcategories_id' => $itilcategories_id,
+                        ],
+                    ];
+                    $level = self::getFirst($criteria, 'level');
                     $group_params['condition'] .= " AND cat_gr.level = '$level'";
                 } else {
                     $level_max = $level + 1;
@@ -356,11 +324,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                             }
                         } else {
                             foreach ($found_groups['groups_id_level' . $lvl] as $groups_id) {
-                                if (countElementsInTableForEntity(
-                                    'glpi_groups',
-                                    $ticket->getEntityID(),
-                                    ['id' => $groups_id],
-                                ) > 0) {
+                                if (
+                                    countElementsInTableForEntity(
+                                        'glpi_groups',
+                                        $ticket->getEntityID(),
+                                        ['id' => $groups_id],
+                                    ) > 0
+                                ) {
                                     $group->getFromDB($groups_id);
                                     $groups_id_toshow[] = $group->getID();
                                 }
@@ -424,8 +394,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         $table    = getTableForItemType(__CLASS__);
 
         if ($category->getFromDB($itilcategories_id)) {
-            $entity_restrict = getEntitiesRestrictRequest(
-                ' AND ',
+            $entity_restrict[] = getEntitiesRestrictRequest(
+                '',
                 'cat',
                 'entities_id',
                 $options['entities_id'],
@@ -436,21 +406,34 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             $DB->doQuery('SET SESSION group_concat_max_len = 1000000');
 
             // retrieve all groups associated to this cat
-            $query = "SELECT
-                     cat.*,
-                     GROUP_CONCAT(\"{\\\"gr_id\\\":\",
-                                  cat_gr.groups_id,
-                                  \", \\\"lvl\\\": \",
-                                  cat_gr.level,
-                                  \"}\") as groups_level
-                   FROM `$table` cat
-                   LEFT JOIN glpi_plugin_itilcategorygroups_categories_groups cat_gr
-                     ON cat_gr.plugin_itilcategorygroups_categories_id = cat.id
-                   WHERE cat.itilcategories_id = '$itilcategories_id' " .
-                      $options['condition'] . $entity_restrict .
-                      " AND cat.is_active = '1'
-                   ORDER BY cat.entities_id DESC";
-            foreach ($DB->request($query) as $data) {
+            $criteria = [
+                'SELECT' => [
+                    'cat.*',
+                    QueryFunction::groupConcat(
+                        expression: new QueryExpression(
+                            "\"{\\\"gr_id\\\":\", cat_gr.groups_id, \", \\\"lvl\\\": \", cat_gr.level, \"}\"",
+                        ),
+                        distinct: false,
+                        alias: 'groups_level',
+                    ),
+                ],
+                'FROM'   => $table . ' AS cat',
+                'LEFT JOIN' => [
+                    'glpi_plugin_itilcategorygroups_categories_groups AS cat_gr' => [
+                        'FKEY' => [
+                            'cat' => 'id',
+                            'cat_gr' => 'plugin_itilcategorygroups_categories_id',
+                        ],
+                    ],
+                ],
+                'WHERE'  => [
+                    'cat.itilcategories_id' => $itilcategories_id,
+                    'cat.is_active'        => 1,
+                ] + $entity_restrict,
+                'GROUPBY' => 'cat.id',
+            ];
+
+            foreach ($DB->request($criteria) as $data) {
                 $groups_level = json_decode('[' . $data['groups_level'] . ']', true);
 
                 for ($level = 1; $level <= 4; $level++) {
@@ -472,16 +455,16 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     /**
      * Helper to make a database request and extract the first element
-     * @param string $query
+     * @param array $criteria
      * @param string $selector
      * @return mixed
      */
-    public static function getFirst($query, $selector)
+    public static function getFirst(array $criteria, string $selector)
     {
         /** @var \DBmysql $DB */
         global $DB;
 
-        $data = $DB->request($query);
+        $data = $DB->request($criteria);
         if (count($data)) {
             $data = json_decode('[' . $data->current()["$selector"] . ']', true);
 
@@ -783,8 +766,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         $table = getTableForItemType(__CLASS__);
 
-        if ($DB->tableExists('glpi_plugin_itilcategorygroups_categories_groups')
-            && $DB->fieldExists('glpi_plugin_itilcategorygroups_categories_groups', 'is_active')) {
+        if (
+            $DB->tableExists('glpi_plugin_itilcategorygroups_categories_groups')
+            && $DB->fieldExists('glpi_plugin_itilcategorygroups_categories_groups', 'is_active')
+        ) {
             $migration->renameTable('glpi_plugin_itilcategorygroups_categories_groups', $table);
         }
 
@@ -869,6 +854,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public static function getIcon()
     {
-        return 'fas fa-users';
+        return 'ti ti-users-group';
     }
 }

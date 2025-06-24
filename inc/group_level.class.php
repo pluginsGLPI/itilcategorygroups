@@ -28,6 +28,36 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+
+/**
+ * -------------------------------------------------------------------------
+ * ItilCategoryGroups plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of ItilCategoryGroups.
+ *
+ * ItilCategoryGroups is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * ItilCategoryGroups is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ItilCategoryGroups. If not, see <http://www.gnu.org/licenses/>.
+ * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2012-2022 by ItilCategoryGroups plugin team.
+ * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @link      https://github.com/pluginsGLPI/itilcategorygroups
+ * -------------------------------------------------------------------------
+ */
+
 class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 {
     // From CommonDBChild
@@ -44,14 +74,19 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         return __('Level attribution', 'itilcategorygroups');
     }
 
-    public static function canView()
+    public static function canView(): bool
     {
         return Session::haveRight('config', READ);
     }
 
-    public static function canCreate()
+    public static function canCreate(): bool
     {
         return Session::haveRight('config', CREATE);
+    }
+
+    public static function canPurge(): bool
+    {
+        return false;
     }
 
     public static function install(Migration $migration)
@@ -90,7 +125,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         if (!$withtemplate) {
             switch ($item->getType()) {
                 case 'Group':
-                    return __('ItilCategory Groups', 'itilcategorygroups');
+                    return self::createTabEntry(__('ItilCategory Groups', 'itilcategorygroups'), 0, $item::getType(), PluginItilcategorygroupsCategory::getIcon());
             }
         }
 
@@ -106,6 +141,11 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         return true;
     }
 
+    public function getFormFields(): array
+    {
+        return ['id', 'lvl'];
+    }
+
     public static function showForGroup(Group $group)
     {
         $ID = $group->getField('id');
@@ -113,47 +153,19 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
             return false;
         }
 
-        $canedit = $group->can($ID, UPDATE);
-        // Get data
         $item = new self();
         if (!$item->getFromDB($ID)) {
             $item->getEmpty();
         }
 
-        $rand = mt_rand();
-        echo "<form name='group_level_form$rand' id='group_level_form$rand' method='post'
-             action='" . Toolbox::getItemTypeFormURL(__CLASS__) . "'>";
-        echo "<input type='hidden' name='" . self::$items_id . "' value='$ID' />";
-
-        echo "<div class='spaced'>";
-        echo "<table class='tab_cadre_fixe'>";
-        echo "<tr class='tab_bg_1'><th>" . __('Level attribution', 'itilcategorygroups') . '</th></tr>';
-
-        echo "<tr class='tab_bg_2'><td class='center'>";
-        Dropdown::showFromArray(
-            'lvl',
-            [null => '---',
-                1 => __('Level 1', 'itilcategorygroups'),
-                2 => __('Level 2', 'itilcategorygroups'),
-                3 => __('Level 3', 'itilcategorygroups'),
-                4 => __('Level 4', 'itilcategorygroups')],
-            ['value' => $item->fields['lvl']],
+        TemplateRenderer::getInstance()->display(
+            '@itilcategorygroups/groupe.html.twig',
+            [
+                'item'          => $item,
+            ],
         );
-        echo '</td></tr>';
 
-        if ($canedit) {
-            echo "<tr class='tab_bg_1'><td class='center'>";
-            if ($item->fields['id']) {
-                echo "<input type='hidden' name='id' value='" . $item->fields['id'] . "'>";
-                echo "<input type='submit' name='update' value=\"" . __('Save') . "\"
-                   class='submit'>";
-            } else {
-                echo "<input type='submit' name='add' value=\"" . __('Save') . "\" class='submit'>";
-            }
-            echo '</td></tr>';
-        }
-        echo '</table></div>';
-        Html::closeForm();
+        return true;
     }
 
     public static function getAddSearchOptions($itemtype)
