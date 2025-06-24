@@ -87,7 +87,8 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
                             'plugin_itilcategorygroups_categories_id' => $data['id'],
                             'level'                                   => $lvl_num,
                             'itilcategories_id'                       => $data['itilcategories_id'],
-                            'groups_id'                               => $data["groups_id_level$lvl_str"]];
+                            'groups_id'                               => $data["groups_id_level$lvl_str"],
+                        ];
                     }
                 }
 
