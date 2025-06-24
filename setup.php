@@ -30,52 +30,61 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.5.1');
-
-// Minimal GLPI version, inclusive
-define('PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI', '10.0.0');
-// Maximum GLPI version, exclusive
-define('PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI', '10.0.99');
+define('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.6.0-beta1');
+define('PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI', '11.0.0');
+define('PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI', '11.0.99');
 
 function plugin_init_itilcategorygroups()
 {
-    /** @var array $PLUGIN_HOOKS */
-    global $PLUGIN_HOOKS;
+    /**
+     * @var array $CFG_GLPI
+     * @var array $PLUGIN_HOOKS
+     */
+    global $CFG_GLPI, $PLUGIN_HOOKS;
+
+    /**
+         * @var array $CFG_GLPI
+         */
+    global $CFG_GLPI;
 
     $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
 
     if (Plugin::isPluginActive('itilcategorygroups')) {
         if (Session::haveRight('config', UPDATE)) {
-            $PLUGIN_HOOKS['config_page']['itilcategorygroups'] = 'front/category.php';
+            $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['itilcategorygroups'] = 'front/category.php';
         }
 
-        Plugin::registerClass(
-            'PluginItilcategorygroupsCategory',
-            ['forwardentityfrom' => 'ITILCategory'],
-        );
-        Plugin::registerClass(
-            'PluginItilcategorygroupsGroup_Level',
-            ['addtabon' => 'Group'],
-        );
+        Plugin::registerClass(PluginItilcategorygroupsCategory::class, ['forwardentityfrom' => ITILCategory::class]);
+        Plugin::registerClass(PluginItilcategorygroupsGroup_Level::class, ['addtabon' => 'Group']);
 
         if (Session::haveRight('config', READ)) {
             // add to 'Admin' menu :
-            $PLUGIN_HOOKS['menu_toadd']['itilcategorygroups'] = ['admin' => 'PluginItilcategorygroupsMenu'];
+            $PLUGIN_HOOKS[Hooks::MENU_TOADD]['itilcategorygroups'] = ['admin' => PluginItilcategorygroupsMenu::class];
 
             // other hook :
-            $PLUGIN_HOOKS['pre_item_update']['itilcategorygroups'] = ['Group' => 'plugin_pre_item_update_itilcategorygroups'];
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['itilcategorygroups'] = [Group::class => 'plugin_pre_item_update_itilcategorygroups'];
         }
         if (Session::haveRight('config', UPDATE)) {
             $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
-               = '/' . Plugin::getWebDir('itilcategorygroups', false) . '/front/category.form.php';
+               = '/' . $CFG_GLPI['root_doc'] . '/plugins/itilcategorygroups/front/category.form.php';
         }
 
-        $PLUGIN_HOOKS['add_javascript']['itilcategorygroups'] = ['scripts/multiple_group.js'];
+        $PLUGIN_HOOKS[hooks::ADD_JAVASCRIPT]['itilcategorygroups'] = ['public/scripts/multiple_group.js'];
 
         $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = [
-            'PluginItilcategorygroupsCategory', 'filterActors',
+            PluginItilcategorygroupsCategory::class, 'filterActors',
         ];
     }
+}
+
+function plugin_itilcategorygroups_check_prerequisites()
+{
+    if (!is_readable(__DIR__ . '/vendor/autoload.php') || !is_file(__DIR__ . '/vendor/autoload.php')) {
+        echo "Run composer install --no-dev in the plugin directory<br>";
+        return false;
+    }
+
+    return true;
 }
 
 // Get the name and the version of the plugin - Needed
