@@ -103,11 +103,13 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = [])
         case 'glpi_plugin_itilcategorygroups_groups_levels.lvl':
             Dropdown::showFromArray(
                 'lvl',
-                [null => '---',
+                [
+                    null => '---',
                     1 => __('Level 1', 'itilcategorygroups'),
                     2 => __('Level 2', 'itilcategorygroups'),
                     3 => __('Level 3', 'itilcategorygroups'),
-                    4 => __('Level 4', 'itilcategorygroups')],
+                    4 => __('Level 4', 'itilcategorygroups'),
+                ],
             );
 
             return true;
