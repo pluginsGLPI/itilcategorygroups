@@ -69,7 +69,7 @@ function plugin_init_itilcategorygroups()
                = '/' . $CFG_GLPI['root_doc'] . '/plugins/itilcategorygroups/front/category.form.php';
         }
 
-        $PLUGIN_HOOKS[hooks::ADD_JAVASCRIPT]['itilcategorygroups'] = ['public/scripts/multiple_group.js'];
+        $PLUGIN_HOOKS[hooks::ADD_JAVASCRIPT]['itilcategorygroups'] = ['scripts/multiple_group.js'];
 
         $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = [
             PluginItilcategorygroupsCategory::class, 'filterActors',
