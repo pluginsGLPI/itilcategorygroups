@@ -30,6 +30,8 @@
 
 use Glpi\Plugin\Hooks;
 
+use function Safe\define;
+
 define('PLUGIN_ITILCATEGORYGROUPS_VERSION', '2.6.0');
 define('PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI', '11.0.0');
 define('PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI', '11.0.99');
@@ -91,7 +93,7 @@ function plugin_itilcategorygroups_check_prerequisites()
 function plugin_version_itilcategorygroups()
 {
     return [
-        'name'         => __('ItilCategory Groups', 'itilcategorygroups'),
+        'name'         => __s('ItilCategory Groups', 'itilcategorygroups'),
         'version'      => PLUGIN_ITILCATEGORYGROUPS_VERSION,
         'author'       => "<a href='http://www.teclib.com'>TECLIB'</a>",
         'homepage'     => 'https://github.com/pluginsGLPI/itilcategorygroups',

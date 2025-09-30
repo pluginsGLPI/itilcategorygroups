@@ -84,7 +84,7 @@ function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num)
                 case 2:
                 case 3:
                 case 4:
-                    return __('Level ' . $value, 'itilcategorygroups');
+                    return __s('Level ' . $value, 'itilcategorygroups');
             }
     }
 
@@ -104,10 +104,10 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = [])
                 'lvl',
                 [
                     null => '---',
-                    1 => __('Level 1', 'itilcategorygroups'),
-                    2 => __('Level 2', 'itilcategorygroups'),
-                    3 => __('Level 3', 'itilcategorygroups'),
-                    4 => __('Level 4', 'itilcategorygroups'),
+                    1 => __s('Level 1', 'itilcategorygroups'),
+                    2 => __s('Level 2', 'itilcategorygroups'),
+                    3 => __s('Level 3', 'itilcategorygroups'),
+                    4 => __s('Level 4', 'itilcategorygroups'),
                 ],
             );
 
