@@ -32,12 +32,12 @@ class PluginItilcategorygroupsMenu extends CommonGLPI
 {
     public static function getTypeName($nb = 0)
     {
-        return __('Link ItilCategory - Groups', 'itilcategorygroups');
+        return __s('Link ItilCategory - Groups', 'itilcategorygroups');
     }
 
     public static function getMenuName()
     {
-        return __('ItilCategory Groups', 'itilcategorygroups');
+        return __s('ItilCategory Groups', 'itilcategorygroups');
     }
 
     public static function getMenuContent()

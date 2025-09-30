@@ -96,7 +96,6 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = [])
 {
     $table     = $options['options']['table'];
     $field     = $options['options']['field'];
-    $linkfield = $options['options']['linkfield'];
 
     // Table fields
     switch ($table . '.' . $field) {

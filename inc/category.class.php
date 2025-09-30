@@ -73,7 +73,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public static function getTypeName($nb = 0)
     {
-        return __('Link ItilCategory - Groups', 'itilcategorygroups');
+        return __s('Link ItilCategory - Groups', 'itilcategorygroups');
     }
 
     public static function canCreate(): bool
@@ -106,7 +106,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public function getSavedValues($level)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $values = [];
@@ -132,7 +132,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public function multipleDropdownGroup($level)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $values = [];
@@ -172,7 +172,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         $cat       = new self();
         $found_cat = $cat->find(['itilcategories_id' => $this->input['itilcategories_id']]);
         if (count($found_cat) > 0) {
-            Session::addMessageAfterRedirect(__('A link with this category already exists', 'itilcategorygroups'));
+            Session::addMessageAfterRedirect(__s('A link with this category already exists', 'itilcategorygroups'));
 
             return false;
         }
@@ -255,12 +255,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 $group_params['entities_id'] = $ticket->fields['entities_id'];
                 $group_params['condition']   = ' AND ' . ($ticket->fields['type'] == Ticket::DEMAND_TYPE ?
                     "`is_request`='1'" : "`is_incident`='1'");
+            } elseif ($type == Ticket::DEMAND_TYPE) {
+                $group_params['condition'] = " AND `is_request` ='1'";
             } else {
-                if ($type == Ticket::DEMAND_TYPE) {
-                    $group_params['condition'] = " AND `is_request` ='1'";
-                } else {
-                    $group_params['condition'] = " AND `is_incident` = '1'";
-                }
+                $group_params['condition'] = " AND `is_incident` = '1'";
             }
 
             $itilcategories_id = $params['params']['item']['itilcategories_id'] ?? $ticket->fields['itilcategories_id'];
@@ -348,7 +346,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                             unset($actor['children'][$index_child]);
                         }
                     }
-
                     if (count($actor['children']) > 0) {
                         // reindex correctly children (to avoid select2 fails)
                         $actor['children'] = array_values($actor['children']);
@@ -356,11 +353,9 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                         // otherwise remove empty parent
                         unset($params['actors'][$index]);
                     }
-                } else {
+                } elseif ($actor['itemtype'] == 'Group' && !in_array($actor['items_id'], $groups_id_toshow)) {
                     // remove direct groups (don't sure this exists)
-                    if ($actor['itemtype'] == 'Group' && !in_array($actor['items_id'], $groups_id_toshow)) {
-                        unset($params['actors'][$index]);
-                    }
+                    unset($params['actors'][$index]);
                 }
             }
         }
@@ -376,7 +371,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
      */
     public static function getGroupsForCategory($itilcategories_id, $params = [])
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         //define default options
@@ -391,7 +386,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         $groups   = [];
         $category = new ITILCategory();
-        $table    = getTableForItemType(__CLASS__);
+        $table    = getTableForItemType(self::class);
 
         if ($category->getFromDB($itilcategories_id)) {
             $entity_restrict[] = getEntitiesRestrictRequest(
@@ -461,11 +456,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
      */
     public static function getFirst(array $criteria, string $selector)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $data = $DB->request($criteria);
-        if (count($data)) {
+        if (count($data) > 0) {
             $data = json_decode('[' . $data->current()["$selector"] . ']', true);
 
             return array_shift($data);
@@ -481,12 +476,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
      */
     public static function canApplyFilter($itilcategories_id)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $category = new ITILCategory();
         if ($category->getFromDB($itilcategories_id)) {
-            $table = getTableForItemType(__CLASS__);
+            $table = getTableForItemType(self::class);
             $data  = $DB->request([
                 'SELECT' => 'is_active',
                 'FROM'   => $table,
@@ -497,7 +492,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ]);
             // A category rule exist for this ticket
-            if (count($data)) {
+            if (count($data) > 0) {
                 return true;
             }
         }
@@ -507,7 +502,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public static function getOthersGroupsID($level = 0)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $res = $DB->request([
@@ -546,14 +541,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         $tab[] = [
             'id'   => 'common',
-            'name' => __('Link ItilCategory - Groups', 'itilcategorygroups'),
+            'name' => __s('Link ItilCategory - Groups', 'itilcategorygroups'),
         ];
 
         $tab[] = [
             'id'            => 1,
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => __('Name'),
+            'name'          => __s('Name'),
             'datatype'      => 'itemlink',
             'checktype'     => 'text',
             'displaytype'   => 'text',
@@ -566,7 +561,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'          => 2,
             'table'       => $this->getTable(),
             'field'       => 'is_incident',
-            'name'        => __('Visible for an incident'),
+            'name'        => __s('Visible for an incident'),
             'datatype'    => 'bool',
             'checktype'   => 'bool',
             'displaytype' => 'bool',
@@ -577,7 +572,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'          => 3,
             'table'       => $this->getTable(),
             'field'       => 'is_request',
-            'name'        => __('Visible for a request'),
+            'name'        => __s('Visible for a request'),
             'datatype'    => 'bool',
             'checktype'   => 'bool',
             'displaytype' => 'bool',
@@ -588,7 +583,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'          => 4,
             'table'       => 'glpi_itilcategories',
             'field'       => 'name',
-            'name'        => __('Category'),
+            'name'        => __s('Category'),
             'datatype'    => 'itemlink',
             'checktype'   => 'text',
             'displaytype' => 'text',
@@ -599,7 +594,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'          => 5,
             'table'       => $this->getTable(),
             'field'       => 'is_active',
-            'name'        => __('Active'),
+            'name'        => __s('Active'),
             'datatype'    => 'bool',
             'checktype'   => 'bool',
             'displaytype' => 'bool',
@@ -610,7 +605,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'          => 16,
             'table'       => $this->getTable(),
             'field'       => 'comment',
-            'name'        => __('Comments'),
+            'name'        => __s('Comments'),
             'datatype'    => 'text',
             'checktype'   => 'text',
             'displaytype' => 'multiline_text',
@@ -621,7 +616,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'           => 26,
             'table'        => 'glpi_groups',
             'field'        => 'name',
-            'name'         => __('Level 1', 'itilcategorygroups'),
+            'name'         => __s('Level 1', 'itilcategorygroups'),
             'forcegroupby' => true,
             'joinparams'   => [
                 'beforejoin' => [
@@ -645,7 +640,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'           => 27,
             'table'        => 'glpi_groups',
             'field'        => 'name',
-            'name'         => __('Level 2', 'itilcategorygroups'),
+            'name'         => __s('Level 2', 'itilcategorygroups'),
             'forcegroupby' => true,
             'joinparams'   => [
                 'beforejoin' => [
@@ -669,7 +664,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'           => 28,
             'table'        => 'glpi_groups',
             'field'        => 'name',
-            'name'         => __('Level 3', 'itilcategorygroups'),
+            'name'         => __s('Level 3', 'itilcategorygroups'),
             'forcegroupby' => true,
             'joinparams'   => [
                 'beforejoin' => [
@@ -693,7 +688,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'           => 29,
             'table'        => 'glpi_groups',
             'field'        => 'name',
-            'name'         => __('Level 4', 'itilcategorygroups'),
+            'name'         => __s('Level 4', 'itilcategorygroups'),
             'forcegroupby' => true,
             'joinparams'   => [
                 'beforejoin' => [
@@ -717,7 +712,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'            => 30,
             'table'         => $this->getTable(),
             'field'         => 'id',
-            'name'          => __('ID'),
+            'name'          => __s('ID'),
             'injectable'    => false,
             'massiveaction' => false,
         ];
@@ -726,7 +721,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'            => 35,
             'table'         => $this->getTable(),
             'field'         => 'date_mod',
-            'name'          => __('Last update'),
+            'name'          => __s('Last update'),
             'datatype'      => 'datetime',
             'massiveaction' => false,
         ];
@@ -735,7 +730,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'            => 80,
             'table'         => 'glpi_entities',
             'field'         => 'completename',
-            'name'          => __('Entity'),
+            'name'          => __s('Entity'),
             'injectable'    => false,
             'massiveaction' => false,
         ];
@@ -744,7 +739,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'id'          => 86,
             'table'       => $this->getTable(),
             'field'       => 'is_recursive',
-            'name'        => __('Child entities'),
+            'name'        => __s('Child entities'),
             'datatype'    => 'bool',
             'checktype'   => 'bool',
             'displaytype' => 'bool',
@@ -757,14 +752,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
     //----------------------------- Install process --------------------------//
     public static function install(Migration $migration)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset   = DBConnection::getDefaultCharset();
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign  = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
 
         if (
             $DB->tableExists('glpi_plugin_itilcategorygroups_categories_groups')
@@ -844,9 +839,9 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public static function uninstall()
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         $DB->doQuery("DROP TABLE IF EXISTS`$table`");
 
         return true;

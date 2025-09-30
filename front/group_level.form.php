@@ -30,7 +30,7 @@
 
 use Glpi\Exception\Http\BadRequestHttpException;
 
-include('../../../inc/includes.php');
+include(__DIR__ . '/../../../inc/includes.php');
 
 Session::checkCentralAccess();
 

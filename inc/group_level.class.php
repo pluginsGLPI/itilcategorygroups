@@ -71,7 +71,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
     public static function getTypeName($nb = 0)
     {
-        return __('Level attribution', 'itilcategorygroups');
+        return __s('Level attribution', 'itilcategorygroups');
     }
 
     public static function canView(): bool
@@ -91,14 +91,14 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
     public static function install(Migration $migration)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset   = DBConnection::getDefaultCharset();
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign  = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
 
         return $DB->doQuery("CREATE TABLE IF NOT EXISTS `$table` (
          `id`        int {$default_key_sign} NOT NULL auto_increment,
@@ -112,10 +112,10 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
     public static function uninstall()
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
 
         return $DB->doQuery("DROP TABLE IF EXISTS `$table`");
     }
@@ -125,7 +125,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         if (!$withtemplate) {
             switch ($item->getType()) {
                 case 'Group':
-                    return self::createTabEntry(__('ItilCategory Groups', 'itilcategorygroups'), 0, $item::getType(), PluginItilcategorygroupsCategory::getIcon());
+                    return self::createTabEntry(__s('ItilCategory Groups', 'itilcategorygroups'), 0, $item::getType(), PluginItilcategorygroupsCategory::getIcon());
             }
         }
 
@@ -173,9 +173,9 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         $opt = [];
 
         if ($itemtype == 'Group') {
-            $opt[9978]['table']      = getTableForItemType(__CLASS__);
+            $opt[9978]['table']      = getTableForItemType(self::class);
             $opt[9978]['field']      = 'lvl';
-            $opt[9978]['name']       = __('Level attribution', 'itilcategorygroups');
+            $opt[9978]['name']       = __s('Level attribution', 'itilcategorygroups');
             $opt[9978]['linkfield']  = 'lvl';
             $opt[9978]['joinparams'] = ['jointype' => 'child'];
         }
@@ -185,7 +185,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
     public static function getAllGroupForALevel($level, $entities_id = -1)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         if ($entities_id === -1) {
@@ -193,7 +193,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         }
 
         $groups_id = [];
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         $query = [
             'SELECT' => "$table.groups_id",
             'FROM'   => $table,
