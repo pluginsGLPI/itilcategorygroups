@@ -34,9 +34,9 @@ Potom, pro každou z kategorií požadavku je možné určit která skupina bude
    </authors>
    <versions>
       <version>
-         <num>2.6.0-beta2</num>
+         <num>2.6.0</num>
          <compatibility>~11.0.0</compatibility>
-         <download_url>https://github.com/pluginsGLPI/itilcategorygroups/releases/download/2.6.0-beta2/glpi-itilcategorygroups-2.6.0-beta2.tar.bz2</download_url>
+         <download_url>https://github.com/pluginsGLPI/itilcategorygroups/releases/download/2.6.0/glpi-itilcategorygroups-2.6.0.tar.bz2</download_url>
       </version>
       <version>
          <num>2.5.1</num>

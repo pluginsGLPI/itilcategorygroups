@@ -35,14 +35,14 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 
     public static function install(Migration $migration)
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset   = DBConnection::getDefaultCharset();
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign  = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         if (!$DB->tableExists($table)) {
             $query = "CREATE TABLE IF NOT EXISTS `$table` (
          `id`                                      INT     {$default_key_sign} NOT NULL AUTO_INCREMENT,
@@ -87,13 +87,14 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
                             'plugin_itilcategorygroups_categories_id' => $data['id'],
                             'level'                                   => $lvl_num,
                             'itilcategories_id'                       => $data['itilcategories_id'],
-                            'groups_id'                               => $data["groups_id_level$lvl_str"]];
+                            'groups_id'                               => $data["groups_id_level$lvl_str"],
+                        ];
                     }
                 }
 
                 //insert "all groups for this lvl'
                 foreach ($all_lvl as $itilcategories_id => $lvl) {
-                    foreach ($lvl as $lvl_num => $lvl_str) {
+                    foreach (array_keys($lvl) as $lvl_num) {
                         $DB->doQuery("UPDATE $parent_table SET view_all_lvl$lvl_num = 1
                               WHERE itilcategories_id = $itilcategories_id");
                     }
@@ -127,10 +128,10 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 
     public static function uninstall()
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         $DB->doQuery("DROP TABLE IF EXISTS`$table`");
 
         return true;

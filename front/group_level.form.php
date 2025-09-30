@@ -28,7 +28,9 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
+use Glpi\Exception\Http\BadRequestHttpException;
+
+include(__DIR__ . '/../../../inc/includes.php');
 
 Session::checkCentralAccess();
 
@@ -41,4 +43,5 @@ if (isset($_POST['add'])) {
     $level->update($_POST);
     Html::back();
 }
-Html::displayErrorAndDie('lost');
+
+throw new BadRequestHttpException();

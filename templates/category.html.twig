@@ -1,0 +1,144 @@
+{#
+ # -------------------------------------------------------------------------
+ # ItilCategoryGroups plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of ItilCategoryGroups.
+ #
+ # ItilCategoryGroups is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #
+ # ItilCategoryGroups is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with ItilCategoryGroups. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2012-2022 by ItilCategoryGroups plugin team.
+ # @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ # @link      https://github.com/pluginsGLPI/itilcategorygroups
+ # -------------------------------------------------------------------------
+ #}
+
+{% extends "generic_show_form.html.twig" %}
+{% import "components/form/fields_macros.html.twig" as fields %}
+
+{% block more_fields %}
+
+    {{ fields.dropdownField(
+        'ITILCategory',
+        'itilcategories_id',
+        item.fields['itilcategories_id'],
+        'ITILCategory'|itemtype_name,
+        {
+            'display_emptychoice': false,
+        }
+    ) }}
+
+    {{ fields.checkboxField(
+        'is_groups_restriction',
+        item.fields['is_groups_restriction'],
+        __('Restrict to next-level groups')
+    ) }}
+
+    {{ fields.nullField() }}
+
+    {{ fields.checkboxField(
+        'is_incident',
+        item.fields['is_incident'],
+        __('Visible for incidents')
+    ) }}
+
+    {{ fields.nullField() }}
+
+    {{ fields.checkboxField(
+        'is_request',
+        item.fields['is_request'],
+        __('Visible for requests')
+    ) }}
+
+    <div class="hr-text">
+        <i class="fa-2x ti ti-arrow-up-right"></i>
+        <span>{{ __('Level', 'itilcategorygroups') }}</span>
+    </div>
+
+
+    {% if show_level == 0 %}
+        <div class="alert info" style="display: block;">
+            {{ __("Please select an itil category before continue", 'advanceddashboard') }}
+        </div>
+    {% else %}
+
+        {{ fields.dropdownArrayField(
+            'groups_id_level1',
+            '',
+            item.multipleDropdownGroup(1),
+            __('Level 1', 'treeview'),
+            field_options|merge({
+                'values': item.getSavedValues(1),
+                'multiple': true
+            })
+        ) }}
+
+        {{ fields.dropdownArrayField(
+            'groups_id_level2',
+            '',
+            item.multipleDropdownGroup(2),
+            __('Level 2', 'treeview'),
+            field_options|merge({
+                'values': item.getSavedValues(2),
+                'multiple': true
+            })
+        ) }}
+
+        {{ fields.dropdownArrayField(
+            'groups_id_level3',
+            '',
+            item.multipleDropdownGroup(3),
+            __('Level 3', 'treeview'),
+            field_options|merge({
+                'values': item.getSavedValues(3),
+                'multiple': true
+            })
+        ) }}
+
+        {{ fields.dropdownArrayField(
+            'groups_id_level4',
+            '',
+            item.multipleDropdownGroup(4),
+            __('Level 4', 'treeview'),
+            field_options|merge({
+                'values': item.getSavedValues(4),
+                'multiple': true
+            })
+        ) }}
+
+        {{ fields.hiddenField(
+            'view_all_lvl1',
+            0,
+        ) }}
+
+        {{ fields.hiddenField(
+            'view_all_lvl2',
+            0,
+        ) }}
+
+        {{ fields.hiddenField(
+            'view_all_lvl3',
+            0,
+        ) }}
+
+        {{ fields.hiddenField(
+            'view_all_lvl4',
+            0,
+        ) }}
+
+    {% endif %}
+
+{% endblock %}

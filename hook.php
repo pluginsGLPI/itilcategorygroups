@@ -84,7 +84,7 @@ function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num)
                 case 2:
                 case 3:
                 case 4:
-                    return __('Level ' . $value, 'itilcategorygroups');
+                    return __s('Level ' . $value, 'itilcategorygroups');
             }
     }
 
@@ -96,18 +96,19 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = [])
 {
     $table     = $options['options']['table'];
     $field     = $options['options']['field'];
-    $linkfield = $options['options']['linkfield'];
 
     // Table fields
     switch ($table . '.' . $field) {
         case 'glpi_plugin_itilcategorygroups_groups_levels.lvl':
             Dropdown::showFromArray(
                 'lvl',
-                [null => '---',
-                    1 => __('Level 1', 'itilcategorygroups'),
-                    2 => __('Level 2', 'itilcategorygroups'),
-                    3 => __('Level 3', 'itilcategorygroups'),
-                    4 => __('Level 4', 'itilcategorygroups')],
+                [
+                    null => '---',
+                    1 => __s('Level 1', 'itilcategorygroups'),
+                    2 => __s('Level 2', 'itilcategorygroups'),
+                    3 => __s('Level 3', 'itilcategorygroups'),
+                    4 => __s('Level 4', 'itilcategorygroups'),
+                ],
             );
 
             return true;
