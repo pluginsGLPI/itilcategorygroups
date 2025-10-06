@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015,2018,2021
+# Kaya Zeren <kayazeren@gmail.com>, 2015,2018,2021,2025
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-11 07:36+0000\n"
+"POT-Creation-Date: 2025-10-06 01:59+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015,2018,2021\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015,2018,2021,2025\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,43 +18,50 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: inc/category.class.php:195
-msgid "A link with this category already exists"
-msgstr "Bu kategoriye bir bağlantı zaten var"
-
-#: inc/menu.class.php:38 inc/group_level.class.php:83 setup.php:79
-msgid "ItilCategory Groups"
-msgstr "ITIL kategori grupları"
-
-#: hook.php:81
-msgid "Level "
-msgstr "Düzey"
-
-#: hook.php:99 inc/category.class.php:117 inc/category.class.php:572
-#: inc/group_level.class.php:125
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:621 hook.php:107
 msgid "Level 1"
 msgstr "1. düzey"
 
-#: hook.php:100 inc/category.class.php:121 inc/category.class.php:596
-#: inc/group_level.class.php:126
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:645 hook.php:108
 msgid "Level 2"
 msgstr "2. düzey"
 
-#: hook.php:101 inc/category.class.php:126 inc/category.class.php:620
-#: inc/group_level.class.php:127
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:669 hook.php:109
 msgid "Level 3"
 msgstr "3. düzey"
 
-#: hook.php:102 inc/category.class.php:130 inc/category.class.php:644
-#: inc/group_level.class.php:128
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:693 hook.php:110
 msgid "Level 4"
 msgstr "4. düzey"
 
-#: inc/group_level.class.php:42 inc/group_level.class.php:120
-#: inc/group_level.class.php:154
+#: templates/groupe.html.twig templates/category.html.twig
+msgid "Level"
+msgstr "Düzey"
+
+#: templates/category.html.twig
+msgid "Please select an itil category before continue"
+msgstr "İlerlemeden önce lütfen bir ITIL kategorisi seçin"
+
+#: setup.php:96 inc/menu.class.php:40 inc/group_level.class.php:128
+msgid "ItilCategory Groups"
+msgstr "ITIL kategori grupları"
+
+#: inc/menu.class.php:35 inc/category.class.php:78 inc/category.class.php:546
+msgid "Link ItilCategory - Groups"
+msgstr "ITIL kategori - Gruplar bağlantısı"
+
+#: inc/category.class.php:177
+msgid "A link with this category already exists"
+msgstr "Bu kategoriye bir bağlantı zaten var"
+
+#: inc/group_level.class.php:74 inc/group_level.class.php:178
 msgid "Level attribution"
 msgstr "Düzey özellikleri"
 
-#: inc/menu.class.php:34 inc/category.class.php:42 inc/category.class.php:497
-msgid "Link ItilCategory - Groups"
-msgstr "ITIL kategori - Gruplar bağlantısı"
+#: hook.php:87
+msgid "Level "
+msgstr "Düzey"
