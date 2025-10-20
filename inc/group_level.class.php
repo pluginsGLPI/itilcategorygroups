@@ -162,6 +162,10 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
             '@itilcategorygroups/groupe.html.twig',
             [
                 'item'          => $item,
+                'groups_id'     => $ID,
+                'params'    => [
+                    'canedit' => Session::haveRight(Group::$rightname, UPDATE),
+                ],
             ],
         );
 
