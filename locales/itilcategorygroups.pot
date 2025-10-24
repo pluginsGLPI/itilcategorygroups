@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 01:59+0000\n"
+"POT-Creation-Date: 2025-10-24 01:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 msgid "A link with this category already exists"
 msgstr ""
 
-#: inc/group_level.class.php:74 inc/group_level.class.php:178
+#: inc/group_level.class.php:74 inc/group_level.class.php:182
 msgid "Level attribution"
 msgstr ""
 

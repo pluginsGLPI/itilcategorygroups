@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 02:07+0000\n"
+"POT-Creation-Date: 2025-10-23 02:00+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: Pierfrancesco Passerini <p.passerini@gmail.com>, 2018\n"
 "Language-Team: Italian (Italy) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/it_IT/)\n"
@@ -59,7 +59,7 @@ msgstr "Collegamento Categorie Itil - Gruppi"
 msgid "A link with this category already exists"
 msgstr "Il collegamento con questa categoria è già esistente"
 
-#: inc/group_level.class.php:74 inc/group_level.class.php:178
+#: inc/group_level.class.php:74 inc/group_level.class.php:182
 msgid "Level attribution"
 msgstr "Livello di attribuzione"
 
