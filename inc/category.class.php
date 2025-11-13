@@ -65,8 +65,11 @@ use function Safe\json_decode;
 class PluginItilcategorygroupsCategory extends CommonDropdown
 {
     public $first_level_menu      = 'plugins';
+
     public $second_level_menu     = 'itilcategorygroups';
+
     public $display_dropdowntitle = false;
+
     public $can_be_translated = false;
 
     public static $rightname = 'config';
@@ -209,7 +212,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         $cat_group = new PluginItilcategorygroupsCategory_Group();
 
         for ($lvl = 1; $lvl <= 4; $lvl++) {
-            if ($this->input["view_all_lvl$lvl"] != 1) {
+            if ($this->input['view_all_lvl' . $lvl] != 1) {
                 //delete old groups values
                 $found_cat_groups = $cat_group->find(
                     [
@@ -218,13 +221,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                     ],
                 );
 
-                foreach ($found_cat_groups as $id => $current_cat_group) {
+                foreach ($found_cat_groups as $current_cat_group) {
                     $cat_group->delete(['id' => $current_cat_group['id']]);
                 }
 
                 //insert new saved
-                if (isset($this->input["groups_id_level$lvl"]) && is_array($this->input["groups_id_level$lvl"])) {
-                    foreach ($this->input["groups_id_level$lvl"] as $groups_id) {
+                if (isset($this->input['groups_id_level' . $lvl]) && is_array($this->input['groups_id_level' . $lvl])) {
+                    foreach ($this->input['groups_id_level' . $lvl] as $groups_id) {
                         $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input['id'],
                             'level'                                                => $lvl,
                             'itilcategories_id'                                    => $this->input['itilcategories_id'],
@@ -255,8 +258,8 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             if (!empty($items_id) && $ticket->getFromDB($items_id)) {
                 // == UPDATE EXISTING TICKET ==
                 $group_params['entities_id'] = $ticket->fields['entities_id'];
-                $group_params['condition']   = ' AND ' . ($ticket->fields['type'] == Ticket::DEMAND_TYPE ?
-                    "`is_request`='1'" : "`is_incident`='1'");
+                $group_params['condition']   = ' AND ' . ($ticket->fields['type'] == Ticket::DEMAND_TYPE
+                    ? "`is_request`='1'" : "`is_incident`='1'");
             } elseif ($type == Ticket::DEMAND_TYPE) {
                 $group_params['condition'] = " AND `is_request` ='1'";
             } else {
@@ -274,7 +277,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 // == CHECKS FOR LEVEL VISIBILITY ==
                 $level         = 0;
                 $categoryGroup = new PluginItilcategorygroupsCategory_Group();
-                $table         = getTableForItemType(get_class($categoryGroup));
+                $table         = getTableForItemType($categoryGroup::class);
                 // All groups assigned to the ticket
                 foreach ($ticket->getGroups(2) as $element) {
                     $groupsId   = $element['groups_id'];
@@ -290,9 +293,11 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                     if (!empty($data_level)) {
                         $level = $data_level > $level ? $data_level : $level;
                     }
+
                     // Don't display groups already assigned to the ticket in the dropdown
-                    $group_params['condition'] .= " AND cat_gr.groups_id <> '$groupsId'";
+                    $group_params['condition'] .= sprintf(" AND cat_gr.groups_id <> '%s'", $groupsId);
                 }
+
                 // No group assigned to the ticket
                 // Selects the level min that will be displayed
                 if ($level == 0) {
@@ -304,10 +309,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                         ],
                     ];
                     $level = self::getFirst($criteria, 'level');
-                    $group_params['condition'] .= " AND cat_gr.level = '$level'";
+                    $group_params['condition'] .= sprintf(" AND cat_gr.level = '%s'", $level);
                 } else {
                     $level_max = $level + 1;
-                    $group_params['condition'] .= " AND (cat_gr.level = '$level' OR cat_gr.level = '$level_max')";
+                    $group_params['condition'] .= sprintf(" AND (cat_gr.level = '%s' OR cat_gr.level = '%s')", $level, $level_max);
                 }
             }
 
@@ -348,6 +353,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                             unset($actor['children'][$index_child]);
                         }
                     }
+
                     if (count($actor['children']) > 0) {
                         // reindex correctly children (to avoid select2 fails)
                         $actor['children'] = array_values($actor['children']);
@@ -434,12 +440,12 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 $groups_level = json_decode('[' . $data['groups_level'] . ']', true);
 
                 for ($level = 1; $level <= 4; $level++) {
-                    if ($data["view_all_lvl$level"]) {
-                        $groups["groups_id_level$level"] = 'all';
+                    if ($data['view_all_lvl' . $level]) {
+                        $groups['groups_id_level' . $level] = 'all';
                     } else {
                         foreach ($groups_level as $current_group_level) {
                             if ($current_group_level['lvl'] == $level) {
-                                $groups["groups_id_level$level"][] = $current_group_level['gr_id'];
+                                $groups['groups_id_level' . $level][] = $current_group_level['gr_id'];
                             }
                         }
                     }
@@ -452,8 +458,6 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     /**
      * Helper to make a database request and extract the first element
-     * @param array $criteria
-     * @param string $selector
      * @return mixed
      */
     public static function getFirst(array $criteria, string $selector)
@@ -463,7 +467,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
         $data = $DB->request($criteria);
         if (count($data) > 0) {
-            $data = json_decode('[' . $data->current()["$selector"] . ']', true);
+            $data = json_decode('[' . $data->current()[$selector] . ']', true);
 
             return array_shift($data);
         }
@@ -539,14 +543,10 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public function rawSearchOptions()
     {
-        $tab = [];
-
-        $tab[] = [
+        return [[
             'id'   => 'common',
             'name' => __s('Link ItilCategory - Groups', 'itilcategorygroups'),
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 1,
             'table'         => $this->getTable(),
             'field'         => 'name',
@@ -557,9 +557,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'injectable'    => true,
             'massiveaction' => false,
             'autocomplete'  => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'          => 2,
             'table'       => $this->getTable(),
             'field'       => 'is_incident',
@@ -568,9 +566,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'checktype'   => 'bool',
             'displaytype' => 'bool',
             'injectable'  => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'          => 3,
             'table'       => $this->getTable(),
             'field'       => 'is_request',
@@ -579,9 +575,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'checktype'   => 'bool',
             'displaytype' => 'bool',
             'injectable'  => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'          => 4,
             'table'       => 'glpi_itilcategories',
             'field'       => 'name',
@@ -590,9 +584,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'checktype'   => 'text',
             'displaytype' => 'text',
             'injectable'  => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'          => 5,
             'table'       => $this->getTable(),
             'field'       => 'is_active',
@@ -601,9 +593,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'checktype'   => 'bool',
             'displaytype' => 'bool',
             'injectable'  => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'          => 16,
             'table'       => $this->getTable(),
             'field'       => 'comment',
@@ -612,9 +602,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'checktype'   => 'text',
             'displaytype' => 'multiline_text',
             'injectable'  => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'           => 26,
             'table'        => 'glpi_groups',
             'field'        => 'name',
@@ -636,9 +624,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ],
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'           => 27,
             'table'        => 'glpi_groups',
             'field'        => 'name',
@@ -660,9 +646,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ],
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'           => 28,
             'table'        => 'glpi_groups',
             'field'        => 'name',
@@ -684,9 +668,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ],
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'           => 29,
             'table'        => 'glpi_groups',
             'field'        => 'name',
@@ -708,36 +690,28 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 ],
             ],
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 30,
             'table'         => $this->getTable(),
             'field'         => 'id',
             'name'          => __s('ID'),
             'injectable'    => false,
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 35,
             'table'         => $this->getTable(),
             'field'         => 'date_mod',
             'name'          => __s('Last update'),
             'datatype'      => 'datetime',
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 80,
             'table'         => 'glpi_entities',
             'field'         => 'completename',
             'name'          => __s('Entity'),
             'injectable'    => false,
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'          => 86,
             'table'       => $this->getTable(),
             'field'       => 'is_recursive',
@@ -746,9 +720,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             'checktype'   => 'bool',
             'displaytype' => 'bool',
             'injectable'  => true,
-        ];
-
-        return $tab;
+        ]];
     }
 
     //----------------------------- Install process --------------------------//
@@ -771,7 +743,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         }
 
         if (!$DB->tableExists($table)) {
-            $query = "CREATE TABLE IF NOT EXISTS `$table` (
+            $query = "CREATE TABLE IF NOT EXISTS `{$table}` (
          `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
          `is_active` TINYINT NOT NULL DEFAULT '0',
          `name` VARCHAR(255) DEFAULT '',
@@ -844,7 +816,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         /** @var DBmysql $DB */
         global $DB;
         $table = getTableForItemType(self::class);
-        $DB->doQuery("DROP TABLE IF EXISTS`$table`");
+        $DB->doQuery(sprintf('DROP TABLE IF EXISTS `%s`', $table));
 
         return true;
     }

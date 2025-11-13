@@ -62,9 +62,7 @@ function plugin_itilcategorygroups_uninstall()
 function plugin_itilcategorygroups_getAddSearchOptions($itemtype)
 {
     if (isset($_SESSION['glpiactiveentities'])) {
-        $options = PluginItilcategorygroupsGroup_Level::getAddSearchOptions($itemtype);
-
-        return $options;
+        return PluginItilcategorygroupsGroup_Level::getAddSearchOptions($itemtype);
     } else {
         return null;
     }
@@ -75,17 +73,16 @@ function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num)
     $searchopt = &Search::getOptions($type);
     $table     = $searchopt[$ID]['table'];
     $field     = $searchopt[$ID]['field'];
-    $value     = $data['raw']["ITEM_$num"];
+    $value     = $data['raw']['ITEM_' . $num];
 
-    switch ($table . '.' . $field) {
-        case 'glpi_plugin_itilcategorygroups_groups_levels.lvl':
-            switch ($value) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                    return __s('Level ' . $value, 'itilcategorygroups');
-            }
+    if ($table . '.' . $field === 'glpi_plugin_itilcategorygroups_groups_levels.lvl') {
+        switch ($value) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return __s('Level ' . $value, 'itilcategorygroups');
+        }
     }
 
     return '';
@@ -97,21 +94,18 @@ function plugin_itilcategorygroups_MassiveActionsFieldsDisplay($options = [])
     $table     = $options['options']['table'];
     $field     = $options['options']['field'];
 
-    // Table fields
-    switch ($table . '.' . $field) {
-        case 'glpi_plugin_itilcategorygroups_groups_levels.lvl':
-            Dropdown::showFromArray(
-                'lvl',
-                [
-                    null => '---',
-                    1 => __s('Level 1', 'itilcategorygroups'),
-                    2 => __s('Level 2', 'itilcategorygroups'),
-                    3 => __s('Level 3', 'itilcategorygroups'),
-                    4 => __s('Level 4', 'itilcategorygroups'),
-                ],
-            );
-
-            return true;
+    if ($table . '.' . $field === 'glpi_plugin_itilcategorygroups_groups_levels.lvl') {
+        Dropdown::showFromArray(
+            'lvl',
+            [
+                null => '---',
+                1 => __s('Level 1', 'itilcategorygroups'),
+                2 => __s('Level 2', 'itilcategorygroups'),
+                3 => __s('Level 3', 'itilcategorygroups'),
+                4 => __s('Level 4', 'itilcategorygroups'),
+            ],
+        );
+        return true;
     }
 
     // Need to return false on non display item

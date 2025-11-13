@@ -66,6 +66,7 @@ function plugin_init_itilcategorygroups()
             // other hook :
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['itilcategorygroups'] = [Group::class => 'plugin_pre_item_update_itilcategorygroups'];
         }
+
         if (Session::haveRight('config', UPDATE)) {
             $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
                = '/' . $CFG_GLPI['root_doc'] . '/plugins/itilcategorygroups/front/category.form.php';
@@ -73,9 +74,7 @@ function plugin_init_itilcategorygroups()
 
         $PLUGIN_HOOKS[hooks::ADD_JAVASCRIPT]['itilcategorygroups'] = ['scripts/multiple_group.js'];
 
-        $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = [
-            PluginItilcategorygroupsCategory::class, 'filterActors',
-        ];
+        $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = PluginItilcategorygroupsCategory::filterActors(...);
     }
 }
 
