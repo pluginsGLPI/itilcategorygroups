@@ -31,6 +31,7 @@
 class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 {
     public static $itemtype = 'PluginItilcategorygroupsCategory';
+
     public static $items_id = 'plugin_itilcategorygroups_categories_id';
 
     public static function install(Migration $migration)
@@ -44,7 +45,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 
         $table = getTableForItemType(self::class);
         if (!$DB->tableExists($table)) {
-            $query = "CREATE TABLE IF NOT EXISTS `$table` (
+            $query = "CREATE TABLE IF NOT EXISTS `{$table}` (
          `id`                                      INT     {$default_key_sign} NOT NULL AUTO_INCREMENT,
          `plugin_itilcategorygroups_categories_id` INT     {$default_key_sign} NOT NULL DEFAULT '0',
          `level`                                   TINYINT NOT NULL DEFAULT '0',
@@ -64,30 +65,30 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 
         //we must migrate groups datas in sub table
         if ($DB->fieldExists($parent_table, 'groups_id_levelone')) {
-            $all_lvl = $cat_groups = [];
-
+            $all_lvl = [];
+            $cat_groups = [];
             //foreach old levels
             foreach ([1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four'] as $lvl_num => $lvl_str) {
                 $res   = $DB->request([
                     'SELECT' => [
                         'id',
                         'itilcategories_id',
-                        "groups_id_level$lvl_str",
+                        'groups_id_level' . $lvl_str,
                     ],
                     'FROM'   => $parent_table,
                 ]);
                 foreach ($res as $data) {
                     //specific case (all group of this lvl), store it for further treatment
-                    if ($data["groups_id_level$lvl_str"] == -1) {
+                    if ($data['groups_id_level' . $lvl_str] == -1) {
                         $all_lvl[$data['itilcategories_id']][$lvl_num] = $lvl_str;
                     }
 
-                    if ($data["groups_id_level$lvl_str"] > 0) {
+                    if ($data['groups_id_level' . $lvl_str] > 0) {
                         $cat_groups[] = [
                             'plugin_itilcategorygroups_categories_id' => $data['id'],
                             'level'                                   => $lvl_num,
                             'itilcategories_id'                       => $data['itilcategories_id'],
-                            'groups_id'                               => $data["groups_id_level$lvl_str"],
+                            'groups_id'                               => $data['groups_id_level' . $lvl_str],
                         ];
                     }
                 }
@@ -95,8 +96,8 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
                 //insert "all groups for this lvl'
                 foreach ($all_lvl as $itilcategories_id => $lvl) {
                     foreach (array_keys($lvl) as $lvl_num) {
-                        $DB->doQuery("UPDATE $parent_table SET view_all_lvl$lvl_num = 1
-                              WHERE itilcategories_id = $itilcategories_id");
+                        $DB->doQuery("UPDATE {$parent_table} SET view_all_lvl{$lvl_num} = 1
+                              WHERE itilcategories_id = {$itilcategories_id}");
                     }
                 }
 
@@ -132,7 +133,7 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
         global $DB;
 
         $table = getTableForItemType(self::class);
-        $DB->doQuery("DROP TABLE IF EXISTS`$table`");
+        $DB->doQuery(sprintf('DROP TABLE IF EXISTS `%s`', $table));
 
         return true;
     }

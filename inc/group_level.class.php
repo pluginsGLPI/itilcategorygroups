@@ -62,6 +62,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 {
     // From CommonDBChild
     public static $itemtype = 'Group';
+
     public static $items_id = 'groups_id';
 
     public static function getIndexName()
@@ -100,7 +101,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
         $table = getTableForItemType(self::class);
 
-        return $DB->doQuery("CREATE TABLE IF NOT EXISTS `$table` (
+        return $DB->doQuery("CREATE TABLE IF NOT EXISTS `{$table}` (
          `id`        int {$default_key_sign} NOT NULL auto_increment,
          `groups_id` int {$default_key_sign} NOT NULL,
          `lvl`       int DEFAULT NULL,
@@ -117,16 +118,13 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
         $table = getTableForItemType(self::class);
 
-        return $DB->doQuery("DROP TABLE IF EXISTS `$table`");
+        return $DB->doQuery(sprintf('DROP TABLE IF EXISTS `%s`', $table));
     }
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        if (!$withtemplate) {
-            switch ($item->getType()) {
-                case 'Group':
-                    return self::createTabEntry(__s('ItilCategory Groups', 'itilcategorygroups'), 0, $item::getType(), PluginItilcategorygroupsCategory::getIcon());
-            }
+        if (!$withtemplate && $item->getType() === 'Group') {
+            return self::createTabEntry(__s('ItilCategory Groups', 'itilcategorygroups'), 0, $item::getType(), PluginItilcategorygroupsCategory::getIcon());
         }
 
         return '';
@@ -199,7 +197,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
         $groups_id = [];
         $table = getTableForItemType(self::class);
         $query = [
-            'SELECT' => "$table.groups_id",
+            'SELECT' => $table . '.groups_id',
             'FROM'   => $table,
             'LEFT JOIN' => [
                 'glpi_groups' => [
@@ -210,7 +208,7 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
                 ],
             ],
             'WHERE' => [
-                "$table.lvl" => $level,
+                $table . '.lvl' => $level,
             ] + getEntitiesRestrictCriteria(
                 'glpi_groups',
                 'entities_id',
