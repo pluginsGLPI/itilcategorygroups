@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 02:20+0000\n"
+"POT-Creation-Date: 2026-02-26 02:47+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/hr_HR/)\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:609 hook.php:102
+#: templates/groupe.html.twig templates/category.html.twig hook.php:102
+#: inc/category.class.php:609
 msgid "Level 1"
 msgstr "Razina 1"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:631 hook.php:103
+#: templates/groupe.html.twig templates/category.html.twig hook.php:103
+#: inc/category.class.php:631
 msgid "Level 2"
 msgstr "Razina 2"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:653 hook.php:104
+#: templates/groupe.html.twig templates/category.html.twig hook.php:104
+#: inc/category.class.php:653
 msgid "Level 3"
 msgstr "Razina 3"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:675 hook.php:105
+#: templates/groupe.html.twig templates/category.html.twig hook.php:105
+#: inc/category.class.php:675
 msgid "Level 4"
 msgstr "Razina 4"
 
@@ -46,13 +46,17 @@ msgstr ""
 msgid "Please select an itil category before continue"
 msgstr ""
 
-#: setup.php:95 inc/menu.class.php:40 inc/group_level.class.php:127
-msgid "ItilCategory Groups"
-msgstr "Grupe ITIL kategorije"
+#: hook.php:84
+msgid "Level "
+msgstr "Razina "
 
 #: inc/menu.class.php:35 inc/category.class.php:81 inc/category.class.php:548
 msgid "Link ItilCategory - Groups"
 msgstr "Poveznica ITIL kategorije – Grupe"
+
+#: inc/menu.class.php:40 inc/group_level.class.php:127 setup.php:95
+msgid "ItilCategory Groups"
+msgstr "Grupe ITIL kategorije"
 
 #: inc/category.class.php:180
 msgid "A link with this category already exists"
@@ -61,7 +65,3 @@ msgstr "Poveznica s ovom kategorijom već postoji"
 #: inc/group_level.class.php:75 inc/group_level.class.php:180
 msgid "Level attribution"
 msgstr "Određivanje razine"
-
-#: hook.php:84
-msgid "Level "
-msgstr "Razina "
