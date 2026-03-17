@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 02:20+0000\n"
+"POT-Creation-Date: 2026-02-26 02:47+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: Alexey Petukhov <lexx015@gmail.com>, 2021\n"
 "Language-Team: Russian (Russia) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/ru_RU/)\n"
@@ -19,23 +19,23 @@ msgstr ""
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:609 hook.php:102
+#: templates/groupe.html.twig templates/category.html.twig hook.php:102
+#: inc/category.class.php:609
 msgid "Level 1"
 msgstr "Уровень 1"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:631 hook.php:103
+#: templates/groupe.html.twig templates/category.html.twig hook.php:103
+#: inc/category.class.php:631
 msgid "Level 2"
 msgstr "Уровень 2"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:653 hook.php:104
+#: templates/groupe.html.twig templates/category.html.twig hook.php:104
+#: inc/category.class.php:653
 msgid "Level 3"
 msgstr "Уровень 3"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:675 hook.php:105
+#: templates/groupe.html.twig templates/category.html.twig hook.php:105
+#: inc/category.class.php:675
 msgid "Level 4"
 msgstr "Уровень 4"
 
@@ -47,13 +47,17 @@ msgstr ""
 msgid "Please select an itil category before continue"
 msgstr ""
 
-#: setup.php:95 inc/menu.class.php:40 inc/group_level.class.php:127
-msgid "ItilCategory Groups"
-msgstr "Группы ITIL Категории"
+#: hook.php:84
+msgid "Level "
+msgstr "Уровень"
 
 #: inc/menu.class.php:35 inc/category.class.php:81 inc/category.class.php:548
 msgid "Link ItilCategory - Groups"
 msgstr "Связь ITIL Категория - Группы"
+
+#: inc/menu.class.php:40 inc/group_level.class.php:127 setup.php:95
+msgid "ItilCategory Groups"
+msgstr "Группы ITIL Категории"
 
 #: inc/category.class.php:180
 msgid "A link with this category already exists"
@@ -62,7 +66,3 @@ msgstr "Связь с этой категорией уже существует"
 #: inc/group_level.class.php:75 inc/group_level.class.php:180
 msgid "Level attribution"
 msgstr "Атрибуция уровня"
-
-#: hook.php:84
-msgid "Level "
-msgstr "Уровень"
