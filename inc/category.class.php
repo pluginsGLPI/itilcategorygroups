@@ -302,7 +302,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 // Selects the level min that will be displayed
                 if ($level == 0) {
                     $criteria = [
-                        'SELECT' => 'MIN(level) as level',
+                        'SELECT' => ['MIN' => 'level'],
                         'FROM'   => $table,
                         'WHERE'  => [
                             'itilcategories_id' => $itilcategories_id,
