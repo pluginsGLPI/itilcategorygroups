@@ -33,9 +33,9 @@ use Glpi\Application\View\TemplateRenderer;
 class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 {
     // From CommonDBChild
-    public static $itemtype = 'Group';
+    public static string $itemtype = 'Group';
 
-    public static $items_id = 'groups_id';
+    public static string $items_id = 'groups_id';
 
     public static function getIndexName()
     {

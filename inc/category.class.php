@@ -41,13 +41,13 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
 
     public $second_level_menu     = 'itilcategorygroups';
 
-    public $display_dropdowntitle = false;
+    public bool $display_dropdowntitle = false;
 
-    public $can_be_translated = false;
+    public bool $can_be_translated = false;
 
-    public static $rightname = 'config';
+    public static string $rightname = 'config';
 
-    public $dohistory = true;
+    public bool $dohistory = true;
 
     public static function getTypeName($nb = 0)
     {
@@ -378,8 +378,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         $table    = getTableForItemType(self::class);
 
         if ($category->getFromDB($itilcategories_id)) {
-            $entity_restrict[] = getEntitiesRestrictRequest(
-                '',
+            $entity_restrict = getEntitiesRestrictCriteria(
                 'cat',
                 'entities_id',
                 $options['entities_id'],
