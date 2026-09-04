@@ -30,8 +30,6 @@
 
 use Glpi\Exception\Http\BadRequestHttpException;
 
-include(__DIR__ . '/../../../inc/includes.php');
-
 Session::checkCentralAccess();
 
 $level = new PluginItilcategorygroupsGroup_Level();

@@ -70,7 +70,7 @@ function plugin_itilcategorygroups_getAddSearchOptions($itemtype)
 
 function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num)
 {
-    $searchopt = &Search::getOptions($type);
+    $searchopt = Search::getOptions($type);
     $table     = $searchopt[$ID]['table'];
     $field     = $searchopt[$ID]['field'];
     $value     = $data['raw']['ITEM_' . $num];

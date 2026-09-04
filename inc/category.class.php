@@ -33,34 +33,7 @@ use Glpi\DBAL\QueryExpression;
 use Glpi\DBAL\QueryFunction;
 
 use function Safe\json_decode;
-
-/**
- * -------------------------------------------------------------------------
- * ItilCategoryGroups plugin for GLPI
- * -------------------------------------------------------------------------
- *
- * LICENSE
- *
- * This file is part of ItilCategoryGroups.
- *
- * ItilCategoryGroups is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * ItilCategoryGroups is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with ItilCategoryGroups. If not, see <http://www.gnu.org/licenses/>.
- * -------------------------------------------------------------------------
- * @copyright Copyright (C) 2012-2022 by ItilCategoryGroups plugin team.
- * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
- * @link      https://github.com/pluginsGLPI/itilcategorygroups
- * -------------------------------------------------------------------------
- */
+use function Safe\preg_replace;
 
 class PluginItilcategorygroupsCategory extends CommonDropdown
 {
@@ -79,6 +52,14 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
     public static function getTypeName($nb = 0)
     {
         return __s('Link ItilCategory - Groups', 'itilcategorygroups');
+    }
+
+    /**
+     * @return array{0: string, 1: string, 2: string}
+     */
+    public static function getSectorizedDetails(): array
+    {
+        return ['admin', 'pluginitilcategorygroupsmenu', 'model'];
     }
 
     public static function canCreate(): bool
@@ -302,7 +283,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 // Selects the level min that will be displayed
                 if ($level == 0) {
                     $criteria = [
-                        'SELECT' => ['MIN' => 'level'],
+                        'SELECT' => ['MIN' => 'level as level'],
                         'FROM'   => $table,
                         'WHERE'  => [
                             'itilcategories_id' => $itilcategories_id,
@@ -429,10 +410,15 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                         ],
                     ],
                 ],
-                'WHERE'  => [
-                    'cat.itilcategories_id' => $itilcategories_id,
-                    'cat.is_active'        => 1,
-                ] + $entity_restrict,
+                'WHERE'  => array_merge(
+                    [
+                        'cat.itilcategories_id' => $itilcategories_id,
+                        'cat.is_active'        => 1,
+                    ],
+                    $entity_restrict,
+                    // extra caller-provided filtering (ticket type, level restriction, already assigned groups)
+                    [new QueryExpression(preg_replace('/^\s*AND\s+/i', '', $options['condition']))],
+                ),
                 'GROUPBY' => 'cat.id',
             ];
 
