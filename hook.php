@@ -63,9 +63,9 @@ function plugin_itilcategorygroups_getAddSearchOptions($itemtype)
 {
     if (isset($_SESSION['glpiactiveentities'])) {
         return PluginItilcategorygroupsGroup_Level::getAddSearchOptions($itemtype);
-    } else {
-        return null;
     }
+
+    return null;
 }
 
 function plugin_itilcategorygroups_giveItem($type, $ID, $data, $num)

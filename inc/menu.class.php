@@ -47,12 +47,12 @@ class PluginItilcategorygroupsMenu extends CommonGLPI
         $menu['page']  = '/plugins/itilcategorygroups/front/category.php';
         $menu['icon']  = PluginItilcategorygroupsCategory::getIcon();
 
-        if (Session::haveRight('config', READ)) {
+        if (Session::haveRight(Config::$rightname, READ)) {
             $menu['options']['model']['title']           = PluginItilcategorygroupsMenu::getTypeName();
             $menu['options']['model']['page']            = Toolbox::getItemTypeSearchUrl(PluginItilcategorygroupsCategory::class, false);
             $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl(PluginItilcategorygroupsCategory::class, false);
 
-            if (Session::haveRight('config', UPDATE)) {
+            if (Session::haveRight(Config::$rightname, UPDATE)) {
                 $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl(PluginItilcategorygroupsCategory::class, false);
             }
         }

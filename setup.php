@@ -52,14 +52,14 @@ function plugin_init_itilcategorygroups()
     $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
 
     if (Plugin::isPluginActive('itilcategorygroups')) {
-        if (Session::haveRight('config', UPDATE)) {
+        if (Session::haveRight(Config::$rightname, UPDATE)) {
             $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['itilcategorygroups'] = 'front/category.php';
         }
 
         Plugin::registerClass(PluginItilcategorygroupsCategory::class, ['forwardentityfrom' => ITILCategory::class]);
         Plugin::registerClass(PluginItilcategorygroupsGroup_Level::class, ['addtabon' => 'Group']);
 
-        if (Session::haveRight('config', READ)) {
+        if (Session::haveRight(Config::$rightname, READ)) {
             // add to 'Admin' menu :
             $PLUGIN_HOOKS[Hooks::MENU_TOADD]['itilcategorygroups'] = ['admin' => PluginItilcategorygroupsMenu::class];
 
@@ -67,7 +67,7 @@ function plugin_init_itilcategorygroups()
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['itilcategorygroups'] = [Group::class => 'plugin_pre_item_update_itilcategorygroups'];
         }
 
-        if (Session::haveRight('config', UPDATE)) {
+        if (Session::haveRight(Config::$rightname, UPDATE)) {
             $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
                = '/' . $CFG_GLPI['root_doc'] . '/plugins/itilcategorygroups/front/category.form.php';
         }
