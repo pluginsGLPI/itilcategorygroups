@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 04:35+0000\n"
+"POT-Creation-Date: 2026-09-24 04:29+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: feonsu <feonsu@gmail.com>, 2023,2026\n"
 "Language-Team: Slovak (Slovakia) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/sk_SK/)\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Language: sk_SK\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:102
-#: inc/category.class.php:595
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:595 hook.php:102
 msgid "Level 1"
 msgstr "Úroveň 1"
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:103
-#: inc/category.class.php:617
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:617 hook.php:103
 msgid "Level 2"
 msgstr "Úroveň 2"
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:104
-#: inc/category.class.php:639
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:639 hook.php:104
 msgid "Level 3"
 msgstr "Úroveň 3"
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:105
-#: inc/category.class.php:661
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:661 hook.php:105
 msgid "Level 4"
 msgstr "Úroveň 4"
 
@@ -46,18 +46,6 @@ msgstr "Úroveň"
 msgid "Please select an itil category before continue"
 msgstr "Vyberte kategóriu ITIL pred pokračovaním"
 
-#: setup.php:95 inc/group_level.class.php:99 inc/menu.class.php:40
-msgid "ItilCategory Groups"
-msgstr "Skupiny kategórie ITIL"
-
-#: hook.php:84
-msgid "Level "
-msgstr "Úroveň"
-
-#: inc/group_level.class.php:47 inc/group_level.class.php:152
-msgid "Level attribution"
-msgstr "Pridelenie úrovne"
-
 #: inc/category.class.php:54 inc/category.class.php:534 inc/menu.class.php:35
 msgid "Link ItilCategory - Groups"
 msgstr "Prepojenie ITIL kategória - skupiny"
@@ -65,3 +53,15 @@ msgstr "Prepojenie ITIL kategória - skupiny"
 #: inc/category.class.php:161
 msgid "A link with this category already exists"
 msgstr "Prepojenie s touto kategóriou už existuje"
+
+#: inc/group_level.class.php:47 inc/group_level.class.php:152
+msgid "Level attribution"
+msgstr "Pridelenie úrovne"
+
+#: inc/group_level.class.php:99 inc/menu.class.php:40 setup.php:95
+msgid "ItilCategory Groups"
+msgstr "Skupiny kategórie ITIL"
+
+#: hook.php:84
+msgid "Level "
+msgstr "Úroveň"

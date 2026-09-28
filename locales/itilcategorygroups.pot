@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 04:35+0000\n"
+"POT-Creation-Date: 2026-09-28 05:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:102
-#: inc/category.class.php:595
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:595 hook.php:102
 msgid "Level 1"
 msgstr ""
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:103
-#: inc/category.class.php:617
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:617 hook.php:103
 msgid "Level 2"
 msgstr ""
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:104
-#: inc/category.class.php:639
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:639 hook.php:104
 msgid "Level 3"
 msgstr ""
 
-#: templates/groupe.html.twig templates/category.html.twig hook.php:105
-#: inc/category.class.php:661
+#: templates/groupe.html.twig templates/category.html.twig
+#: inc/category.class.php:661 hook.php:105
 msgid "Level 4"
 msgstr ""
 
@@ -45,22 +45,22 @@ msgstr ""
 msgid "Please select an itil category before continue"
 msgstr ""
 
-#: setup.php:95 inc/group_level.class.php:99 inc/menu.class.php:40
-msgid "ItilCategory Groups"
-msgstr ""
-
-#: hook.php:84
-msgid "Level "
-msgstr ""
-
-#: inc/group_level.class.php:47 inc/group_level.class.php:152
-msgid "Level attribution"
-msgstr ""
-
 #: inc/category.class.php:54 inc/category.class.php:534 inc/menu.class.php:35
 msgid "Link ItilCategory - Groups"
 msgstr ""
 
 #: inc/category.class.php:161
 msgid "A link with this category already exists"
+msgstr ""
+
+#: inc/group_level.class.php:47 inc/group_level.class.php:152
+msgid "Level attribution"
+msgstr ""
+
+#: inc/group_level.class.php:99 inc/menu.class.php:40 setup.php:95
+msgid "ItilCategory Groups"
+msgstr ""
+
+#: hook.php:84
+msgid "Level "
 msgstr ""
