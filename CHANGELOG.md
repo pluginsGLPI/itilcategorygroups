@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix restrict mode
 - Fix warnings and errors in logs
+- CI: fix Psalm cache directory, drop the stray `glpi-project/tools` composer dependency, declare a unique composer autoloader suffix
 
 ## [2.6.2] - 2026-05-12
 
