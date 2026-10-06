@@ -30,9 +30,9 @@
 
 class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 {
-    public static $itemtype = 'PluginItilcategorygroupsCategory';
+    public static string $itemtype = 'PluginItilcategorygroupsCategory';
 
-    public static $items_id = 'plugin_itilcategorygroups_categories_id';
+    public static string $items_id = 'plugin_itilcategorygroups_categories_id';
 
     public static function install(Migration $migration)
     {

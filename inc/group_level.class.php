@@ -33,9 +33,9 @@ use Glpi\Application\View\TemplateRenderer;
 class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 {
     // From CommonDBChild
-    public static $itemtype = 'Group';
+    public static string $itemtype = 'Group';
 
-    public static $items_id = 'groups_id';
+    public static string $items_id = 'groups_id';
 
     public static function getIndexName()
     {
@@ -49,12 +49,12 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
     public static function canView(): bool
     {
-        return Session::haveRight('config', READ);
+        return Session::haveRight(Config::$rightname, READ);
     }
 
     public static function canCreate(): bool
     {
-        return Session::haveRight('config', CREATE);
+        return Session::haveRight(Config::$rightname, CREATE);
     }
 
     public static function canPurge(): bool
@@ -95,8 +95,8 @@ class PluginItilcategorygroupsGroup_Level extends CommonDBChild
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        if (!$withtemplate && $item->getType() === 'Group') {
-            return self::createTabEntry(__s('ItilCategory Groups', 'itilcategorygroups'), 0, $item::getType(), PluginItilcategorygroupsCategory::getIcon());
+        if (!$withtemplate && $item::class === 'Group') {
+            return self::createTabEntry(__s('ItilCategory Groups', 'itilcategorygroups'), 0, $item::class, PluginItilcategorygroupsCategory::getIcon());
         }
 
         return '';
