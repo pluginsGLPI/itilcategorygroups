@@ -34,6 +34,16 @@ Potom, pro každou z kategorií požadavku je možné určit která skupina bude
    </authors>
    <versions>
       <version>
+         <num>2.7.0</num>
+         <compatibility>~12.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/itilcategorygroups/releases/download/2.7.0/glpi-itilcategorygroups-2.7.0.tar.bz2</download_url>
+      </version>
+      <version>
+         <num>2.6.3</num>
+         <compatibility>~11.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/itilcategorygroups/releases/download/2.6.3/glpi-itilcategorygroups-2.6.3.tar.bz2</download_url>
+      </version>
+      <version>
          <num>2.6.2</num>
          <compatibility>~11.0.0</compatibility>
          <download_url>https://github.com/pluginsGLPI/itilcategorygroups/releases/download/2.6.2/glpi-itilcategorygroups-2.6.2.tar.bz2</download_url>
