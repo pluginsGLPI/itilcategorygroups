@@ -90,30 +90,64 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         return true;
     }
 
+    public function cleanDBonPurge()
+    {
+        parent::cleanDBonPurge();
+
+        $this->deleteChildrenAndRelationsFromDb([
+            PluginItilcategorygroupsCategory_Group::class,
+        ]);
+    }
+
+    /**
+     * Groups linked to this rule, per level, loaded once for the 4 levels of the form
+     *
+     * @var array<int, array<int, int>>|null
+     */
+    private ?array $saved_values_cache = null;
+
+    /**
+     * Rule id and category the saved values cache was built for
+     */
+    private ?string $saved_values_cache_key = null;
+
+    /**
+     * Groups available per level, loaded once for the 4 levels of the form
+     *
+     * @var array<int, array<int, string>>|null
+     */
+    private ?array $level_groups_cache = null;
+
     public function getSavedValues($level)
     {
         /** @var DBmysql $DB */
         global $DB;
 
-        $values = [];
-        if (!$this->isNewItem()) {
+        if ($this->isNewItem()) {
+            return [];
+        }
+
+        $cache_key = $this->getID() . '-' . $this->fields['itilcategories_id'];
+        if ($this->saved_values_cache === null || $this->saved_values_cache_key !== $cache_key) {
+            $this->saved_values_cache     = [];
+            $this->saved_values_cache_key = $cache_key;
             $res_val = $DB->request([
-                'SELECT' => 'groups_id',
+                'SELECT' => ['groups_id', 'level'],
                 'FROM'   => 'glpi_plugin_itilcategorygroups_categories_groups',
                 'WHERE'  => [
                     'OR' => [
                         'itilcategories_id' => $this->fields['itilcategories_id'],
                         'plugin_itilcategorygroups_categories_id' => $this->getID(),
                     ],
-                    'level' => $level,
+                    'level' => [1, 2, 3, 4],
                 ],
             ]);
             foreach ($res_val as $data_val) {
-                $values[$data_val['groups_id']] = $data_val['groups_id'];
+                $this->saved_values_cache[$data_val['level']][$data_val['groups_id']] = $data_val['groups_id'];
             }
         }
 
-        return $values;
+        return $this->saved_values_cache[(int) $level] ?? [];
     }
 
     public function multipleDropdownGroup($level)
@@ -121,36 +155,38 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
         /** @var DBmysql $DB */
         global $DB;
 
-        $values = [];
-        $res_val = $DB->request([
-            'SELECT' => ['glpi_groups.id', 'glpi_groups.name'],
-            'FROM'   => 'glpi_groups',
-            'INNER JOIN' => [
-                'glpi_plugin_itilcategorygroups_groups_levels' => [
-                    'ON' => [
-                        'glpi_plugin_itilcategorygroups_groups_levels' => 'groups_id',
-                        'glpi_groups' => 'id',
-                        [
-                            'AND' => [
-                                'glpi_plugin_itilcategorygroups_groups_levels.lvl' => intval($level),
+        if ($this->level_groups_cache === null) {
+            $this->level_groups_cache = [];
+            $res_val = $DB->request([
+                'SELECT' => ['glpi_groups.id', 'glpi_groups.name', 'glpi_plugin_itilcategorygroups_groups_levels.lvl'],
+                'FROM'   => 'glpi_groups',
+                'INNER JOIN' => [
+                    'glpi_plugin_itilcategorygroups_groups_levels' => [
+                        'ON' => [
+                            'glpi_plugin_itilcategorygroups_groups_levels' => 'groups_id',
+                            'glpi_groups' => 'id',
+                            [
+                                'AND' => [
+                                    'glpi_plugin_itilcategorygroups_groups_levels.lvl' => [1, 2, 3, 4],
+                                ],
                             ],
                         ],
                     ],
                 ],
-            ],
-            'WHERE' => getEntitiesRestrictCriteria(
-                'glpi_groups',
-                '',
-                $_SESSION['glpiactiveentities'],
-                true,
-            ),
-        ]);
+                'WHERE' => getEntitiesRestrictCriteria(
+                    'glpi_groups',
+                    '',
+                    $_SESSION['glpiactiveentities'],
+                    true,
+                ),
+            ]);
 
-        foreach ($res_val as $data_val) {
-            $values[$data_val['id']] = $data_val['name'];
+            foreach ($res_val as $data_val) {
+                $this->level_groups_cache[$data_val['lvl']][$data_val['id']] = $data_val['name'];
+            }
         }
 
-        return $values;
+        return $this->level_groups_cache[intval($level)] ?? [];
     }
 
     public function prepareInputForAdd($input)
@@ -190,38 +226,69 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             return;
         }
 
+        // Links are about to change: drop the values memoized for the form
+        $this->saved_values_cache = null;
+
         $cat_group = new PluginItilcategorygroupsCategory_Group();
 
-        for ($lvl = 1; $lvl <= 4; $lvl++) {
-            if ($this->input['view_all_lvl' . $lvl] != 1) {
-                //delete old groups values
-                $found_cat_groups = $cat_group->find(
-                    [
-                        'itilcategories_id' => $this->input['itilcategories_id'],
-                        'level'             => $lvl,
-                    ],
-                );
+        // Levels whose groups are listed explicitly (not "all groups of the level")
+        $levels = array_values(array_filter(
+            [1, 2, 3, 4],
+            fn(int $lvl): bool => ($this->input['view_all_lvl' . $lvl] ?? 0) != 1,
+        ));
+        if ($levels === []) {
+            return;
+        }
 
-                foreach ($found_cat_groups as $current_cat_group) {
-                    $cat_group->delete(['id' => $current_cat_group['id']]);
+        // Current links of the category for these levels, in a single query
+        $current_links = [];
+        foreach (
+            $cat_group->find([
+                'itilcategories_id' => $this->input['itilcategories_id'],
+                'level'             => $levels,
+            ], ['id']) as $current_cat_group
+        ) {
+            $current_links[$current_cat_group['level']][] = $current_cat_group;
+        }
+
+        foreach ($levels as $lvl) {
+            $wanted_groups = [];
+            if (isset($this->input['groups_id_level' . $lvl]) && is_array($this->input['groups_id_level' . $lvl])) {
+                foreach ($this->input['groups_id_level' . $lvl] as $groups_id) {
+                    $wanted_groups[(int) $groups_id] = true;
+                }
+            }
+
+            // Keep the links of this rule that are still selected, delete the others
+            foreach ($current_links[$lvl] ?? [] as $current_cat_group) {
+                $groups_id = (int) $current_cat_group['groups_id'];
+                if (
+                    isset($wanted_groups[$groups_id])
+                    && $current_cat_group['plugin_itilcategorygroups_categories_id'] == $this->input['id']
+                ) {
+                    unset($wanted_groups[$groups_id]);
+                    continue;
                 }
 
-                //insert new saved
-                if (isset($this->input['groups_id_level' . $lvl]) && is_array($this->input['groups_id_level' . $lvl])) {
-                    foreach ($this->input['groups_id_level' . $lvl] as $groups_id) {
-                        $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input['id'],
-                            'level'                                                => $lvl,
-                            'itilcategories_id'                                    => $this->input['itilcategories_id'],
-                            'groups_id'                                            => $groups_id,
-                        ]);
-                    }
-                }
+                $cat_group->delete(['id' => $current_cat_group['id']]);
+            }
+
+            // Add only the newly selected groups
+            foreach (array_keys($wanted_groups) as $groups_id) {
+                $cat_group->add(['plugin_itilcategorygroups_categories_id' => $this->input['id'],
+                    'level'                                                => $lvl,
+                    'itilcategories_id'                                    => $this->input['itilcategories_id'],
+                    'groups_id'                                            => $groups_id,
+                ]);
             }
         }
     }
 
     public static function filterActors(array $params = []): array
     {
+        /** @var DBmysql $DB */
+        global $DB;
+
         $itemtype = $params['params']['itemtype'];
         $items_id = $params['params']['items_id'];
 
@@ -260,21 +327,30 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 $categoryGroup = new PluginItilcategorygroupsCategory_Group();
                 $table         = getTableForItemType($categoryGroup::class);
                 // All groups assigned to the ticket
-                foreach ($ticket->getGroups(2) as $element) {
-                    $groupsId   = $element['groups_id'];
-                    $criteria = [
-                        'SELECT' => 'level',
+                $assigned_groups_ids = array_column($ticket->getGroups(2), 'groups_id');
+                if ($assigned_groups_ids !== []) {
+                    // Level of each assigned group for this category, in a single query
+                    // (first link found per group, as the former one query per group did)
+                    $groups_levels = [];
+                    $levels_iterator = $DB->request([
+                        'SELECT' => ['groups_id', 'level'],
                         'FROM'   => $table,
                         'WHERE'  => [
                             'itilcategories_id' => $itilcategories_id,
-                            'groups_id'         => $groupsId,
+                            'groups_id'         => $assigned_groups_ids,
                         ],
-                    ];
-                    $data_level = self::getFirst($criteria, 'level');
-                    if (!empty($data_level)) {
-                        $level = $data_level > $level ? $data_level : $level;
+                        'ORDER'  => 'id',
+                    ]);
+                    foreach ($levels_iterator as $data) {
+                        $groups_levels[$data['groups_id']] ??= (int) $data['level'];
                     }
 
+                    if ($groups_levels !== []) {
+                        $level = max($groups_levels);
+                    }
+                }
+
+                foreach ($assigned_groups_ids as $groupsId) {
                     // Don't display groups already assigned to the ticket in the dropdown
                     $group_params['condition'] .= sprintf(" AND cat_gr.groups_id <> '%s'", $groupsId);
                 }
@@ -298,30 +374,40 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
             }
 
             $found_groups     = self::getGroupsForCategory($itilcategories_id, $group_params);
-            $groups_id_toshow = []; //init
+            $groups_id_toshow = []; //init, group ids as keys
             if (!empty($found_groups)) {
+                $groups_id_tocheck = [];
                 for ($lvl = 1; $lvl <= 4; $lvl++) {
                     if (isset($found_groups['groups_id_level' . $lvl])) {
                         if ($found_groups['groups_id_level' . $lvl] === 'all') {
+                            // already joined with glpi_groups and restricted to the entity
                             foreach (PluginItilcategorygroupsGroup_Level::getAllGroupForALevel($lvl, $group_params['entities_id']) as $groups_id) {
-                                if ($group->getFromDB($groups_id)) {
-                                    $groups_id_toshow[] = $group->getID();
-                                }
+                                $groups_id_toshow[$groups_id] = true;
                             }
                         } else {
                             foreach ($found_groups['groups_id_level' . $lvl] as $groups_id) {
-                                if (
-                                    countElementsInTableForEntity(
-                                        'glpi_groups',
-                                        $ticket->getEntityID(),
-                                        ['id' => $groups_id],
-                                    ) > 0
-                                ) {
-                                    $group->getFromDB($groups_id);
-                                    $groups_id_toshow[] = $group->getID();
-                                }
+                                $groups_id_tocheck[$groups_id] = true;
                             }
                         }
+                    }
+                }
+
+                if ($groups_id_tocheck !== []) {
+                    // Keep the groups visible from the ticket entity, in a single query
+                    $visible_groups = $DB->request([
+                        'SELECT' => 'id',
+                        'FROM'   => Group::getTable(),
+                        'WHERE'  => [
+                            'id' => array_keys($groups_id_tocheck),
+                        ] + getEntitiesRestrictCriteria(
+                            Group::getTable(),
+                            '',
+                            $ticket->getEntityID(),
+                            $group->maybeRecursive(),
+                        ),
+                    ]);
+                    foreach ($visible_groups as $data) {
+                        $groups_id_toshow[$data['id']] = true;
                     }
                 }
             }
@@ -330,7 +416,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                 //remove groups in children nodes
                 if (isset($actor['children'])) {
                     foreach ($actor['children'] as $index_child => &$child) {
-                        if ($child['itemtype'] == 'Group' && !in_array($child['items_id'], $groups_id_toshow)) {
+                        if ($child['itemtype'] == 'Group' && !isset($groups_id_toshow[$child['items_id']])) {
                             unset($actor['children'][$index_child]);
                         }
                     }
@@ -342,7 +428,7 @@ class PluginItilcategorygroupsCategory extends CommonDropdown
                         // otherwise remove empty parent
                         unset($params['actors'][$index]);
                     }
-                } elseif ($actor['itemtype'] == 'Group' && !in_array($actor['items_id'], $groups_id_toshow)) {
+                } elseif ($actor['itemtype'] == 'Group' && !isset($groups_id_toshow[$actor['items_id']])) {
                     // remove direct groups (don't sure this exists)
                     unset($params['actors'][$index]);
                 }
