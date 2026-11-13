@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\DBAL\QuerySubQuery;
+
 class PluginItilcategorygroupsCategory_Group extends CommonDBChild
 {
     public static $itemtype = 'PluginItilcategorygroupsCategory';
@@ -62,6 +64,19 @@ class PluginItilcategorygroupsCategory_Group extends CommonDBChild
         }
 
         $parent_table = 'glpi_plugin_itilcategorygroups_categories';
+
+        // Remove links left behind by rules purged before links were cleaned on purge
+        if ($DB->tableExists($parent_table)) {
+            $DB->delete($table, [
+                'plugin_itilcategorygroups_categories_id' => ['>', 0],
+                'NOT' => [
+                    'plugin_itilcategorygroups_categories_id' => new QuerySubQuery([
+                        'SELECT' => 'id',
+                        'FROM'   => $parent_table,
+                    ]),
+                ],
+            ]);
+        }
 
         //we must migrate groups datas in sub table
         if ($DB->fieldExists($parent_table, 'groups_id_levelone')) {

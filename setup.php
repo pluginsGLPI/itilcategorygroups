@@ -44,11 +44,6 @@ function plugin_init_itilcategorygroups()
      */
     global $CFG_GLPI, $PLUGIN_HOOKS;
 
-    /**
-         * @var array $CFG_GLPI
-         */
-    global $CFG_GLPI;
-
     $PLUGIN_HOOKS['csrf_compliant']['itilcategorygroups'] = true;
 
     if (Plugin::isPluginActive('itilcategorygroups')) {
@@ -71,8 +66,6 @@ function plugin_init_itilcategorygroups()
             $PLUGIN_HOOKS['submenu_entry']['itilcategorygroups']['options']['PluginItilcategorygroupsCategory']['links']['add']
                = '/' . $CFG_GLPI['root_doc'] . '/plugins/itilcategorygroups/front/category.form.php';
         }
-
-        $PLUGIN_HOOKS[hooks::ADD_JAVASCRIPT]['itilcategorygroups'] = ['scripts/multiple_group.js'];
 
         $PLUGIN_HOOKS[Hooks::FILTER_ACTORS]['itilcategorygroups'] = PluginItilcategorygroupsCategory::filterActors(...);
     }
