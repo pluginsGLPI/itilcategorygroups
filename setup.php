@@ -92,11 +92,12 @@ function plugin_itilcategorygroups_check_prerequisites()
 function plugin_version_itilcategorygroups()
 {
     return [
-        'name'         => __s('ItilCategory Groups', 'itilcategorygroups'),
-        'version'      => PLUGIN_ITILCATEGORYGROUPS_VERSION,
-        'author'       => "<a href='http://www.teclib.com'>TECLIB'</a>",
-        'homepage'     => 'https://github.com/pluginsGLPI/itilcategorygroups',
-        'requirements' => [
+        'name'          => __s('ItilCategory Groups', 'itilcategorygroups'),
+        'version'       => PLUGIN_ITILCATEGORYGROUPS_VERSION,
+        'author'        => "<a href='http://www.teclib.com'>TECLIB'</a>",
+        'homepage'      => 'https://github.com/pluginsGLPI/itilcategorygroups',
+        'csp_compliant' => true,
+        'requirements'  => [
             'glpi' => [
                 'min' => PLUGIN_ITILCATEGORYGROUPS_MIN_GLPI,
                 'max' => PLUGIN_ITILCATEGORYGROUPS_MAX_GLPI,
