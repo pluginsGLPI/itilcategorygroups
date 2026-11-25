@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add Transifex translations link to README
 
+### Changed
+
+- Make the plugin compatible with the Content Security Policy
+
 ## [2.7.0] - 2026-10-06
 
 ### Added
