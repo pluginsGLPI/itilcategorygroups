@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Make the plugin compatible with the Content Security Policy
 
+### Fixed
+
+- Delete the group links of a rule when it is purged, and clean the links left by rules purged before
+- Reduce SQL queries of the "Assigned to" actor dropdown filter (one query per group replaced by batched queries)
+- Load the 4 levels of the rule form in 2 queries instead of 8
+- Only delete and add the changed group links when saving a rule
+- Remove the unused `multiple_group.js` loaded on every page
+
 ## [2.6.3] - 2026-10-06
 
 ### Fixed
