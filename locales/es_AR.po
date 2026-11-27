@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Alan Lehoux, 2026
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-27 08:02+0000\n"
+"PO-Revision-Date: 2015-09-18 10:32+0000\n"
+"Last-Translator: Alan Lehoux, 2026\n"
+"Language-Team: Spanish (Argentina) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/es_AR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_AR\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: templates/category.html.twig templates/groupe.html.twig
+msgid "Level"
+msgstr "Nivel"
+
+#: templates/category.html.twig
+msgid "Please select an itil category before continue"
+msgstr "Por favor, seleccioná una categoría itil antes de continuar"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:594 hook.php:102
+msgid "Level 1"
+msgstr "Nivel 1"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:616 hook.php:103
+msgid "Level 2"
+msgstr "Nivel 2"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:638 hook.php:104
+msgid "Level 3"
+msgstr "Nivel 3"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:660 hook.php:105
+msgid "Level 4"
+msgstr "Nivel 4"
+
+#: inc/menu.class.php:35 inc/category.class.php:54 inc/category.class.php:533
+msgid "Link ItilCategory - Groups"
+msgstr "Vincular CategoríaItil - Grupos"
+
+#: inc/menu.class.php:40 inc/group_level.class.php:99 setup.php:95
+msgid "ItilCategory Groups"
+msgstr "Grupos de CategoríaItil"
+
+#: inc/category.class.php:161
+msgid "A link with this category already exists"
+msgstr "Ya existe un vínculo con esta categoría"
+
+#: inc/group_level.class.php:47 inc/group_level.class.php:152
+msgid "Level attribution"
+msgstr "Asignación de nivel"
+
+#: hook.php:84
+msgid "Level "
+msgstr "Nivel"
