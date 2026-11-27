@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 04:29+0000\n"
+"POT-Creation-Date: 2026-11-20 06:57+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: Pierfrancesco Passerini <p.passerini@gmail.com>, 2018\n"
 "Language-Team: Italian (Italy) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/it_IT/)\n"
@@ -19,27 +19,7 @@ msgstr ""
 "Language: it_IT\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:595 hook.php:102
-msgid "Level 1"
-msgstr "Livello 1"
-
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:617 hook.php:103
-msgid "Level 2"
-msgstr "Livello 2"
-
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:639 hook.php:104
-msgid "Level 3"
-msgstr "Livello 3"
-
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:661 hook.php:105
-msgid "Level 4"
-msgstr "Livello 4"
-
-#: templates/groupe.html.twig templates/category.html.twig
+#: templates/category.html.twig templates/groupe.html.twig
 msgid "Level"
 msgstr ""
 
@@ -47,9 +27,33 @@ msgstr ""
 msgid "Please select an itil category before continue"
 msgstr ""
 
-#: inc/category.class.php:54 inc/category.class.php:534 inc/menu.class.php:35
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:594 hook.php:102
+msgid "Level 1"
+msgstr "Livello 1"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:616 hook.php:103
+msgid "Level 2"
+msgstr "Livello 2"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:638 hook.php:104
+msgid "Level 3"
+msgstr "Livello 3"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:660 hook.php:105
+msgid "Level 4"
+msgstr "Livello 4"
+
+#: inc/menu.class.php:35 inc/category.class.php:54 inc/category.class.php:533
 msgid "Link ItilCategory - Groups"
 msgstr "Collegamento Categorie Itil - Gruppi"
+
+#: inc/menu.class.php:40 inc/group_level.class.php:99 setup.php:95
+msgid "ItilCategory Groups"
+msgstr "Gruppi Categorie Itil "
 
 #: inc/category.class.php:161
 msgid "A link with this category already exists"
@@ -58,10 +62,6 @@ msgstr "Il collegamento con questa categoria è già esistente"
 #: inc/group_level.class.php:47 inc/group_level.class.php:152
 msgid "Level attribution"
 msgstr "Livello di attribuzione"
-
-#: inc/group_level.class.php:99 inc/menu.class.php:40 setup.php:95
-msgid "ItilCategory Groups"
-msgstr "Gruppi Categorie Itil "
 
 #: hook.php:84
 msgid "Level "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Itilcategorygroups\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 04:29+0000\n"
+"POT-Creation-Date: 2026-11-20 06:57+0000\n"
 "PO-Revision-Date: 2015-09-18 10:32+0000\n"
 "Last-Translator: Markku Vepsä, 2018\n"
 "Language-Team: Finnish (Finland) (http://app.transifex.com/teclib/glpi-plugin-itilcategorygroups/language/fi_FI/)\n"
@@ -18,27 +18,7 @@ msgstr ""
 "Language: fi_FI\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:595 hook.php:102
-msgid "Level 1"
-msgstr "Taso 1"
-
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:617 hook.php:103
-msgid "Level 2"
-msgstr "Taso 2"
-
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:639 hook.php:104
-msgid "Level 3"
-msgstr "Taso 3"
-
-#: templates/groupe.html.twig templates/category.html.twig
-#: inc/category.class.php:661 hook.php:105
-msgid "Level 4"
-msgstr "Taso 4"
-
-#: templates/groupe.html.twig templates/category.html.twig
+#: templates/category.html.twig templates/groupe.html.twig
 msgid "Level"
 msgstr ""
 
@@ -46,9 +26,33 @@ msgstr ""
 msgid "Please select an itil category before continue"
 msgstr ""
 
-#: inc/category.class.php:54 inc/category.class.php:534 inc/menu.class.php:35
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:594 hook.php:102
+msgid "Level 1"
+msgstr "Taso 1"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:616 hook.php:103
+msgid "Level 2"
+msgstr "Taso 2"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:638 hook.php:104
+msgid "Level 3"
+msgstr "Taso 3"
+
+#: templates/category.html.twig templates/groupe.html.twig
+#: inc/category.class.php:660 hook.php:105
+msgid "Level 4"
+msgstr "Taso 4"
+
+#: inc/menu.class.php:35 inc/category.class.php:54 inc/category.class.php:533
 msgid "Link ItilCategory - Groups"
 msgstr "Linkki Tikettikategoria - Ryhmät"
+
+#: inc/menu.class.php:40 inc/group_level.class.php:99 setup.php:95
+msgid "ItilCategory Groups"
+msgstr "Tikettikategoria ryhmät"
 
 #: inc/category.class.php:161
 msgid "A link with this category already exists"
@@ -57,10 +61,6 @@ msgstr "Linkki tähän kategoriaan on jo olemassa"
 #: inc/group_level.class.php:47 inc/group_level.class.php:152
 msgid "Level attribution"
 msgstr "Tason määritys"
-
-#: inc/group_level.class.php:99 inc/menu.class.php:40 setup.php:95
-msgid "ItilCategory Groups"
-msgstr "Tikettikategoria ryhmät"
 
 #: hook.php:84
 msgid "Level "
